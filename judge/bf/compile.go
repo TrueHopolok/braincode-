@@ -133,3 +133,30 @@ func (b ByteCode) String() string {
 	}
 	return string(buf)
 }
+
+var opIndex = [opMax + 1]byte{
+	0:           0,
+	OpDecrement: 0,
+	OpIncrement: 1,
+	OpLeft:      2,
+	OpRight:     3,
+	OpInput:     4,
+	OpOutput:    5,
+	OpLoopStart: 6,
+	OpLoopEnd:   7,
+}
+
+var indexOp = [8]Op{
+	0: OpDecrement,
+	1: OpIncrement,
+	2: OpLeft,
+	3: OpRight,
+	4: OpInput,
+	5: OpOutput,
+	6: OpLoopStart,
+	7: OpLoopEnd,
+}
+
+func (o Op) index() byte {
+	return opIndex[o]
+}

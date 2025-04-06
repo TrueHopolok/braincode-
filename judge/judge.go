@@ -26,6 +26,19 @@ func (v Verdict) Error() string {
 	return v.Status.String()
 }
 
-type Problem interface {
-	Judge(bfSource string) error
+type InputGenerator interface {
+	GenerateInput() ([][]string, error)
+}
+
+type OutputChecker interface {
+	CheckOutput(input string, output string) error
+}
+
+type Problem struct {
+	InputGenerator
+	OutputChecker
+}
+
+func (p Problem) Judge(bfSource string) error {
+	panic("TODO")
 }
