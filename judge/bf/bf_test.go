@@ -2,6 +2,7 @@ package bf_test
 
 import (
 	"bytes"
+	"reflect"
 	"strings"
 	"testing"
 
@@ -135,5 +136,29 @@ func TestStepLimit(t *testing.T) {
 
 	if have != want {
 		t.Errorf("have %q want %q", have, want)
+	}
+}
+
+func TestMarshal(t *testing.T) {
+	// thanks wikipedia! (https://en.wikipedia.org/wiki/Brainfuck)
+	const source = "++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++."
+
+	bc, err := bf.Compile(source, -1)
+	if err != nil {
+		t.Fatalf("err = %v", err)
+	}
+
+	bin, err := bc.MarshalBinary()
+	if err != nil {
+		t.Fatalf("err = %v", err)
+	}
+
+	var bc2 bf.ByteCode
+	if err := bc2.UnmarshalBinary(bin); err != nil {
+		t.Errorf("err = %v", err)
+	}
+
+	if !reflect.DeepEqual(bc, bc2) {
+		t.Errorf("before %v after %v", bc, bc2)
 	}
 }
