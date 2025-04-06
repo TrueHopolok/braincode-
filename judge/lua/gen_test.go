@@ -1,7 +1,6 @@
 package lua_test
 
 import (
-	"fmt"
 	"reflect"
 	"testing"
 
@@ -46,6 +45,14 @@ func TestGetTests(t *testing.T) {
 			false,
 		},
 		{
+			"throws",
+			`function test_data() 
+				error("HAHAHAHA")
+			end`,
+			nil,
+			true,
+		},
+		{
 			"empty",
 			`test_data = {{}, {}, nil, {}}`,
 			nil,
@@ -84,7 +91,6 @@ func TestGetTests(t *testing.T) {
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("GetTests() = %v, want %v", got, tt.want)
 			}
-			fmt.Println(err)
 		})
 	}
 }

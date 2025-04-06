@@ -11,14 +11,17 @@ func _() {
 	_ = x[StatusAccept-0]
 	_ = x[StatusCompilationFailed-1]
 	_ = x[StatusRuntimeError-2]
-	_ = x[StatusTimeLimit-3]
-	_ = x[StatusMemoryLimit-4]
-	_ = x[StatusWrongAnswer-5]
+	_ = x[StatusSourceSizeLimit-3]
+	_ = x[StatusTimeLimit-4]
+	_ = x[StatusMemoryLimit-5]
+	_ = x[StatusWrongAnswer-6]
+	_ = x[StatusCheckerFailed-7]
+	_ = x[StatusJudgeFailed-8]
 }
 
-const _Status_name = "AcceptCompilationFailedRuntimeErrorTimeLimitMemoryLimitWrongAnswer"
+const _Status_name = "AcceptCompilationFailedRuntimeErrorSourceSizeLimitTimeLimitMemoryLimitWrongAnswerCheckerFailedJudgeFailed"
 
-var _Status_index = [...]uint8{0, 6, 23, 35, 44, 55, 66}
+var _Status_index = [...]uint8{0, 6, 23, 35, 50, 59, 70, 81, 94, 105}
 
 func (i Status) String() string {
 	if i >= Status(len(_Status_index)-1) {
