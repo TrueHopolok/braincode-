@@ -59,6 +59,11 @@ func NewJudge(workers int) Judge {
 	}
 }
 
+func (j Judge) Close() error {
+	close(j.jobs)
+	return nil
+}
+
 type job struct {
 	OutputChecker
 

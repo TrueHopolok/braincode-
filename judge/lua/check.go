@@ -83,7 +83,7 @@ func (c *Checker) CheckOutput(input, output string) (string, error) {
 	}
 }
 
-func (c *Checker) runSolution(l *lua.LState, input, output string) (string, error) {
+func (c *Checker) runSolution(l luaState, input, output string) (string, error) {
 	if err := l.CallByParam(lua.P{
 		Fn:      l.GetGlobal("solution"),
 		NRet:    1,
@@ -95,13 +95,13 @@ func (c *Checker) runSolution(l *lua.LState, input, output string) (string, erro
 	ret := l.CheckString(-1)
 
 	if ret != output {
-		return "result do not match", nil
+		return l.Buffer.String() + "result do not match", nil
 	}
 
 	return "", nil
 }
 
-func (c *Checker) runChecker(l *lua.LState, input, output string) (string, error) {
+func (c *Checker) runChecker(l luaState, input, output string) (string, error) {
 	if err := l.CallByParam(lua.P{
 		Fn:      l.GetGlobal("checker"),
 		NRet:    1,
@@ -113,7 +113,7 @@ func (c *Checker) runChecker(l *lua.LState, input, output string) (string, error
 	ret := l.Get(-1)
 
 	if lua.LVAsBool(ret) {
-		return ret.String(), nil
+		return l.Buffer.String() + ret.String(), nil
 	}
 
 	return "", nil
