@@ -1,13 +1,23 @@
 package lua
 
 import (
+	"bytes"
+	"fmt"
 	"math/rand/v2"
+	"strings"
 	"sync"
 
 	lua "github.com/yuin/gopher-lua"
 )
 
-func newLuaState() *lua.LState {
+type luaState struct {
+	*lua.LState
+	*bytes.Buffer
+}
+
+func newLuaState() luaState {
+	b := new(bytes.Buffer)
+
 	l := lua.NewState(lua.Options{
 		CallStackSize:   256,
 		RegistryMaxSize: 1024 * 128,
@@ -18,9 +28,6 @@ func newLuaState() *lua.LState {
 	lua.OpenMath(l)
 	lua.OpenString(l)
 	lua.OpenTable(l)
-
-	// will write to stdout
-	noopFunction(l, "print")
 
 	// not part of standard in the first place
 	deleteFunction(l, "_printregs")
@@ -61,7 +68,16 @@ func newLuaState() *lua.LState {
 		return 0
 	}))
 
-	return l
+	l.SetGlobal("print", l.NewFunction(func(l *lua.LState) int {
+		var s []string
+		for i := 1; i <= l.GetTop(); i++ {
+			s = append(s, l.Get(i).String())
+		}
+		fmt.Fprintf(b, "%s\n", strings.Join(s, " "))
+		return 0
+	}))
+
+	return luaState{l, b}
 }
 
 func denyFunction(l *lua.LState, name string) {
@@ -73,8 +89,4 @@ func denyFunction(l *lua.LState, name string) {
 
 func deleteFunction(l *lua.LState, name string) {
 	l.SetGlobal(name, lua.LNil)
-}
-
-func noopFunction(l *lua.LState, name string) {
-	l.SetGlobal(name, l.NewFunction(func(l *lua.LState) int { return 0 }))
 }

@@ -19,7 +19,7 @@ func GetTests(source string) ([][]string, error) {
 	defer l.Close()
 	l.SetContext(ctx)
 
-	lua.OpenBase(l)
+	lua.OpenBase(l.LState)
 
 	if err := l.DoString(source); err != nil {
 		return nil, err
