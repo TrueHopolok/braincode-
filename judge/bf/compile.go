@@ -65,6 +65,8 @@ func (j opjump) Addr() uint32 {
 
 // Compile extracts byte code from a source string.
 //
+// Initial comment loop will be stripped.
+//
 // Instruction limit may be set to limit length of byte code. Negative limit disables it.
 // In that case, [CompilationError] with kind [CompilationInstructionLimit] is never returned.
 //
@@ -73,6 +75,10 @@ func Compile(source string, instructionLimit int) (ByteCode, error) {
 	if instructionLimit < 0 {
 		instructionLimit = math.MaxInt
 	}
+
+	was := len(source)
+	source = stripCommentLoop(source)
+	off := was - len(source)
 
 	var instructions []opjump
 	var openLoops []uint32
@@ -86,7 +92,7 @@ func Compile(source string, instructionLimit int) (ByteCode, error) {
 		if len(instructions) >= instructionLimit {
 			return ByteCode{}, CompilationError{
 				Kind:   CompilationInstructionLimit,
-				Offset: i,
+				Offset: i + off,
 				Char:   r,
 			}
 		}
@@ -102,7 +108,7 @@ func Compile(source string, instructionLimit int) (ByteCode, error) {
 			if len(openLoops) == 0 {
 				return ByteCode{}, CompilationError{
 					Kind:   CompilationUnmatchedParen,
-					Offset: i,
+					Offset: i + off,
 					Char:   rune(OpLoopEnd),
 				}
 			}
@@ -122,7 +128,7 @@ func Compile(source string, instructionLimit int) (ByteCode, error) {
 	if len(openLoops) > 0 {
 		return ByteCode{}, CompilationError{
 			Kind:   CompilationUnmatchedParen,
-			Offset: byteOff[len(byteOff)-1],
+			Offset: byteOff[len(byteOff)-1] + off,
 			Char:   rune(OpLoopStart),
 		}
 	}
@@ -155,4 +161,36 @@ var indexOp = [8]Op{
 
 func (o Op) index() byte {
 	return opIndex[o]
+}
+
+func stripCommentLoop(s string) (res string) {
+	depth := 0
+
+outer:
+	for res = s; len(res) > 0; res = res[1:] {
+		b := res[0]
+		if res[0] > byte(opMax) || !validOp[b] {
+			continue
+		}
+
+		switch Op(b) {
+		case OpLoopStart:
+			depth++
+		case OpLoopEnd:
+			if depth == 0 {
+				return s
+			}
+			depth--
+		default:
+			if depth == 0 {
+				break outer
+			}
+		}
+	}
+
+	if depth != 0 {
+		return s
+	}
+
+	return
 }

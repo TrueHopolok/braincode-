@@ -9,6 +9,13 @@ import (
 
 type bfChecker bf.ByteCode
 
+// NewBFChecker creates a new brainfunk output checker.
+//
+// # Expected brainfunk API
+// Standard input will be test input and test output separated by a 0.
+// No output signifies a passes test, any other output will be used as comment.
+//
+// Not all programs can be tested with this api, for this use [NewLuaChecker], you freak.
 func NewBFChecker(source string) (OutputChecker, error) {
 	bc, err := bf.Compile(source, -1)
 	return bfChecker(bc), err
