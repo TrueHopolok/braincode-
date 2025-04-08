@@ -9,6 +9,8 @@ import (
 	"github.com/TrueHopolok/braincode-/judge/bf"
 )
 
+//go:generate go tool github.com/princjef/gomarkdoc/cmd/gomarkdoc -o documentation.md
+
 // Judge is a handle to a pool of goroutines ready to judge submissions.
 //
 // Judge must be closed to free up resources.
