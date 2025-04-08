@@ -4,21 +4,25 @@ import (
 	"math"
 )
 
+// ByteCode contains a compiled brainfunk program.
+//
+// ByteCode is immutable, so it is safe to use from multiple goroutines.
 type ByteCode struct {
 	ops []opjump
 }
 
+// Op is a brainfunk operations.
 type Op byte
 
 const (
-	OpLeft      Op = '<'
-	OpRight     Op = '>'
-	OpIncrement Op = '+'
-	OpDecrement Op = '-'
-	OpInput     Op = ','
-	OpOutput    Op = '.'
-	OpLoopStart Op = '['
-	OpLoopEnd   Op = ']'
+	OpLeft      Op = '<' // Move head left. Underflow is a runtime error.
+	OpRight     Op = '>' // Move head right. May allocate another byte.
+	OpIncrement Op = '+' // Increment value under head. Wraps.
+	OpDecrement Op = '-' // Decrement value under head. Wraps.
+	OpInput     Op = ',' // Copy byte from input to head.
+	OpOutput    Op = '.' // Copy byte from head to output.
+	OpLoopStart Op = '[' // Start of loop. Loop acts as a while (head != 0) loop.
+	OpLoopEnd   Op = ']' // End of loop.
 
 	opMax = max(OpLeft, OpRight, OpIncrement, OpDecrement, OpIncrement, OpOutput, OpLoopStart, OpLoopEnd)
 )
@@ -34,6 +38,7 @@ var validOp = [opMax + 1]bool{
 	OpLoopEnd:   true,
 }
 
+// opjump encode an instruction or a jump offset.
 type opjump uint32
 
 func makeOpjump(op Op, addr uint32) opjump {
@@ -58,6 +63,12 @@ func (j opjump) Addr() uint32 {
 
 }
 
+// Compile extracts byte code from a source string.
+//
+// Instruction limit may be set to limit length of byte code. Negative limit disables it.
+// In that case, [CompilationError] with kind [CompilationInstructionLimit] is never returned.
+//
+// Returned error's underlying type is [CompilationError].
 func Compile(source string, instructionLimit int) (ByteCode, error) {
 	if instructionLimit < 0 {
 		instructionLimit = math.MaxInt
@@ -117,21 +128,6 @@ func Compile(source string, instructionLimit int) (ByteCode, error) {
 	}
 
 	return ByteCode{ops: instructions}, nil
-}
-
-func (b ByteCode) String() string {
-	buf := make([]byte, 0, len(b.ops))
-	for i, op := range b.ops {
-		char := op.Op()
-		if char != OpLoopStart {
-			buf = append(buf, byte(char))
-		} else if addr := op.Addr(); int(addr) > i {
-			buf = append(buf, byte(OpLoopStart))
-		} else {
-			buf = append(buf, byte(OpLoopEnd))
-		}
-	}
-	return string(buf)
 }
 
 var opIndex = [opMax + 1]byte{
