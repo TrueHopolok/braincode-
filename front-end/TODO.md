@@ -15,7 +15,8 @@
     - Remove button if user is an admin or he is an owner of that task
     - If remove button clicked, confirmation window appears
 - Search bar by title
-- Button to show next 25 tasks
+- Button to show next N tasks (may be 10, 25 and etc.) MUST UTILIZE FETCH
+- Button to show only user's uploaded tasks MUST UTILIZE FETCH
 - Upload task button that direct you to the upload task page
 
 ## Profile stats
