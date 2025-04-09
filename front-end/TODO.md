@@ -21,8 +21,8 @@
 
 ## Profile stats
 - Submission list of the user
-- Uploaded tasks list of the user
-- Solved task rate number
+- Solved task rate number out of all tasks
+- Acceptance rate out of all submissions
 
 ## Solve task page
 - Title of the task
