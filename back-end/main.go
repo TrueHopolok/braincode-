@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	plog "github.com/TrueHopolok/logger--and--spellchecker/plog"
+	plog "github.com/TrueHopolok/plog"
 )
 
 const LOG_FILE_NAME = "back-end/server.log"
