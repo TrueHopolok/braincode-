@@ -8,7 +8,7 @@ tool (
 )
 
 require (
-	github.com/TrueHopolok/logger--and--spellchecker v0.0.0-20250408094436-751cf4703c0d
+	github.com/TrueHopolok/plog v0.0.0-20250409130028-948d2d54a606
 	github.com/yuin/gopher-lua v1.1.1
 )
 
