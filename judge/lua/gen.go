@@ -10,6 +10,30 @@ import (
 
 const genTimeout = 2 * time.Second
 
+// GetTests extracts tests from lua source.
+//
+// Tests can be provided in of 2 ways.
+//
+// # Static tests
+//
+//	# singular test
+//	test_data = "abc"
+//
+//	# multiple tests without groups
+//	test_data = {"1", "2", "3"}
+//
+//	# multiple tests with subgroup
+//	test_data = {{"1", "2"}, {"3", "4"}, nil, "5"}
+//
+//	# same as this
+//	test_data = {{"1", "2"}, {"3", "4"}, {"5"}}
+//
+// Only strings and nils are allowed. Nils are silently dropped.
+//
+// # Dynamic tests
+//
+// A function called test_data may be provided. It will be called with zero arguments and must return
+// a string | (nil | string | (nil | string)[])[]
 func GetTests(source string) ([][]string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), genTimeout)
 	defer cancel()

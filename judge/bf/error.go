@@ -2,18 +2,19 @@ package bf
 
 import "fmt"
 
+// CompilationError is used to report a compilation error.
 type CompilationError struct {
-	Kind CompilationErrorKind
+	Kind CompilationErrorKind // Kind of error.
 
-	Offset int
-	Char   rune
+	Offset int  // Offending byte offset in the original source code.
+	Char   rune // Offending rune. Will always fit into a byte.
 }
 
 type CompilationErrorKind int
 
 const (
-	CompilationUnmatchedParen CompilationErrorKind = iota
-	CompilationInstructionLimit
+	CompilationUnmatchedParen   CompilationErrorKind = iota // Loop brackets are not matched.
+	CompilationInstructionLimit                             // Compiled program exceeds set limit.
 )
 
 func (e CompilationError) Error() string {
@@ -27,12 +28,13 @@ func (e CompilationError) Error() string {
 	}
 }
 
+// RuntimeError is used to report a failure during execution of a brainfunk program.
 type RuntimeError int
 
 const (
-	RuntimeErrorHeadUnderflow RuntimeError = iota
-	RuntimeErrorMemoryLimit
-	RuntimeErrorStepLimit
+	RuntimeErrorHeadUnderflow RuntimeError = iota // Head executed [OpLeft] while pointing to leftmost byte.
+	RuntimeErrorMemoryLimit                       // Program allocated limit+1 bytes.
+	RuntimeErrorStepLimit                         // Program did not terminate after limit steps.
 )
 
 func (e RuntimeError) Error() string {

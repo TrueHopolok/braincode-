@@ -2,7 +2,6 @@ package judge
 
 import (
 	"bytes"
-	"fmt"
 	"math"
 	"strings"
 	"sync"
@@ -10,48 +9,24 @@ import (
 	"github.com/TrueHopolok/braincode-/judge/bf"
 )
 
-//go:generate go tool golang.org/x/tools/cmd/stringer -type=Status -trimprefix=Status
-type Status uint
+//go:generate go tool github.com/princjef/gomarkdoc/cmd/gomarkdoc -o documentation.md
 
-const (
-	StatusAccept Status = iota
-	StatusCompilationFailed
-	StatusRuntimeError
-	StatusSourceSizeLimit
-	StatusTimeLimit
-	StatusMemoryLimit
-	StatusWrongAnswer
-	StatusCheckerFailed
-	StatusJudgeFailed
-)
-
-type Verdict struct {
-	Status  Status
-	Comment string
-}
-
-func (v Verdict) Error() string {
-	if v.Comment != "" {
-		return fmt.Sprintf("%v: %s", v.Status, v.Comment)
-	}
-	return v.Status.String()
-}
-
-type InputGenerator interface {
-	GenerateInput() ([][]string, error)
-}
-
-type OutputChecker interface {
-	CheckOutput(input string, output string) Verdict
-}
-
+// Judge is a handle to a pool of goroutines ready to judge submissions.
+//
+// Judge must be closed to free up resources.
+//
+// Judge is safe for concurrent use. Zero value judge is invalid, use [NewJudge] instead.
 type Judge struct {
 	jobs chan<- job
 }
 
+// NewJudge creates a new judge and allocates workers.
+// At least one worker will be allocated to prevent a deadlock.
+//
+// Judge must be closed to free up resources.
 func NewJudge(workers int) Judge {
 	ch := make(chan job)
-	for range workers {
+	for range max(workers, 1) {
 		go worker(ch)
 	}
 	return Judge{
@@ -59,6 +34,8 @@ func NewJudge(workers int) Judge {
 	}
 }
 
+// Frees worker pool of the judge. Never returns an error.
+// Signature matches [io.Closer].
 func (j Judge) Close() error {
 	close(j.jobs)
 	return nil
@@ -75,15 +52,20 @@ type job struct {
 	memory int
 }
 
+// Problem is a collection of metadata about a problem. It should be constructed directly.
 type Problem struct {
 	InputGenerator
 	OutputChecker
 
-	Steps        int
-	Memory       int
-	Instructions int
+	Instructions int // Maximum number of active instructions.
+	Steps        int // Maximum number of steps of execution.
+	Memory       int // Maximum number of allocated bytes during the execution.
 }
 
+// CalculateScore is a helper function to calculate score of a given verdict set.
+// Returned value is NaN for zero length v and in range [0, 1] in all other cases.
+//
+// Test group is only counted if all tests in a group pass.
 func CalculateScore(v [][]Verdict) float64 {
 	var total, good int
 
@@ -103,6 +85,12 @@ outer:
 	return float64(good) / float64(total)
 }
 
+// Judge judges a problem against a solution and returns a verdict.
+//
+// Judge may return a singular verdict [][]Verdict{{value}} if
+//   - submition is not valid brainfunk
+//   - input generation failed
+//   - on any other judge failure (should be unreachable, but who knows)
 func (j Judge) Judge(p Problem, submition string) [][]Verdict {
 	if p.Memory <= 0 {
 		p.Memory = math.MaxInt

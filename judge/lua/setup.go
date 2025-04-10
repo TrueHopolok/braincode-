@@ -1,4 +1,7 @@
+// Package lua implements [judge.InputGenerator] and [judge.OutputChecker] for lua programs.
 package lua
+
+//go:generate go tool github.com/princjef/gomarkdoc/cmd/gomarkdoc -o documentation.md
 
 import (
 	"bytes"
@@ -12,7 +15,7 @@ import (
 
 type luaState struct {
 	*lua.LState
-	*bytes.Buffer
+	*bytes.Buffer // standard output
 }
 
 func newLuaState() luaState {

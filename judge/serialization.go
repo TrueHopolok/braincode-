@@ -77,8 +77,8 @@ func AppendChecker(c OutputChecker, b []byte) ([]byte, error) {
 		val.BFSolution = &che
 	case listSolution:
 		val.List = &che
-	case luaChecker:
-		val.Lua = che.Checker
+	case *luaChecker:
+		val.Lua = &che.Checker
 	default:
 		return nil, fmt.Errorf("unexpected checker: %T", che)
 	}
@@ -95,7 +95,7 @@ func UnmarshalChecker(b []byte) (OutputChecker, error) {
 	}
 
 	if val.Lua != nil {
-		return luaChecker{val.Lua}, nil
+		return &luaChecker{*val.Lua}, nil
 	}
 	if val.BFChecker != nil {
 		return *val.BFChecker, nil

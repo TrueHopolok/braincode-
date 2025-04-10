@@ -9,6 +9,18 @@ import (
 
 type bfGenerator bf.ByteCode
 
+// NewBFGenerator creates a new brainfunk input generator.
+//
+// # Expected brainfunk API
+//
+// There will be no input provided.
+// First output byte will be used as a group delimiter, second as a test delimiter. Delimiters cannot be the same.
+// After that one or more groups of test may be provided.
+//
+// Tests must be separated by test delimiter. Groups must be separated by group delimiter.
+// No terminating delimiter is required if last test is not empty.
+//
+// There is a hard cap of 1 billion steps and 64MiB memory. These may change in future versions.
 func NewBFGenerator(source string) (InputGenerator, error) {
 	bc, err := bf.Compile(source, -1)
 	return &smartGenerator{bfGenerator(bc)}, err

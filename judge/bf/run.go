@@ -1,3 +1,8 @@
+// Package bf implements a brainfunk interpreter
+//
+// Brainfunk needs to be compiled into byte code using [Compile] and then executed using [State].
+//
+// [Wikipedia]: https://en.wikipedia.org/wiki/Brainfuck
 package bf
 
 import (
@@ -6,6 +11,11 @@ import (
 	"io"
 )
 
+// State stores runtime brainfunk state.
+//
+// Zero value for state is a terminated program.
+//
+// State is *not* safe for concurrent use.
 type State struct {
 	r           io.ByteReader
 	w           io.ByteWriter
@@ -21,6 +31,17 @@ type State struct {
 	err error
 }
 
+// NewState creates a new [State].
+//
+// r is used for standard input.
+// It may be nil, in that case program will fail with EOF on first read.
+// If r implements [io.ByteReader] it is used instead.
+//
+// w is used for standard output.
+// It may be nil, in that program will fail on first write.
+// If w implements [io.ByteWriter] it is used instead.
+//
+// Step and memory limits must be set. Negative limits terminated the program immediately.
 func NewState(
 	code ByteCode,
 	r io.Reader,
@@ -59,28 +80,49 @@ func NewState(
 	return s
 }
 
+// UsedMemory returns maximum number of bytes ever used by the program.
+//
+// Only tape memory is considered, any input or output bytes are not.
+// Byte code length is also not counted.
 func (s *State) UsedMemory() int {
 	return len(s.memory)
 }
 
+// RemainingSteps returns maximum number of steps program can take before hitting the step limit.
 func (s *State) RemainingSteps() int {
 	return s.stepLimit
 }
 
+// Run steps repeatedly until program either runs to completion or returns an error.
+//
+// [Finished] is guaranteed to return true after a call to Run.
+//
+// See [Step] for more info.
 func (s *State) Run() error {
 	for ; !s.Finished(); s.Step() {
 	}
 	return s.Error()
 }
 
+// Finished reports whether program completed. All steps will be no-ops after program finished.
 func (s *State) Finished() bool {
 	return s.instruction >= len(s.bytecode)
 }
 
+// Error returns an error if one has happened. If the program did not complete, Error returns a nil error.
 func (s *State) Error() error {
 	return s.err
 }
 
+// Step executes a single brainfunk instruction.
+//
+// Error is returned in 2 cases:
+//   - When a runtime error occurs, in that case underlying type will be [RuntimeError]
+//   - If an IO operation fails, in that case error is passes as-is from the reader or writer.
+//
+// Calling Step on a finished state is a no-op, it will return result of last call to Step.
+//
+// Any error terminates the brainfunk program.
 func (s *State) Step() error {
 	if s.Finished() {
 		return s.Error()
