@@ -1,6 +1,8 @@
 // Implements initialization, global calls and destruction for cutomly written plog logger
 package logger
 
+//go:generate go tool github.com/princjef/gomarkdoc/cmd/gomarkdoc -o documentation.md
+
 import (
 	"flag"
 	"io"

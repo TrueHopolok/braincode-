@@ -2,6 +2,8 @@
 // As well as prepared statements to use for the project.
 package db
 
+//go:generate go tool github.com/princjef/gomarkdoc/cmd/gomarkdoc -o documentation.md
+
 import (
 	"database/sql"
 	"flag"
