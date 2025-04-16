@@ -12,6 +12,9 @@ import (
 // Contain path to the log file
 var LOG_FILE_NAME = flag.String("log_file", "back-end/server.log", "File path where logs will be saved into")
 
+// Contain if logger output level is debug if true
+var LOG_LEVEL_DEBUG = flag.Bool("log_level", true, "If true logger will output level debug")
+
 // Logger variable that must initialized via Start() function in the package
 var Log *plog.Logger
 
