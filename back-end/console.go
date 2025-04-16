@@ -4,6 +4,8 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+
+	"github.com/TrueHopolok/braincode-/back-end/logger"
 )
 
 type Instruction struct {
@@ -18,6 +20,7 @@ var Instructions = []Instruction{
 func ConsoleHandler() {
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Split(bufio.ScanLines)
+	logger.Log.Info("Console: started")
 	for scanner.Scan() {
 		// if multiarguments will be needed: use strings.Fields or flag package
 		// if faster checker required, use search tree for string

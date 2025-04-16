@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 
+	db "github.com/TrueHopolok/braincode-/back-end/db"
 	logger "github.com/TrueHopolok/braincode-/back-end/logger"
 )
 
@@ -17,16 +18,20 @@ func main() {
 	logger.Log.Line()
 	defer logger.Stop()
 	
-	http.HandleFunc("/", HelloServer)
-	go http.ListenAndServe(":8080", nil)
-	
-	logger.Log.Info("Server started")
+	logger.Log.Info("Database: connecting...")
+	db.Version() // TODO: initialize connection
+	logger.Log.Info("Database: connected")
+
+	logger.Log.Info("Server: starting...")
+	// http.HandleFunc("/", HelloServer)
+	// go http.ListenAndServe(":8080", nil)
+	logger.Log.Info("Server: started")
 
 	ConsoleHandler()
 }
 
 func StopServer() {
-	logger.Log.Info("Server stopped, via console input")
+	logger.Log.Info("Server: stopped via console")
 	logger.Stop()
 	os.Exit(0)
 }
