@@ -1,1 +1,1 @@
-go run ./back-end
+go run ./back-end --migrate=false

@@ -11,29 +11,42 @@ import (
 )
 
 func main() {
-	err := logger.Start(true)
+	var err error
+
+	//* Logger init
+	err = logger.Start(true)
 	if err != nil {
 		log.Fatalln(err)
 	}
 	logger.Log.Line()
 	defer logger.Stop()
-	
+
+	//* Database init
 	logger.Log.Info("Database: connecting...")
-	db.Version() // TODO: initialize connection
-	logger.Log.Info("Database: connected")
+	if err = db.Init(); err != nil {
+		logger.Log.Error("Database: connection failed; err=%s", err)
+		logger.Stop()
+		os.Exit(1)
+	}
+	logger.Log.Info("Database: connection succeeded")
 
-	logger.Log.Info("Server: starting...")
-	// http.HandleFunc("/", HelloServer)
-	// go http.ListenAndServe(":8080", nil)
-	logger.Log.Info("Server: started")
+	//* Database migrate
+	logger.Log.Info("Migrations: executing...")
+	if err = db.Migrate("drop", "create"); err != nil {
+		logger.Log.Error("Migration: execution failed; error=%s", err)
+		logger.Stop()
+		os.Exit(1)
+	}
+	logger.Log.Info("Migrations: execution succeeded")
 
+	//* HTTP init
+	logger.Log.Info("HTTP server: starting...")
+	http.HandleFunc("/", HelloServer) // TODO: normal function handler for complicated requests
+	go http.ListenAndServe(":8080", nil)
+	logger.Log.Info("HTTP server: start succeeded")
+
+	//* Console init
 	ConsoleHandler()
-}
-
-func StopServer() {
-	logger.Log.Info("Server: stopped via console")
-	logger.Stop()
-	os.Exit(0)
 }
 
 func HelloServer(w http.ResponseWriter, r *http.Request) {
