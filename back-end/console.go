@@ -20,7 +20,6 @@ var Instructions = []Instruction{
 		"stop",
 		func() {
 			logger.Log.Info("Console: server stopped")
-			logger.Stop()
 			os.Exit(0)
 		},
 	},

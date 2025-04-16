@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 
 	db "github.com/TrueHopolok/braincode-/back-end/db"
 	logger "github.com/TrueHopolok/braincode-/back-end/logger"
@@ -14,28 +13,23 @@ func main() {
 	var err error
 
 	//* Logger init
-	err = logger.Start(true)
+	err = logger.Init(true)
 	if err != nil {
 		log.Fatalln(err)
 	}
 	logger.Log.Line()
-	defer logger.Stop()
 
 	//* Database init
 	logger.Log.Info("Database: connecting...")
 	if err = db.Init(); err != nil {
-		logger.Log.Error("Database: connection failed; err=%s", err)
-		logger.Stop()
-		os.Exit(1)
+		logger.Log.Fatal("Database: connection failed; err=%s", err)
 	}
 	logger.Log.Info("Database: connection succeeded")
 
 	//* Database migrate
 	logger.Log.Info("Migrations: executing...")
 	if err = db.Migrate("drop", "create"); err != nil {
-		logger.Log.Error("Migration: execution failed; error=%s", err)
-		logger.Stop()
-		os.Exit(1)
+		logger.Log.Fatal("Migration: execution failed; error=%s", err)
 	}
 	logger.Log.Info("Migrations: execution succeeded")
 

@@ -1,8 +1,9 @@
+// Implements basic realization of database connection and queries.
+// As well as prepared statements to use for the project.
 package db
 
 import (
 	"database/sql"
-	"errors"
 	"flag"
 	"fmt"
 
@@ -13,23 +14,21 @@ import (
 // Contain path to database file
 var DB_FILE_PATH = flag.String("db_location", "back-end/db/db.db", "Provide location for database file location")
 
-var conn *sql.DB
+// Contains pointer to sql.DB but gurantees safety of usage outside the package
+type DB struct {
+	*sql.DB
+}
+
+// The connection to database that is a *sql.DB type variable with limit on access it directly to avoid overwrite to nil
+var Conn DB
 
 // Open database and checks if database is reachable
 func Init() error {
 	var err error
-	conn, err = sql.Open("sqlite3", fmt.Sprintf("file:%s", *DB_FILE_PATH))
+	sqldb, err := sql.Open("sqlite3", fmt.Sprintf("file:%s", *DB_FILE_PATH))
 	if err != nil {
 		return err
 	}
-	return conn.Ping()
-}
-
-// TODO: need proper implementation
-func Execute(query_path string, data ...any) error {
-	if conn == nil {
-		return errors.New("database is not initialized")
-	}
-	// TODO: add functionality for executing queries
-	return nil
+	Conn = DB{sqldb}
+	return Conn.Ping()
 }
