@@ -1,18 +1,32 @@
+// Implements initialization, global calls and destruction for cutomly written plog logger
 package logger
 
 import (
+	"flag"
 	"io"
 	"os"
 
 	plog "github.com/TrueHopolok/plog"
 )
 
-const LOG_FILE_NAME = "back-end/server.log"
 var log_file *os.File
+
+// Contain path to the log file
+var LOG_FILE_NAME = flag.String("log", "back-end/server.log", "File path where logs will be saved into")
+
+// Logger variable that must initialized via Start() function in the package
 var Log *plog.Logger
 
+/*
+Initialize global logger by opening log file with write, append and create flags.
+Should be called once. Otherwise may result in unexpected behaviour.
+
+	if debug: level = debug, output += os.Stdout
+	else: level = info
+	return os.OpenFile(log_file)
+*/
 func Start(debug bool) error {
-	log_file, err := os.OpenFile(LOG_FILE_NAME, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0666)
+	log_file, err := os.OpenFile(*LOG_FILE_NAME, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0666)
 	if err != nil {
 		return err
 	}
@@ -26,6 +40,7 @@ func Start(debug bool) error {
 	return err
 }
 
+// Closes log file making logger unusable.
 func Stop() {
 	log_file.Close()
 }

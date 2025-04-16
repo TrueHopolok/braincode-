@@ -10,10 +10,12 @@ import (
 	_ "github.com/ncruces/go-sqlite3/embed"
 )
 
+// Contain path to database file
 var DB_FILE_PATH = flag.String("db_location", "back-end/db/db.db", "Provide location for database file location")
 
 var conn *sql.DB
 
+// Open database and checks if database is reachable
 func Init() error {
 	var err error
 	conn, err = sql.Open("sqlite3", fmt.Sprintf("file:%s", *DB_FILE_PATH))
@@ -23,6 +25,7 @@ func Init() error {
 	return conn.Ping()
 }
 
+// TODO: need proper implementation
 func Execute(query_path string, data ...any) error {
 	if conn == nil {
 		return errors.New("database is not initialized")

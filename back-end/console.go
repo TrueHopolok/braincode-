@@ -8,11 +8,13 @@ import (
 	"github.com/TrueHopolok/braincode-/back-end/logger"
 )
 
+// On command encounter in the os.Stdin, the function will be executed
 type Instruction struct {
 	command  string
 	function func()
 }
 
+// Contain all instructions that can be accessed via console
 var Instructions = []Instruction{
 	{
 		"stop",
@@ -24,6 +26,9 @@ var Instructions = []Instruction{
 	},
 }
 
+// Wait for the input in os.Stdin.
+// Check if inputed string is one of the commands in the intructions slice.
+// If it is, the function of that instruction is executed.
 func ConsoleHandler() {
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Split(bufio.ScanLines)
