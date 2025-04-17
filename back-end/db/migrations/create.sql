@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS "Task" (
 	"id"	INTEGER NOT NULL,
 	"owner_name"	TEXT NOT NULL,
 	"task"	TEXT NOT NULL,
+	"judge" BLOB NOT NULL,
 	FOREIGN KEY("owner_name") REFERENCES "User"("name") ON DELETE SET NULL,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );

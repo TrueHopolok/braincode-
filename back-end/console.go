@@ -32,6 +32,7 @@ func ConsoleHandler() {
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Split(bufio.ScanLines)
 	logger.Log.Info("Console: initialized")
+	fmt.Println("Waiting for user input:")
 	for scanner.Scan() {
 		// if multiarguments will be needed: use strings.Fields or flag package
 		// if faster checker required, use search tree for string

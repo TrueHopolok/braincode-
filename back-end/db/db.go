@@ -14,7 +14,11 @@ import (
 )
 
 // Contain path to database file
-var DB_FILE_PATH = flag.String("db_location", "back-end/db/db.db", "Provide location for database file location")
+var DB_FILE_PATH string
+
+func init() {
+	flag.StringVar(&DB_FILE_PATH, "db_location", "back-end/db/db.db", "Provide location for database file location")
+}
 
 // Contains pointer to sql.DB but gurantees safety of usage outside the package
 type DB struct {
@@ -27,7 +31,7 @@ var Conn DB
 // Open database and checks if database is reachable
 func Init() error {
 	var err error
-	sqldb, err := sql.Open("sqlite3", fmt.Sprintf("file:%s", *DB_FILE_PATH))
+	sqldb, err := sql.Open("sqlite3", fmt.Sprintf("file:%s", DB_FILE_PATH))
 	if err != nil {
 		return err
 	}

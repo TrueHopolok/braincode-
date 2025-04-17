@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"net/http"
@@ -9,11 +10,17 @@ import (
 	logger "github.com/TrueHopolok/braincode-/back-end/logger"
 )
 
+var DEBUG_MODE bool
+
+func init() {
+	flag.BoolVar(&DEBUG_MODE, "debug", true, "Launch program in the debug mode")
+}
+
 func main() {
 	var err error
 
 	//* Logger init
-	err = logger.Init(true)
+	err = logger.Init(DEBUG_MODE)
 	if err != nil {
 		log.Fatalln(err)
 	}

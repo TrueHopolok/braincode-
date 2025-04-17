@@ -8,13 +8,17 @@ import (
 )
 
 // Contain migration files directory
-var MIGRATIONS_DIR_PATH = flag.String("db_migrations", "back-end/db/migrations/", "Provide a directory with all migartion queries")
+var MIGRATIONS_DIR_PATH string
+
+func init() {
+	flag.StringVar(&MIGRATIONS_DIR_PATH, "db_migrations", "back-end/db/migrations/", "Provide a directory with all migartion queries")
+}
 
 // Execute all given queries if they exists as files.
 // Only requirement is to provide name of the file, not the path nor extenstion.
 func Migrate(migration_name ...string) error {
 	for _, mname := range migration_name {
-		mname = fmt.Sprintf("%s%s%s", *MIGRATIONS_DIR_PATH, mname, ".sql")
+		mname = fmt.Sprintf("%s%s%s", MIGRATIONS_DIR_PATH, mname, ".sql")
 		mfile, err := os.Open(mname)
 		if err != nil {
 			return err
