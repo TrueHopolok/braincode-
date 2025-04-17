@@ -108,3 +108,15 @@ func UnmarshalChecker(b []byte) (OutputChecker, error) {
 	}
 	return nil, errors.New("value did not contain any known checker")
 }
+
+func AppendProblem(p Problem, b []byte) ([]byte, error) {
+	panic("TODO")
+}
+
+func MarshalProblem(p Problem) ([]byte, error) {
+	panic("TODO")
+}
+
+func UnmarshalProblem(b []byte) (Problem, error) {
+	panic("TODO")
+}
