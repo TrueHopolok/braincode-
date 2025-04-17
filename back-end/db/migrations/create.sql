@@ -7,15 +7,15 @@ CREATE TABLE IF NOT EXISTS "User" (
 CREATE TABLE IF NOT EXISTS "Task" (
 	"id"	INTEGER NOT NULL,
 	"owner_name"	TEXT NOT NULL,
-	"task"	TEXT NOT NULL,
-	"judge" BLOB NOT NULL,
+	"info"	TEXT NOT NULL,
+	"problem" BLOB NOT NULL,
 	FOREIGN KEY("owner_name") REFERENCES "User"("name") ON DELETE SET NULL,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
 CREATE TABLE IF NOT EXISTS "Status" (
 	"owner_name"	TEXT NOT NULL,
 	"task_id"	INTEGER NOT NULL,
-	"success"	BLOB NOT NULL,
+	"score"	NUMERIC NOT NULL,
 	FOREIGN KEY("task_id") REFERENCES "Task"("id") ON DELETE CASCADE,
 	FOREIGN KEY("owner_name") REFERENCES "User"("name") ON DELETE CASCADE,
 	PRIMARY KEY("owner_name","task_id")
@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS "Submission" (
 	"owner_name"	TEXT NOT NULL,
 	"task_id"	INTEGER NOT NULL,
 	"timestamp"	TEXT NOT NULL,
-	"success"	BLOB NOT NULL,
+	"score"	NUMERIC NOT NULL,
 	"solution"	TEXT NOT NULL,
 	FOREIGN KEY("task_id") REFERENCES "Task"("id") ON DELETE SET NULL,
 	PRIMARY KEY("id" AUTOINCREMENT),
