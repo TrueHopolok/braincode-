@@ -35,7 +35,7 @@ func main() {
 
 	//* Database migrate
 	logger.Log.Info("Migrations: executing...")
-	if err = db.Migrate("drop", "create"); err != nil {
+	if err = db.Migrate("drop", "create", "user", "task", "submission", "status"); err != nil {
 		logger.Log.Fatal("Migration: execution failed; error=%s", err)
 	}
 	logger.Log.Info("Migrations: execution succeeded")
