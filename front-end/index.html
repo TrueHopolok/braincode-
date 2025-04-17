@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="style/indexpage.css">
     <title>Braincode</title>
 </head>
 <body>
@@ -36,8 +36,8 @@
     <nav class="navigation">
         <div class="container">
             <ul class="nav-ul">
-                <li class="nav-ul-element"><a class="active" href="#">PROBLEMSET</a></li>
-                <li class="nav-ul-element"><a href="#">PROBLEMUPLOAD</a></li>
+                <li id="problem-set" class="nav-ul-element"><a href="#">PROBLEMSET</a></li>
+                <li id="problem-upload" class="nav-ul-element"><a href="#">PROBLEMUPLOAD</a></li>
                 <li class="nav-ul-element"><a href="#">LOG OUT</a></li>
               </ul>
         </div>
@@ -45,15 +45,20 @@
 
     <section class="section">
         <div class="container">
-            <div class="section-upper">
+            <div id="section-upper" class="section-upper">
                 <input class="section-search" type="text">
                 <div class="section-user">
                     <input type="checkbox">
                     <div>USER PROBLEM</div>
                 </div>
             </div>
+
+            <div id="section-content">
+                
+            </div>
         </div>
     </section>
 
+    <script src="scripts/script.js"></script>
 </body>
 </html>
