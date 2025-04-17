@@ -72,7 +72,7 @@ func (j opjump) Addr() uint32 {
 //
 // Returned error's underlying type is [CompilationError].
 func Compile(source string, instructionLimit int) (ByteCode, error) {
-	if instructionLimit < 0 {
+	if instructionLimit <= 0 {
 		instructionLimit = math.MaxInt
 	}
 
