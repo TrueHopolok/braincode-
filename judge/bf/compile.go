@@ -59,7 +59,7 @@ func (j opjump) Addr() uint32 {
 }
 
 func Compile(source string, instructionLimit int) (ByteCode, error) {
-	if instructionLimit < 0 {
+	if instructionLimit <= 0 {
 		instructionLimit = math.MaxInt
 	}
 
