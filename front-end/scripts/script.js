@@ -22,7 +22,7 @@ function render_task() {
 
         let link = document.createElement('a');
         link.innerHTML = 'task ->';
-        link.href = 'taskpage.html';
+        link.href = `taskpage.html?id=${i}`;
         table_col3.append(link);
 
         table_row.append(table_col1);
