@@ -6,7 +6,7 @@ import (
 	"sync"
 )
 
-const key_size = 8
+const key_size = 32
 
 type keyChain struct {
 	mut sync.Mutex 
