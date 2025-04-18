@@ -12,7 +12,7 @@ Implements basic realization of database connection and queries. As well as prep
 
 - [Variables](<#variables>)
 - [func Init\(\) error](<#Init>)
-- [func Migrate\(migration\_name ...string\) error](<#Migrate>)
+- [func Migrate\(\) error](<#Migrate>)
 - [type DB](<#DB>)
 
 
@@ -21,17 +21,17 @@ Implements basic realization of database connection and queries. As well as prep
 <a name="DB_FILE_PATH"></a>Contain path to database file
 
 ```go
-var DB_FILE_PATH = flag.String("db_location", "back-end/db/db.db", "Provide location for database file location")
+var DB_FILE_PATH string
 ```
 
 <a name="MIGRATIONS_DIR_PATH"></a>Contain migration files directory
 
 ```go
-var MIGRATIONS_DIR_PATH = flag.String("db_migrations", "back-end/db/migrations/", "Provide a directory with all migartion queries")
+var MIGRATIONS_DIR_PATH string
 ```
 
 <a name="Init"></a>
-## func [Init](<https://github.com/TrueHopolok/braincode-/blob/main/back-end/db/db.go#L28>)
+## func [Init](<https://github.com/TrueHopolok/braincode-/blob/main/back-end/db/db.go#L32>)
 
 ```go
 func Init() error
@@ -40,16 +40,21 @@ func Init() error
 Open database and checks if database is reachable
 
 <a name="Migrate"></a>
-## func [Migrate](<https://github.com/TrueHopolok/braincode-/blob/main/back-end/db/migrate.go#L15>)
+## func [Migrate](<https://github.com/TrueHopolok/braincode-/blob/main/back-end/db/migrate.go#L26>)
 
 ```go
-func Migrate(migration_name ...string) error
+func Migrate() error
 ```
 
-Execute all given queries if they exists as files. Only requirement is to provide name of the file, not the path nor extenstion.
+Execute all migrations with numbered prefixes. Starting from "001\_" prefix and adding 1 to the next prefix.
+
+```
+max_prefix = "999_"
+if cur_prefix do not exist: migration execution stops
+```
 
 <a name="DB"></a>
-## type [DB](<https://github.com/TrueHopolok/braincode-/blob/main/back-end/db/db.go#L20-L22>)
+## type [DB](<https://github.com/TrueHopolok/braincode-/blob/main/back-end/db/db.go#L24-L26>)
 
 Contains pointer to sql.DB but gurantees safety of usage outside the package
 

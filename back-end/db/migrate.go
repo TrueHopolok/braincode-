@@ -1,10 +1,12 @@
 package db
 
 import (
-	"bytes"
 	"flag"
 	"fmt"
 	"os"
+	"strings"
+
+	"github.com/TrueHopolok/braincode-/back-end/logger"
 )
 
 // Contain migration files directory
@@ -14,24 +16,36 @@ func init() {
 	flag.StringVar(&MIGRATIONS_DIR_PATH, "db_migrations", "back-end/db/migrations/", "Provide a directory with all migartion queries")
 }
 
-// Execute all given queries if they exists as files.
-// Only requirement is to provide name of the file, not the path nor extenstion.
-func Migrate(migration_name ...string) error {
-	for _, mname := range migration_name {
-		mname = fmt.Sprintf("%s%s%s", MIGRATIONS_DIR_PATH, mname, ".sql")
-		mfile, err := os.Open(mname)
-		if err != nil {
-			return err
+/*
+Execute all migrations with numbered prefixes.
+Starting from "001_" prefix and adding 1 to the next prefix.
+
+	max_prefix = "999_"
+	if cur_prefix do not exist: migration execution stops
+*/
+func Migrate() error {
+	files, err := os.ReadDir(MIGRATIONS_DIR_PATH)
+	if err != nil {
+		return err
+	}
+	for i := 1; i <= 999; i++ {
+		prefix := fmt.Sprintf("%03d_", i)
+		found := false
+		for _, file := range files {
+			fname := file.Name()
+			if !file.IsDir() && strings.HasPrefix(fname, prefix) {
+				logger.Log.Debug("Migration: found = %s", fname)
+				buf, err := os.ReadFile(fname)
+				_, err = Conn.Exec(string(buf))
+				if err != nil {
+					return err
+				}
+				found = true
+				break
+			}
 		}
-		var buf bytes.Buffer
-		_, err = buf.ReadFrom(mfile)
-		mfile.Close()
-		if err != nil {
-			return err
-		}
-		_, err = Conn.Exec(buf.String())
-		if err != nil {
-			return err
+		if !found {
+			return nil
 		}
 	}
 	return nil
