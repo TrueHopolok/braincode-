@@ -25,18 +25,13 @@ func Init() error
 Open database and checks if database is reachable
 
 <a name="Migrate"></a>
-## func [Migrate](<https://github.com/TrueHopolok/braincode-/blob/main/back-end/db/migrate.go#L19>)
+## func [Migrate](<https://github.com/TrueHopolok/braincode-/blob/main/back-end/db/migrate.go#L24>)
 
 ```go
 func Migrate() error
 ```
 
-Execute all migrations with numbered prefixes. Starting from "001\_" prefix and adding 1 to the next prefix.
-
-```
-max_prefix = "999_"
-if cur_prefix do not exist: migration execution stops
-```
+Migrate executes all embedded migrations.
 
 <a name="DB"></a>
 ## type [DB](<https://github.com/TrueHopolok/braincode-/blob/main/back-end/db/db.go#L17-L19>)

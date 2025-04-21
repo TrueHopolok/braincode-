@@ -31,6 +31,9 @@ import "github.com/TrueHopolok/braincode-/judge"
   - [func UnmarshalChecker\(b \[\]byte\) \(OutputChecker, error\)](<#UnmarshalChecker>)
 - [type Pair](<#Pair>)
 - [type Problem](<#Problem>)
+  - [func \(p \*Problem\) AppendBinary\(buf \[\]byte\) \(\[\]byte, error\)](<#Problem.AppendBinary>)
+  - [func \(p \*Problem\) MarshalBinary\(\) \(\[\]byte, error\)](<#Problem.MarshalBinary>)
+  - [func \(p \*Problem\) UnmarshalBinary\(buf \[\]byte\) error](<#Problem.UnmarshalBinary>)
 - [type Status](<#Status>)
   - [func \(i Status\) String\(\) string](<#Status.String>)
 - [type Verdict](<#Verdict>)
@@ -38,7 +41,7 @@ import "github.com/TrueHopolok/braincode-/judge"
 
 
 <a name="AppendChecker"></a>
-## func [AppendChecker](<https://github.com/TrueHopolok/braincode-/blob/main/judge/serialization.go#L71>)
+## func [AppendChecker](<https://github.com/TrueHopolok/braincode-/blob/main/judge/serialization.go#L128>)
 
 ```go
 func AppendChecker(c OutputChecker, b []byte) ([]byte, error)
@@ -47,7 +50,7 @@ func AppendChecker(c OutputChecker, b []byte) ([]byte, error)
 
 
 <a name="AppendGenerator"></a>
-## func [AppendGenerator](<https://github.com/TrueHopolok/braincode-/blob/main/judge/serialization.go#L22>)
+## func [AppendGenerator](<https://github.com/TrueHopolok/braincode-/blob/main/judge/serialization.go#L60>)
 
 ```go
 func AppendGenerator(g InputGenerator, b []byte) ([]byte, error)
@@ -67,7 +70,7 @@ CalculateScore is a helper function to calculate score of a given verdict set. R
 Test group is only counted if all tests in a group pass.
 
 <a name="MarshalChecker"></a>
-## func [MarshalChecker](<https://github.com/TrueHopolok/braincode-/blob/main/judge/serialization.go#L67>)
+## func [MarshalChecker](<https://github.com/TrueHopolok/braincode-/blob/main/judge/serialization.go#L124>)
 
 ```go
 func MarshalChecker(c OutputChecker) ([]byte, error)
@@ -76,7 +79,7 @@ func MarshalChecker(c OutputChecker) ([]byte, error)
 
 
 <a name="MarshalGenerator"></a>
-## func [MarshalGenerator](<https://github.com/TrueHopolok/braincode-/blob/main/judge/serialization.go#L18>)
+## func [MarshalGenerator](<https://github.com/TrueHopolok/braincode-/blob/main/judge/serialization.go#L56>)
 
 ```go
 func MarshalGenerator(g InputGenerator) ([]byte, error)
@@ -131,7 +134,7 @@ func NewLuaGenerator(source string) InputGenerator
 NewLuaGenerator create a new generator from lua source code. See \[lua.GetTests\] for details.
 
 <a name="UnmarshalGenerator"></a>
-### func [UnmarshalGenerator](<https://github.com/TrueHopolok/braincode-/blob/main/judge/serialization.go#L42>)
+### func [UnmarshalGenerator](<https://github.com/TrueHopolok/braincode-/blob/main/judge/serialization.go#L66>)
 
 ```go
 func UnmarshalGenerator(b []byte) (InputGenerator, error)
@@ -250,7 +253,7 @@ func NewLuaChecker(source string) (OutputChecker, error)
 NewLuaChecker creates a new lua checker. See \[lua.NewChecker\] for details.
 
 <a name="UnmarshalChecker"></a>
-### func [UnmarshalChecker](<https://github.com/TrueHopolok/braincode-/blob/main/judge/serialization.go#L91>)
+### func [UnmarshalChecker](<https://github.com/TrueHopolok/braincode-/blob/main/judge/serialization.go#L134>)
 
 ```go
 func UnmarshalChecker(b []byte) (OutputChecker, error)
@@ -285,6 +288,33 @@ type Problem struct {
     Memory       int // Maximum number of allocated bytes during the execution.
 }
 ```
+
+<a name="Problem.AppendBinary"></a>
+### func \(\*Problem\) [AppendBinary](<https://github.com/TrueHopolok/braincode-/blob/main/judge/serialization.go#L154>)
+
+```go
+func (p *Problem) AppendBinary(buf []byte) ([]byte, error)
+```
+
+
+
+<a name="Problem.MarshalBinary"></a>
+### func \(\*Problem\) [MarshalBinary](<https://github.com/TrueHopolok/braincode-/blob/main/judge/serialization.go#L150>)
+
+```go
+func (p *Problem) MarshalBinary() ([]byte, error)
+```
+
+
+
+<a name="Problem.UnmarshalBinary"></a>
+### func \(\*Problem\) [UnmarshalBinary](<https://github.com/TrueHopolok/braincode-/blob/main/judge/serialization.go#L173>)
+
+```go
+func (p *Problem) UnmarshalBinary(buf []byte) error
+```
+
+
 
 <a name="Status"></a>
 ## type [Status](<https://github.com/TrueHopolok/braincode-/blob/main/judge/types.go#L6>)
