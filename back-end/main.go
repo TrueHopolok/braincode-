@@ -1,30 +1,16 @@
 package main
 
 import (
-	"flag"
 	"fmt"
-	"log"
 	"net/http"
 
 	db "github.com/TrueHopolok/braincode-/back-end/db"
 	logger "github.com/TrueHopolok/braincode-/back-end/logger"
+	"github.com/TrueHopolok/braincode-/back-end/prepared"
 )
-
-var DEBUG_MODE bool
-
-func init() {
-	flag.BoolVar(&DEBUG_MODE, "debug", true, "Launch program in the debug mode")
-}
 
 func main() {
 	var err error
-
-	//* Logger init
-	err = logger.Init(DEBUG_MODE)
-	if err != nil {
-		log.Fatalln(err)
-	}
-	logger.Log.Line()
 
 	//* Database init
 	logger.Log.Info("Database: connecting...")
@@ -39,6 +25,13 @@ func main() {
 		logger.Log.Fatal("Migration: execution failed; error=%s", err)
 	}
 	logger.Log.Info("Migrations: execution succeeded")
+
+	//* Templates init
+	logger.Log.Info("Templates: initilizating...")
+	if err = prepared.Init(); err != nil {
+		logger.Log.Fatal("Templates: initilization failed; error=%s", err)
+	}
+	logger.Log.Info("Templates: initilization succeeded")
 
 	//* HTTP init
 	logger.Log.Info("HTTP server: starting...")

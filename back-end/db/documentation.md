@@ -10,28 +10,13 @@ Implements basic realization of database connection and queries. As well as prep
 
 ## Index
 
-- [Variables](<#variables>)
 - [func Init\(\) error](<#Init>)
 - [func Migrate\(\) error](<#Migrate>)
 - [type DB](<#DB>)
 
 
-## Variables
-
-<a name="DB_FILE_PATH"></a>Contain path to database file
-
-```go
-var DB_FILE_PATH string
-```
-
-<a name="MIGRATIONS_DIR_PATH"></a>Contain migration files directory
-
-```go
-var MIGRATIONS_DIR_PATH string
-```
-
 <a name="Init"></a>
-## func [Init](<https://github.com/TrueHopolok/braincode-/blob/main/back-end/db/db.go#L32>)
+## func [Init](<https://github.com/TrueHopolok/braincode-/blob/main/back-end/db/db.go#L25>)
 
 ```go
 func Init() error
@@ -40,7 +25,7 @@ func Init() error
 Open database and checks if database is reachable
 
 <a name="Migrate"></a>
-## func [Migrate](<https://github.com/TrueHopolok/braincode-/blob/main/back-end/db/migrate.go#L26>)
+## func [Migrate](<https://github.com/TrueHopolok/braincode-/blob/main/back-end/db/migrate.go#L19>)
 
 ```go
 func Migrate() error
@@ -54,7 +39,7 @@ if cur_prefix do not exist: migration execution stops
 ```
 
 <a name="DB"></a>
-## type [DB](<https://github.com/TrueHopolok/braincode-/blob/main/back-end/db/db.go#L24-L26>)
+## type [DB](<https://github.com/TrueHopolok/braincode-/blob/main/back-end/db/db.go#L17-L19>)
 
 Contains pointer to sql.DB but gurantees safety of usage outside the package
 

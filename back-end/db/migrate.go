@@ -1,20 +1,13 @@
 package db
 
 import (
-	"flag"
 	"fmt"
 	"os"
 	"strings"
 
+	"github.com/TrueHopolok/braincode-/back-end/config"
 	"github.com/TrueHopolok/braincode-/back-end/logger"
 )
-
-// Contain migration files directory
-var MIGRATIONS_DIR_PATH string
-
-func init() {
-	flag.StringVar(&MIGRATIONS_DIR_PATH, "db_migrations", "back-end/db/migrations/", "Provide a directory with all migartion queries")
-}
 
 /*
 Execute all migrations with numbered prefixes.
@@ -24,7 +17,7 @@ Starting from "001_" prefix and adding 1 to the next prefix.
 	if cur_prefix do not exist: migration execution stops
 */
 func Migrate() error {
-	files, err := os.ReadDir(MIGRATIONS_DIR_PATH)
+	files, err := os.ReadDir(config.DB_MIGRATIONS_DIR)
 	if err != nil {
 		return err
 	}
