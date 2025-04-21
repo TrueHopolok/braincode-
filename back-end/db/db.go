@@ -24,7 +24,7 @@ var Conn DB
 // Open database and checks if database is reachable
 func Init() error {
 	var err error
-	sqldb, err := sql.Open("sqlite3", fmt.Sprintf("file:%s", config.DB_FILE_PATH))
+	sqldb, err := sql.Open("sqlite3", fmt.Sprintf("file:%s", config.Get().DBFilepath))
 	if err != nil {
 		return err
 	}

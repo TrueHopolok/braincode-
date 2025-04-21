@@ -8,7 +8,9 @@ tool (
 )
 
 require (
+	github.com/BurntSushi/toml v1.5.0
 	github.com/TrueHopolok/plog v0.0.0-20250409130028-948d2d54a606
+	github.com/mcuadros/go-defaults v1.2.0
 	github.com/ncruces/go-sqlite3 v0.25.0
 	github.com/yuin/gopher-lua v1.1.1
 )

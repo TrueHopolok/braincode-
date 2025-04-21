@@ -16,13 +16,13 @@ import (
 var Log *plog.Logger
 
 func init() {
-	log_file, err := os.OpenFile(config.LOG_FILE_PATH, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0666)
+	log_file, err := os.OpenFile(config.Get().LogFilepath, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0666)
 	if err != nil {
 		log.Fatalln(err)
 	}
 	var log_writer io.Writer = log_file
 	log_level := plog.LevelInfo
-	if config.LOG_IS_DEBUG {
+	if config.Get().Verbose {
 		log_writer = io.MultiWriter(log_file, os.Stdout)
 		log_level = plog.LevelDebug
 	}

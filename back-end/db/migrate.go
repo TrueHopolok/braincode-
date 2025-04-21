@@ -17,7 +17,7 @@ Starting from "001_" prefix and adding 1 to the next prefix.
 	if cur_prefix do not exist: migration execution stops
 */
 func Migrate() error {
-	files, err := os.ReadDir(config.DB_MIGRATIONS_DIR)
+	files, err := os.ReadDir(config.Get().DBMigrationsPath)
 	if err != nil {
 		return err
 	}

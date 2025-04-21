@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"net/http"
 
@@ -8,6 +9,10 @@ import (
 	logger "github.com/TrueHopolok/braincode-/back-end/logger"
 	"github.com/TrueHopolok/braincode-/back-end/prepared"
 )
+
+func init() {
+	flag.Parse()
+}
 
 func main() {
 	var err error
