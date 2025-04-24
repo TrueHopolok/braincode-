@@ -64,6 +64,9 @@ func Migrate() error {
 		return fmt.Errorf("migration: database version %v is not known", version)
 	}
 
+	if version != "" {
+		i += 1
+	}
 	for _, entry := range entries[i:] {
 		data, err := migrations.ReadFile(entry)
 		if err != nil {
