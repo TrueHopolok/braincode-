@@ -8,7 +8,10 @@ tool (
 )
 
 require (
+	github.com/BurntSushi/toml v1.5.0
 	github.com/TrueHopolok/plog v0.0.0-20250409130028-948d2d54a606
+	github.com/mcuadros/go-defaults v1.2.0
+	github.com/ncruces/go-sqlite3 v0.25.0
 	github.com/yuin/gopher-lua v1.1.1
 )
 
@@ -35,6 +38,7 @@ require (
 	github.com/mgutz/ansi v0.0.0-20200706080929-d51e80ef957d // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/mitchellh/mapstructure v1.4.1 // indirect
+	github.com/ncruces/julianday v1.0.0 // indirect
 	github.com/nxadm/tail v1.4.11 // indirect
 	github.com/pelletier/go-toml v1.9.1 // indirect
 	github.com/princjef/gomarkdoc v1.1.0 // indirect
@@ -51,6 +55,7 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/spf13/viper v1.7.1 // indirect
 	github.com/subosito/gotenv v1.2.0 // indirect
+	github.com/tetratelabs/wazero v1.9.0 // indirect
 	github.com/x-cray/logrus-prefixed-formatter v0.5.2 // indirect
 	github.com/xanzy/ssh-agent v0.3.0 // indirect
 	golang.org/x/crypto v0.36.0 // indirect

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/front-end/styles/style.css">
+    <script src="/front-end/scripts/script.js"></script> 
+    <title>Hello World</title>
+</head>
+<body>
+    <h1>Hello world!</h1>
+    <p>Welcome to test page for go server.</p>
+    <div>
+        {{range .Items}}
+        <p>
+            {{.}}
+        </p>
+        {{else}}
+        <p>
+            <strong>no rows</strong>
+        </p>
+        {{end}}
+    </div>
+    <button type="button" id="datebutton">Click me to display Date and Time.</button>
+    <p id="dateparagraph">...</p>
+</body>
+</html>

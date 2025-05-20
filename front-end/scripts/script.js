@@ -81,4 +81,3 @@ PROBLEM_UPLOAD.addEventListener("click", (e) => {
     
 
     SECTION_CONTENT.append(task_form)
-});

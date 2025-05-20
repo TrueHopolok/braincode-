@@ -2,9 +2,11 @@ package judge
 
 import (
 	"bytes"
+	"encoding/binary"
 	"encoding/gob"
 	"errors"
 	"fmt"
+	"math"
 
 	"github.com/TrueHopolok/braincode-/judge/lua"
 )
@@ -15,33 +17,27 @@ type serializedGenerator struct {
 	Lua  *luaGenerator
 }
 
-func MarshalGenerator(g InputGenerator) ([]byte, error) {
-	return AppendGenerator(g, nil)
-}
-
-func AppendGenerator(g InputGenerator, b []byte) ([]byte, error) {
+func marshalGenerator(enc *gob.Encoder, gen InputGenerator) error {
 	var val serializedGenerator
-	switch gen := g.(type) {
+	switch g := gen.(type) {
 	case bfGenerator:
-		val.BF = &gen
+		val.BF = &g
 	case listGenerator:
-		val.List = &gen
+		val.List = &g
 	case luaGenerator:
-		val.Lua = &gen
+		val.Lua = &g
 	case *smartGenerator:
-		return AppendGenerator(gen.InputGenerator, b)
+		return marshalGenerator(enc, g.InputGenerator)
 	default:
-		return nil, fmt.Errorf("unexpected generator: %T", g)
+		return fmt.Errorf("unexpected generator: %T", g)
 	}
 
-	buf := bytes.NewBuffer(b)
-	err := gob.NewEncoder(buf).Encode(&val)
-	return buf.Bytes(), err
+	return enc.Encode(&val)
 }
 
-func UnmarshalGenerator(b []byte) (InputGenerator, error) {
+func unmarshalGenerator(dec *gob.Decoder) (InputGenerator, error) {
 	var val serializedGenerator
-	if err := gob.NewDecoder(bytes.NewReader(b)).Decode(&val); err != nil {
+	if err := dec.Decode(&val); err != nil {
 		return nil, err
 	}
 
@@ -57,6 +53,28 @@ func UnmarshalGenerator(b []byte) (InputGenerator, error) {
 	return nil, errors.New("value did not contain any known generator")
 }
 
+func MarshalGenerator(g InputGenerator) ([]byte, error) {
+	return AppendGenerator(g, nil)
+}
+
+func AppendGenerator(g InputGenerator, b []byte) ([]byte, error) {
+	buf := bytes.NewBuffer(b)
+	err := marshalGenerator(gob.NewEncoder(buf), g)
+	return buf.Bytes(), err
+}
+
+func UnmarshalGenerator(b []byte) (InputGenerator, error) {
+	buf := bytes.NewReader(b)
+	res, err := unmarshalGenerator(gob.NewDecoder(buf))
+	if err != nil {
+		return nil, err
+	}
+	if buf.Len() > 0 {
+		return nil, fmt.Errorf("buffer contains %d trailing junk bytes", buf.Len())
+	}
+	return res, nil
+}
+
 type serializedChecker struct {
 	List       *listSolution
 	BFSolution *bfSolution
@@ -64,13 +82,9 @@ type serializedChecker struct {
 	Lua        *lua.Checker
 }
 
-func MarshalChecker(c OutputChecker) ([]byte, error) {
-	return AppendChecker(c, nil)
-}
-
-func AppendChecker(c OutputChecker, b []byte) ([]byte, error) {
+func marshalChecker(enc *gob.Encoder, checker OutputChecker) error {
 	var val serializedChecker
-	switch che := c.(type) {
+	switch che := checker.(type) {
 	case bfChecker:
 		val.BFChecker = &che
 	case bfSolution:
@@ -80,17 +94,15 @@ func AppendChecker(c OutputChecker, b []byte) ([]byte, error) {
 	case *luaChecker:
 		val.Lua = &che.Checker
 	default:
-		return nil, fmt.Errorf("unexpected checker: %T", che)
+		return fmt.Errorf("unexpected checker: %T", che)
 	}
 
-	buf := bytes.NewBuffer(b)
-	err := gob.NewEncoder(buf).Encode(&val)
-	return buf.Bytes(), err
+	return enc.Encode(&val)
 }
 
-func UnmarshalChecker(b []byte) (OutputChecker, error) {
+func unmarshalChecker(dec *gob.Decoder) (OutputChecker, error) {
 	var val serializedChecker
-	if err := gob.NewDecoder(bytes.NewReader(b)).Decode(&val); err != nil {
+	if err := dec.Decode(&val); err != nil {
 		return nil, err
 	}
 
@@ -107,4 +119,113 @@ func UnmarshalChecker(b []byte) (OutputChecker, error) {
 		return *val.List, nil
 	}
 	return nil, errors.New("value did not contain any known checker")
+}
+
+func MarshalChecker(c OutputChecker) ([]byte, error) {
+	return AppendChecker(c, nil)
+}
+
+func AppendChecker(c OutputChecker, b []byte) ([]byte, error) {
+	buf := bytes.NewBuffer(b)
+	err := marshalChecker(gob.NewEncoder(buf), c)
+	return buf.Bytes(), err
+}
+
+func UnmarshalChecker(b []byte) (OutputChecker, error) {
+	buf := bytes.NewReader(b)
+	res, err := unmarshalChecker(gob.NewDecoder(buf))
+	if err != nil {
+		return nil, err
+	}
+	if buf.Len() > 0 {
+		return nil, fmt.Errorf("buffer contains %d trailing junk bytes", buf.Len())
+	}
+	return res, nil
+}
+
+const (
+	wireFormatV1 = iota + 1
+)
+
+func (p *Problem) MarshalBinary() ([]byte, error) {
+	return p.AppendBinary(nil)
+}
+
+func (p *Problem) AppendBinary(buf []byte) ([]byte, error) {
+	buf = binary.AppendUvarint(buf, wireFormatV1)
+	buf = binary.AppendUvarint(buf, uint64(max(p.Instructions, 0)))
+	buf = binary.AppendUvarint(buf, uint64(max(p.Memory, 0)))
+	buf = binary.AppendUvarint(buf, uint64(max(p.Steps, 0)))
+
+	b := bytes.NewBuffer(buf)
+	enc := gob.NewEncoder(b)
+
+	if err := marshalGenerator(enc, p.InputGenerator); err != nil {
+		return b.Bytes(), err
+	}
+	if err := marshalChecker(enc, p.OutputChecker); err != nil {
+		return b.Bytes(), err
+	}
+
+	return b.Bytes(), nil
+}
+
+func (p *Problem) UnmarshalBinary(buf []byte) error {
+	r := bytes.NewReader(buf)
+
+	ver, err := binary.ReadUvarint(r)
+	if err != nil {
+		return err
+	}
+	if ver != wireFormatV1 {
+		return fmt.Errorf("serialized version %v, but parser only recognizes v1", ver)
+	}
+
+	instr, err := binary.ReadUvarint(r)
+	if err != nil {
+		return err
+	}
+	if instr > math.MaxInt {
+		return errors.New("instruction count integer overflow (is this system 32 bit?)")
+	}
+
+	memory, err := binary.ReadUvarint(r)
+	if err != nil {
+		return err
+	}
+	if memory > math.MaxInt {
+		return errors.New("memory limit integer overflow (is this system 32 bit?)")
+	}
+
+	steps, err := binary.ReadUvarint(r)
+	if err != nil {
+		return err
+	}
+	if steps > math.MaxInt {
+		return errors.New("step limit integer overflow (is this system 32 bit?)")
+	}
+
+	dec := gob.NewDecoder(r)
+	gen, err := unmarshalGenerator(dec)
+	if err != nil {
+		return err
+	}
+
+	che, err := unmarshalChecker(dec)
+	if err != nil {
+		return err
+	}
+
+	if r.Len() > 0 {
+		return fmt.Errorf("buffer contains %d trailing junk bytes", r.Len())
+	}
+
+	*p = Problem{
+		InputGenerator: gen,
+		OutputChecker:  che,
+		Steps:          int(steps),
+		Memory:         int(memory),
+		Instructions:   int(instr),
+	}
+	return nil
 }
