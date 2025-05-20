@@ -1,0 +1,25 @@
+*,
+*:before,
+*:after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+}
+
+.task {
+    display: flex;
+}
+
+.task-information, .task-submition{
+    border: 1px solid;
+    width: 50%;
+    height: 100vh;
+}
+
+.submition-text {
+    width: 100%;
+    height: 70vh;
+    resize: none;
+}
