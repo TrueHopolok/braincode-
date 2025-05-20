@@ -13,7 +13,7 @@ type Config struct {
 	LogFilepath   string `default:"server/server.log"`
 	Verbose       bool   `default:"false"`
 	DBFilepath    string `default:"server/db/db.db"`
-	TemplatesPath string `default:"static/"` // TODO(anpir): this should be embedded as well
+	TemplatesPath string `default:"frontend/"` // TODO(anpir): this should be embedded as well
 }
 
 var path = flag.String("config", "", "path to the config file")
