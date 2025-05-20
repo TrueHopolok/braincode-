@@ -4,7 +4,7 @@ import (
 	"html/template"
 	"path/filepath"
 
-	"github.com/TrueHopolok/braincode-/back-end/config"
+	"github.com/TrueHopolok/braincode-/server/config"
 )
 
 var Templates *template.Template

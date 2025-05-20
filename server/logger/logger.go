@@ -8,7 +8,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/TrueHopolok/braincode-/back-end/config"
+	"github.com/TrueHopolok/braincode-/server/config"
 	plog "github.com/TrueHopolok/plog"
 )
 

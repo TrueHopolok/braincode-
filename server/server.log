@@ -1,0 +1,556 @@
+[INFO] [2025-05-20 17:19:08] - Database: connecting...
+[INFO] [2025-05-20 17:19:10] - Database: connection succeeded
+[INFO] [2025-05-20 17:19:10] - Migrations: executing...
+[INFO] [2025-05-20 17:19:10] - Migrations: execution succeeded
+[INFO] [2025-05-20 17:19:10] - Templates: initilizating...
+[INFO] [2025-05-20 17:19:10] - Templates: initilization succeeded
+[INFO] [2025-05-20 17:19:10] - HTTP server: starting...
+[INFO] [2025-05-20 17:19:10] - HTTP server: start succeeded
+[INFO] [2025-05-20 17:19:10] - Console: initialized
+[DEBUG] [2025-05-20 17:19:18] - Request=0xc0029bc140 arrived
+[ERROR] [2025-05-20 17:19:18] - Request=0xc0029bc140 failed; error=html/template: "/" is undefined
+[DEBUG] [2025-05-20 17:19:18] - Request=0xc0029bc140 served
+[DEBUG] [2025-05-20 17:19:18] - Request=0xc003688140 arrived
+[ERROR] [2025-05-20 17:19:18] - Request=0xc003688140 failed; error=html/template: "/favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:19:18] - Request=0xc003688140 served
+[DEBUG] [2025-05-20 17:19:19] - Request=0xc003688280 arrived
+[ERROR] [2025-05-20 17:19:19] - Request=0xc003688280 failed; error=html/template: "/" is undefined
+[DEBUG] [2025-05-20 17:19:19] - Request=0xc003688280 served
+[DEBUG] [2025-05-20 17:19:19] - Request=0xc0036883c0 arrived
+[ERROR] [2025-05-20 17:19:19] - Request=0xc0036883c0 failed; error=html/template: "/favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:19:19] - Request=0xc0036883c0 served
+[DEBUG] [2025-05-20 17:19:24] - Request=0xc003688500 arrived
+[ERROR] [2025-05-20 17:19:24] - Request=0xc003688500 failed; error=html/template: "/index.html" is undefined
+[DEBUG] [2025-05-20 17:19:24] - Request=0xc003688500 served
+[DEBUG] [2025-05-20 17:19:24] - Request=0xc003688640 arrived
+[ERROR] [2025-05-20 17:19:24] - Request=0xc003688640 failed; error=html/template: "/favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:19:24] - Request=0xc003688640 served
+[DEBUG] [2025-05-20 17:19:34] - Request=0xc003688780 arrived
+[ERROR] [2025-05-20 17:19:34] - Request=0xc003688780 failed; error=html/template: "/index.html" is undefined
+[DEBUG] [2025-05-20 17:19:34] - Request=0xc003688780 served
+[DEBUG] [2025-05-20 17:19:34] - Request=0xc0036888c0 arrived
+[ERROR] [2025-05-20 17:19:34] - Request=0xc0036888c0 failed; error=html/template: "/favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:19:34] - Request=0xc0036888c0 served
+[DEBUG] [2025-05-20 17:19:39] - Request=0xc003688a00 arrived
+[ERROR] [2025-05-20 17:19:39] - Request=0xc003688a00 failed; error=html/template: "/index.html" is undefined
+[DEBUG] [2025-05-20 17:19:39] - Request=0xc003688a00 served
+[DEBUG] [2025-05-20 17:19:40] - Request=0xc003688b40 arrived
+[ERROR] [2025-05-20 17:19:40] - Request=0xc003688b40 failed; error=html/template: "/favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:19:40] - Request=0xc003688b40 served
+[INFO] [2025-05-20 17:20:09] - Console: server stopped
+[INFO] [2025-05-20 17:20:13] - Database: connecting...
+[INFO] [2025-05-20 17:20:14] - Database: connection succeeded
+[INFO] [2025-05-20 17:20:14] - Migrations: executing...
+[INFO] [2025-05-20 17:20:14] - Migrations: execution succeeded
+[INFO] [2025-05-20 17:20:14] - Templates: initilizating...
+[INFO] [2025-05-20 17:20:14] - Templates: initilization succeeded
+[INFO] [2025-05-20 17:20:14] - HTTP server: starting...
+[INFO] [2025-05-20 17:20:14] - HTTP server: start succeeded
+[INFO] [2025-05-20 17:20:14] - Console: initialized
+[DEBUG] [2025-05-20 17:20:16] - Request=0xc000a84000 arrived
+[DEBUG] [2025-05-20 17:20:16] - Request=0xc000a84000 served
+[DEBUG] [2025-05-20 17:20:17] - Request=0xc0023a0b40 arrived
+[ERROR] [2025-05-20 17:20:17] - Request=0xc0023a0b40 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:20:17] - Request=0xc0023a0b40 served
+[DEBUG] [2025-05-20 17:20:20] - Request=0xc0023a0c80 arrived
+[ERROR] [2025-05-20 17:20:20] - Request=0xc0023a0c80 failed; error=html/template: "" is undefined
+[DEBUG] [2025-05-20 17:20:20] - Request=0xc0023a0c80 served
+[DEBUG] [2025-05-20 17:20:20] - Request=0xc0023a0dc0 arrived
+[ERROR] [2025-05-20 17:20:20] - Request=0xc0023a0dc0 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:20:20] - Request=0xc0023a0dc0 served
+[DEBUG] [2025-05-20 17:20:22] - Request=0xc000a84140 arrived
+[ERROR] [2025-05-20 17:20:22] - Request=0xc000a84140 failed; error=html/template: "" is undefined
+[DEBUG] [2025-05-20 17:20:22] - Request=0xc000a84140 served
+[DEBUG] [2025-05-20 17:20:22] - Request=0xc000a84280 arrived
+[ERROR] [2025-05-20 17:20:22] - Request=0xc000a84280 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:20:22] - Request=0xc000a84280 served
+[DEBUG] [2025-05-20 17:20:29] - Request=0xc00007a000 arrived
+[DEBUG] [2025-05-20 17:20:29] - Request=0xc00007a000 served
+[DEBUG] [2025-05-20 17:20:29] - Request=0xc00007a140 arrived
+[ERROR] [2025-05-20 17:20:29] - Request=0xc00007a140 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:20:29] - Request=0xc00007a140 served
+[INFO] [2025-05-20 17:20:45] - Console: server stopped
+[INFO] [2025-05-20 17:20:47] - Database: connecting...
+[INFO] [2025-05-20 17:20:49] - Database: connection succeeded
+[INFO] [2025-05-20 17:20:49] - Migrations: executing...
+[INFO] [2025-05-20 17:20:49] - Migrations: execution succeeded
+[INFO] [2025-05-20 17:20:49] - Templates: initilizating...
+[INFO] [2025-05-20 17:20:49] - Templates: initilization succeeded
+[INFO] [2025-05-20 17:20:49] - HTTP server: starting...
+[INFO] [2025-05-20 17:20:49] - HTTP server: start succeeded
+[INFO] [2025-05-20 17:20:49] - Console: initialized
+[DEBUG] [2025-05-20 17:20:51] - Request=0xc000a503c0 arrived
+[DEBUG] [2025-05-20 17:20:51] - Request=0xc000a503c0 served
+[DEBUG] [2025-05-20 17:20:51] - Request=0xc000a50500 arrived
+[DEBUG] [2025-05-20 17:20:51] - Request=0xc000a50500 served
+[DEBUG] [2025-05-20 17:20:52] - Request=0xc000a50640 arrived
+[DEBUG] [2025-05-20 17:20:52] - Request=0xc000a50640 served
+[DEBUG] [2025-05-20 17:20:52] - Request=0xc000a50780 arrived
+[DEBUG] [2025-05-20 17:20:52] - Request=0xc000a50780 served
+[DEBUG] [2025-05-20 17:20:54] - Request=0xc00243bb80 arrived
+[DEBUG] [2025-05-20 17:20:54] - Request=0xc00243bb80 served
+[DEBUG] [2025-05-20 17:20:54] - Request=0xc00243bcc0 arrived
+[DEBUG] [2025-05-20 17:20:54] - Request=0xc00243bcc0 served
+[DEBUG] [2025-05-20 17:20:54] - Request=0xc00243be00 arrived
+[DEBUG] [2025-05-20 17:20:54] - Request=0xc00243be00 served
+[DEBUG] [2025-05-20 17:20:54] - Request=0xc000a508c0 arrived
+[DEBUG] [2025-05-20 17:20:54] - Request=0xc000a508c0 served
+[DEBUG] [2025-05-20 17:20:58] - Request=0xc0035c0000 arrived
+[DEBUG] [2025-05-20 17:20:58] - Request=0xc0035c0000 served
+[DEBUG] [2025-05-20 17:20:58] - Request=0xc0035c0140 arrived
+[DEBUG] [2025-05-20 17:20:58] - Request=0xc0035c0140 served
+[INFO] [2025-05-20 17:21:32] - Console: server stopped
+[INFO] [2025-05-20 17:27:58] - Database: connecting...
+[INFO] [2025-05-20 17:27:59] - Database: connection succeeded
+[INFO] [2025-05-20 17:27:59] - Migrations: executing...
+[INFO] [2025-05-20 17:27:59] - Migrations: execution succeeded
+[INFO] [2025-05-20 17:27:59] - Templates: initilizating...
+[INFO] [2025-05-20 17:27:59] - Templates: initilization succeeded
+[INFO] [2025-05-20 17:27:59] - HTTP server: starting...
+[INFO] [2025-05-20 17:27:59] - HTTP server: start succeeded
+[INFO] [2025-05-20 17:27:59] - Console: initialized
+[DEBUG] [2025-05-20 17:28:06] - Request=0xc0009743c0 arrived
+[DEBUG] [2025-05-20 17:28:06] - Request=0xc0009743c0 served
+[DEBUG] [2025-05-20 17:28:06] - Request=0xc003420000 arrived
+[DEBUG] [2025-05-20 17:28:06] - Request=0xc003420000 served
+[DEBUG] [2025-05-20 17:28:06] - Request=0xc000974500 arrived
+[DEBUG] [2025-05-20 17:28:06] - Request=0xc000974500 served
+[DEBUG] [2025-05-20 17:28:06] - Request=0xc003420140 arrived
+[DEBUG] [2025-05-20 17:28:06] - Request=0xc003420140 served
+[DEBUG] [2025-05-20 17:30:05] - Request=0xc003420280 arrived
+[DEBUG] [2025-05-20 17:30:05] - Request=0xc003420280 served
+[DEBUG] [2025-05-20 17:30:09] - Request=0xc003420000 arrived
+[DEBUG] [2025-05-20 17:30:09] - Request=0xc003420000 served
+[DEBUG] [2025-05-20 17:30:09] - Request=0xc003420140 arrived
+[DEBUG] [2025-05-20 17:30:09] - Request=0xc003420140 served
+[DEBUG] [2025-05-20 17:30:09] - Request=0xc000000000 arrived
+[DEBUG] [2025-05-20 17:30:09] - Request=0xc000000000 served
+[DEBUG] [2025-05-20 17:30:09] - Request=0xc000000140 arrived
+[DEBUG] [2025-05-20 17:30:09] - Request=0xc000000140 served
+[DEBUG] [2025-05-20 17:30:10] - Request=0xc0000d8000 arrived
+[DEBUG] [2025-05-20 17:30:10] - Request=0xc0000d8000 served
+[DEBUG] [2025-05-20 17:30:10] - Request=0xc0034203c0 arrived
+[DEBUG] [2025-05-20 17:30:10] - Request=0xc0034203c0 served
+[DEBUG] [2025-05-20 17:30:10] - Request=0xc0000d8140 arrived
+[DEBUG] [2025-05-20 17:30:10] - Request=0xc0000d8140 served
+[DEBUG] [2025-05-20 17:30:10] - Request=0xc003420500 arrived
+[DEBUG] [2025-05-20 17:30:10] - Request=0xc003420500 served
+[DEBUG] [2025-05-20 17:30:11] - Request=0xc0000d8280 arrived
+[DEBUG] [2025-05-20 17:30:11] - Request=0xc0000d8280 served
+[DEBUG] [2025-05-20 17:30:11] - Request=0xc0000d83c0 arrived
+[DEBUG] [2025-05-20 17:30:11] - Request=0xc0000d83c0 served
+[DEBUG] [2025-05-20 17:30:11] - Request=0xc000000280 arrived
+[DEBUG] [2025-05-20 17:30:11] - Request=0xc000000280 served
+[DEBUG] [2025-05-20 17:30:11] - Request=0xc0000003c0 arrived
+[DEBUG] [2025-05-20 17:30:11] - Request=0xc0000003c0 served
+[DEBUG] [2025-05-20 17:30:11] - Request=0xc000000500 arrived
+[DEBUG] [2025-05-20 17:30:11] - Request=0xc000000500 served
+[DEBUG] [2025-05-20 17:30:11] - Request=0xc000000640 arrived
+[DEBUG] [2025-05-20 17:30:11] - Request=0xc000000640 served
+[DEBUG] [2025-05-20 17:30:11] - Request=0xc003420640 arrived
+[DEBUG] [2025-05-20 17:30:11] - Request=0xc003420640 served
+[DEBUG] [2025-05-20 17:30:11] - Request=0xc000000780 arrived
+[DEBUG] [2025-05-20 17:30:11] - Request=0xc000000780 served
+[INFO] [2025-05-20 17:33:43] - Console: server stopped
+[INFO] [2025-05-20 17:33:47] - Database: connecting...
+[INFO] [2025-05-20 17:33:48] - Database: connection succeeded
+[INFO] [2025-05-20 17:33:48] - Migrations: executing...
+[INFO] [2025-05-20 17:33:48] - Migrations: execution succeeded
+[INFO] [2025-05-20 17:33:48] - Templates: initilizating...
+[INFO] [2025-05-20 17:33:48] - Templates: initilization succeeded
+[INFO] [2025-05-20 17:33:48] - HTTP server: starting...
+[INFO] [2025-05-20 17:33:48] - HTTP server: start succeeded
+[INFO] [2025-05-20 17:33:48] - Console: initialized
+[DEBUG] [2025-05-20 17:33:52] - Request=0xc00368e000 arrived
+[DEBUG] [2025-05-20 17:33:52] - Request=0xc00368e000 served
+[DEBUG] [2025-05-20 17:33:52] - Request=0xc0024b9a40 arrived
+[DEBUG] [2025-05-20 17:33:52] - Request=0xc0024b9a40 served
+[DEBUG] [2025-05-20 17:33:52] - Request=0xc0024b9b80 arrived
+[DEBUG] [2025-05-20 17:33:52] - Request=0xc0024b9b80 served
+[DEBUG] [2025-05-20 17:33:52] - Request=0xc003622000 arrived
+[DEBUG] [2025-05-20 17:33:52] - Request=0xc003622000 served
+[DEBUG] [2025-05-20 17:33:54] - Request=0xc003622140 arrived
+[DEBUG] [2025-05-20 17:33:54] - Request=0xc003622140 served
+[DEBUG] [2025-05-20 17:33:59] - Request=0xc003622280 arrived
+[DEBUG] [2025-05-20 17:33:59] - Request=0xc003622280 served
+[DEBUG] [2025-05-20 17:33:59] - Request=0xc0036223c0 arrived
+[DEBUG] [2025-05-20 17:33:59] - Request=0xc0036223c0 served
+[DEBUG] [2025-05-20 17:33:59] - Request=0xc0024b9cc0 arrived
+[DEBUG] [2025-05-20 17:33:59] - Request=0xc0024b9cc0 served
+[DEBUG] [2025-05-20 17:33:59] - Request=0xc003622500 arrived
+[DEBUG] [2025-05-20 17:33:59] - Request=0xc003622500 served
+[DEBUG] [2025-05-20 17:33:59] - Request=0xc003704000 arrived
+[DEBUG] [2025-05-20 17:33:59] - Request=0xc003704000 served
+[DEBUG] [2025-05-20 17:33:59] - Request=0xc003704140 arrived
+[DEBUG] [2025-05-20 17:33:59] - Request=0xc003704140 served
+[DEBUG] [2025-05-20 17:33:59] - Request=0xc0024b9e00 arrived
+[DEBUG] [2025-05-20 17:33:59] - Request=0xc0024b9e00 served
+[DEBUG] [2025-05-20 17:33:59] - Request=0xc003704280 arrived
+[DEBUG] [2025-05-20 17:33:59] - Request=0xc003704280 served
+[DEBUG] [2025-05-20 17:34:08] - Request=0xc003622640 arrived
+[DEBUG] [2025-05-20 17:34:08] - Request=0xc003622640 served
+[DEBUG] [2025-05-20 17:34:08] - Request=0xc003622780 arrived
+[DEBUG] [2025-05-20 17:34:08] - Request=0xc003622780 served
+[DEBUG] [2025-05-20 17:34:08] - Request=0xc002fcc000 arrived
+[DEBUG] [2025-05-20 17:34:08] - Request=0xc002fcc000 served
+[DEBUG] [2025-05-20 17:34:08] - Request=0xc0036228c0 arrived
+[DEBUG] [2025-05-20 17:34:08] - Request=0xc0036228c0 served
+[INFO] [2025-05-20 17:34:10] - Console: server stopped
+[INFO] [2025-05-20 17:34:14] - Database: connecting...
+[INFO] [2025-05-20 17:34:15] - Database: connection succeeded
+[INFO] [2025-05-20 17:34:15] - Migrations: executing...
+[INFO] [2025-05-20 17:34:15] - Migrations: execution succeeded
+[INFO] [2025-05-20 17:34:15] - Templates: initilizating...
+[INFO] [2025-05-20 17:34:15] - Templates: initilization succeeded
+[INFO] [2025-05-20 17:34:15] - HTTP server: starting...
+[INFO] [2025-05-20 17:34:15] - HTTP server: start succeeded
+[INFO] [2025-05-20 17:34:15] - Console: initialized
+[DEBUG] [2025-05-20 17:34:17] - Request=0xc0023eca00 arrived
+[DEBUG] [2025-05-20 17:34:17] - Request=0xc0023eca00 served
+[DEBUG] [2025-05-20 17:34:20] - Request=0xc0023ecb40 arrived
+[ERROR] [2025-05-20 17:34:20] - Request=0xc0023ecb40 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:34:20] - Request=0xc0023ecb40 served
+[DEBUG] [2025-05-20 17:34:21] - Request=0xc0023ecc80 arrived
+[DEBUG] [2025-05-20 17:34:21] - Request=0xc0023ecc80 served
+[DEBUG] [2025-05-20 17:34:21] - Request=0xc0023ecdc0 arrived
+[ERROR] [2025-05-20 17:34:21] - Request=0xc0023ecdc0 failed; error=html/template: "style/indexpage.css" is undefined
+[DEBUG] [2025-05-20 17:34:21] - Request=0xc0023ecdc0 served
+[DEBUG] [2025-05-20 17:34:21] - Request=0xc000a90140 arrived
+[ERROR] [2025-05-20 17:34:21] - Request=0xc000a90140 failed; error=html/template: "scripts/script.js" is undefined
+[DEBUG] [2025-05-20 17:34:21] - Request=0xc000a90140 served
+[DEBUG] [2025-05-20 17:34:21] - Request=0xc0023a8000 arrived
+[ERROR] [2025-05-20 17:34:21] - Request=0xc0023a8000 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:34:21] - Request=0xc0023a8000 served
+[DEBUG] [2025-05-20 17:34:23] - Request=0xc0032a2000 arrived
+[DEBUG] [2025-05-20 17:34:23] - Request=0xc0032a2000 served
+[DEBUG] [2025-05-20 17:34:23] - Request=0xc0023ed900 arrived
+[ERROR] [2025-05-20 17:34:23] - Request=0xc0023ed900 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:34:23] - Request=0xc0023ed900 served
+[DEBUG] [2025-05-20 17:34:23] - Request=0xc000a90280 arrived
+[ERROR] [2025-05-20 17:34:23] - Request=0xc000a90280 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:34:23] - Request=0xc000a90280 served
+[DEBUG] [2025-05-20 17:34:24] - Request=0xc000a903c0 arrived
+[ERROR] [2025-05-20 17:34:24] - Request=0xc000a903c0 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:34:24] - Request=0xc000a903c0 served
+[DEBUG] [2025-05-20 17:34:26] - Request=0xc0023eda40 arrived
+[ERROR] [2025-05-20 17:34:26] - Request=0xc0023eda40 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:34:26] - Request=0xc0023eda40 served
+[DEBUG] [2025-05-20 17:34:27] - Request=0xc0023edb80 arrived
+[ERROR] [2025-05-20 17:34:27] - Request=0xc0023edb80 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:34:27] - Request=0xc0023edb80 served
+[DEBUG] [2025-05-20 17:34:27] - Request=0xc0032a2140 arrived
+[ERROR] [2025-05-20 17:34:27] - Request=0xc0032a2140 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:34:27] - Request=0xc0032a2140 served
+[DEBUG] [2025-05-20 17:34:28] - Request=0xc000a90500 arrived
+[ERROR] [2025-05-20 17:34:28] - Request=0xc000a90500 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:34:28] - Request=0xc000a90500 served
+[DEBUG] [2025-05-20 17:34:29] - Request=0xc0023edcc0 arrived
+[ERROR] [2025-05-20 17:34:29] - Request=0xc0023edcc0 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:34:29] - Request=0xc0023edcc0 served
+[DEBUG] [2025-05-20 17:34:32] - Request=0xc0032a2280 arrived
+[ERROR] [2025-05-20 17:34:32] - Request=0xc0032a2280 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:34:32] - Request=0xc0032a2280 served
+[DEBUG] [2025-05-20 17:34:32] - Request=0xc000a90640 arrived
+[ERROR] [2025-05-20 17:34:32] - Request=0xc000a90640 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:34:32] - Request=0xc000a90640 served
+[DEBUG] [2025-05-20 17:35:58] - Request=0xc0023ede00 arrived
+[DEBUG] [2025-05-20 17:35:58] - Request=0xc0023ede00 served
+[DEBUG] [2025-05-20 17:35:58] - Request=0xc000a90780 arrived
+[ERROR] [2025-05-20 17:35:58] - Request=0xc000a90780 failed; error=html/template: "scripts/script.js" is undefined
+[DEBUG] [2025-05-20 17:35:58] - Request=0xc0032a23c0 arrived
+[ERROR] [2025-05-20 17:35:58] - Request=0xc0032a23c0 failed; error=html/template: "style/indexpage.css" is undefined
+[DEBUG] [2025-05-20 17:35:58] - Request=0xc0032a23c0 served
+[DEBUG] [2025-05-20 17:35:58] - Request=0xc000a90780 served
+[DEBUG] [2025-05-20 17:35:58] - Request=0xc000a908c0 arrived
+[ERROR] [2025-05-20 17:35:58] - Request=0xc000a908c0 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:35:58] - Request=0xc000a908c0 served
+[DEBUG] [2025-05-20 17:36:00] - Request=0xc000a90a00 arrived
+[DEBUG] [2025-05-20 17:36:00] - Request=0xc000a90a00 served
+[DEBUG] [2025-05-20 17:36:00] - Request=0xc000a90b40 arrived
+[ERROR] [2025-05-20 17:36:00] - Request=0xc000a90b40 failed; error=html/template: "scripts/script.js" is undefined
+[DEBUG] [2025-05-20 17:36:00] - Request=0xc000a90b40 served
+[DEBUG] [2025-05-20 17:36:00] - Request=0xc00323c000 arrived
+[ERROR] [2025-05-20 17:36:00] - Request=0xc00323c000 failed; error=html/template: "style/indexpage.css" is undefined
+[DEBUG] [2025-05-20 17:36:00] - Request=0xc00323c000 served
+[DEBUG] [2025-05-20 17:36:00] - Request=0xc000a90c80 arrived
+[ERROR] [2025-05-20 17:36:00] - Request=0xc000a90c80 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:36:00] - Request=0xc000a90c80 served
+[DEBUG] [2025-05-20 17:36:58] - Request=0xc000a90dc0 arrived
+[DEBUG] [2025-05-20 17:36:58] - Request=0xc000a90dc0 served
+[DEBUG] [2025-05-20 17:36:58] - Request=0xc000a90000 arrived
+[ERROR] [2025-05-20 17:36:58] - Request=0xc000a90000 failed; error=html/template: "scripts/script.js" is undefined
+[DEBUG] [2025-05-20 17:36:58] - Request=0xc00008a000 arrived
+[ERROR] [2025-05-20 17:36:58] - Request=0xc00008a000 failed; error=html/template: "style/indexpage.css" is undefined
+[DEBUG] [2025-05-20 17:36:58] - Request=0xc00008a000 served
+[DEBUG] [2025-05-20 17:36:58] - Request=0xc000a90000 served
+[DEBUG] [2025-05-20 17:36:58] - Request=0xc003248000 arrived
+[ERROR] [2025-05-20 17:36:58] - Request=0xc003248000 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:36:58] - Request=0xc003248000 served
+[DEBUG] [2025-05-20 17:36:59] - Request=0xc003248140 arrived
+[DEBUG] [2025-05-20 17:36:59] - Request=0xc003248140 served
+[DEBUG] [2025-05-20 17:36:59] - Request=0xc003248280 arrived
+[ERROR] [2025-05-20 17:36:59] - Request=0xc003248280 failed; error=html/template: "scripts/script.js" is undefined
+[DEBUG] [2025-05-20 17:36:59] - Request=0xc000a90140 arrived
+[ERROR] [2025-05-20 17:36:59] - Request=0xc000a90140 failed; error=html/template: "style/indexpage.css" is undefined
+[DEBUG] [2025-05-20 17:36:59] - Request=0xc003248280 served
+[DEBUG] [2025-05-20 17:36:59] - Request=0xc000a90140 served
+[DEBUG] [2025-05-20 17:36:59] - Request=0xc0032483c0 arrived
+[ERROR] [2025-05-20 17:36:59] - Request=0xc0032483c0 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:36:59] - Request=0xc0032483c0 served
+[INFO] [2025-05-20 17:39:14] - Console: server stopped
+[INFO] [2025-05-20 17:39:16] - Database: connecting...
+[INFO] [2025-05-20 17:39:18] - Database: connection succeeded
+[INFO] [2025-05-20 17:39:18] - Migrations: executing...
+[INFO] [2025-05-20 17:39:18] - Migrations: execution succeeded
+[INFO] [2025-05-20 17:39:18] - Templates: initilizating...
+[INFO] [2025-05-20 17:39:18] - Templates: initilization succeeded
+[INFO] [2025-05-20 17:39:18] - HTTP server: starting...
+[INFO] [2025-05-20 17:39:18] - HTTP server: start succeeded
+[INFO] [2025-05-20 17:39:18] - Console: initialized
+[DEBUG] [2025-05-20 17:39:33] - Request=0xc0035ba000 arrived
+[DEBUG] [2025-05-20 17:39:33] - Request=0xc0035ba000 served
+[DEBUG] [2025-05-20 17:39:33] - Request=0xc0035ba140 arrived
+[ERROR] [2025-05-20 17:39:33] - Request=0xc0035ba140 failed; error=html/template: "style/indexpage.css" is undefined
+[DEBUG] [2025-05-20 17:39:33] - Request=0xc0035ba140 served
+[DEBUG] [2025-05-20 17:39:33] - Request=0xc00360e000 arrived
+[ERROR] [2025-05-20 17:39:33] - Request=0xc00360e000 failed; error=html/template: "scripts/script.js" is undefined
+[DEBUG] [2025-05-20 17:39:33] - Request=0xc00360e000 served
+[DEBUG] [2025-05-20 17:39:33] - Request=0xc0035ba280 arrived
+[ERROR] [2025-05-20 17:39:33] - Request=0xc0035ba280 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:39:33] - Request=0xc0035ba280 served
+[DEBUG] [2025-05-20 17:39:34] - Request=0xc00360e140 arrived
+[DEBUG] [2025-05-20 17:39:34] - Request=0xc00360e140 served
+[DEBUG] [2025-05-20 17:39:34] - Request=0xc00360e280 arrived
+[ERROR] [2025-05-20 17:39:34] - Request=0xc00360e280 failed; error=html/template: "style/indexpage.css" is undefined
+[DEBUG] [2025-05-20 17:39:34] - Request=0xc00360e280 served
+[DEBUG] [2025-05-20 17:39:34] - Request=0xc003684000 arrived
+[ERROR] [2025-05-20 17:39:34] - Request=0xc003684000 failed; error=html/template: "scripts/script.js" is undefined
+[DEBUG] [2025-05-20 17:39:34] - Request=0xc003684000 served
+[DEBUG] [2025-05-20 17:39:34] - Request=0xc00360e3c0 arrived
+[ERROR] [2025-05-20 17:39:34] - Request=0xc00360e3c0 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:39:34] - Request=0xc00360e3c0 served
+[INFO] [2025-05-20 17:40:08] - Console: server stopped
+[INFO] [2025-05-20 17:40:13] - Database: connecting...
+[INFO] [2025-05-20 17:40:14] - Database: connection succeeded
+[INFO] [2025-05-20 17:40:14] - Migrations: executing...
+[INFO] [2025-05-20 17:40:14] - Migrations: execution succeeded
+[INFO] [2025-05-20 17:40:14] - Templates: initilizating...
+[INFO] [2025-05-20 17:40:14] - Templates: initilization succeeded
+[INFO] [2025-05-20 17:40:14] - HTTP server: starting...
+[INFO] [2025-05-20 17:40:14] - HTTP server: start succeeded
+[INFO] [2025-05-20 17:40:14] - Console: initialized
+[DEBUG] [2025-05-20 17:40:17] - Request=0xc0009f43c0 arrived
+[ERROR] [2025-05-20 17:40:17] - Request=0xc0009f43c0 failed; error=html/template: "static" is undefined
+[DEBUG] [2025-05-20 17:40:17] - Request=0xc0009f43c0 served
+[DEBUG] [2025-05-20 17:40:17] - Request=0xc0009f4500 arrived
+[ERROR] [2025-05-20 17:40:17] - Request=0xc0009f4500 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:40:17] - Request=0xc0009f4500 served
+[INFO] [2025-05-20 17:40:50] - Console: server stopped
+[INFO] [2025-05-20 17:41:03] - Database: connecting...
+[INFO] [2025-05-20 17:41:04] - Database: connection succeeded
+[INFO] [2025-05-20 17:41:04] - Migrations: executing...
+[INFO] [2025-05-20 17:41:04] - Migrations: execution succeeded
+[INFO] [2025-05-20 17:41:04] - Templates: initilizating...
+[FATAL] [2025-05-20 17:41:04] - Templates: initilization failed; error=html/template: pattern matches no files: `front-end\templates\*.html`
+[INFO] [2025-05-20 17:43:09] - Database: connecting...
+[INFO] [2025-05-20 17:43:11] - Database: connection succeeded
+[INFO] [2025-05-20 17:43:11] - Migrations: executing...
+[INFO] [2025-05-20 17:43:11] - Migrations: execution succeeded
+[INFO] [2025-05-20 17:43:11] - Templates: initilizating...
+[INFO] [2025-05-20 17:43:11] - Templates: initilization succeeded
+[INFO] [2025-05-20 17:43:11] - HTTP server: starting...
+[INFO] [2025-05-20 17:43:11] - HTTP server: start succeeded
+[INFO] [2025-05-20 17:43:11] - Console: initialized
+[DEBUG] [2025-05-20 17:43:25] - Request=0xc0023c2000 arrived
+[ERROR] [2025-05-20 17:43:25] - Request=0xc0023c2000 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:43:25] - Request=0xc0023c2000 served
+[DEBUG] [2025-05-20 17:43:28] - Request=0xc0023c3cc0 arrived
+[ERROR] [2025-05-20 17:43:28] - Request=0xc0023c3cc0 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:43:28] - Request=0xc0023c3cc0 served
+[DEBUG] [2025-05-20 17:43:37] - Request=0xc0023e3040 arrived
+[ERROR] [2025-05-20 17:43:37] - Request=0xc0023e3040 failed; error=html/template: "styles/" is undefined
+[DEBUG] [2025-05-20 17:43:37] - Request=0xc0023e3040 served
+[DEBUG] [2025-05-20 17:43:37] - Request=0xc0023e3180 arrived
+[ERROR] [2025-05-20 17:43:37] - Request=0xc0023e3180 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:43:37] - Request=0xc0023e3180 served
+[INFO] [2025-05-20 17:44:05] - Console: server stopped
+[INFO] [2025-05-20 17:44:51] - Database: connecting...
+[INFO] [2025-05-20 17:44:53] - Database: connection succeeded
+[INFO] [2025-05-20 17:44:53] - Migrations: executing...
+[INFO] [2025-05-20 17:44:53] - Migrations: execution succeeded
+[INFO] [2025-05-20 17:44:53] - Templates: initilizating...
+[INFO] [2025-05-20 17:44:53] - Templates: initilization succeeded
+[INFO] [2025-05-20 17:44:53] - HTTP server: starting...
+[INFO] [2025-05-20 17:44:53] - HTTP server: start succeeded
+[INFO] [2025-05-20 17:44:53] - Console: initialized
+[DEBUG] [2025-05-20 17:44:55] - Request=0xc002467b80 arrived
+[ERROR] [2025-05-20 17:44:55] - Request=0xc002467b80 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:44:55] - Request=0xc002467b80 served
+[DEBUG] [2025-05-20 17:44:57] - Request=0xc002467cc0 arrived
+[DEBUG] [2025-05-20 17:44:57] - Request=0xc002467cc0 served
+[DEBUG] [2025-05-20 17:44:57] - Request=0xc0033d2000 arrived
+[ERROR] [2025-05-20 17:44:57] - Request=0xc0033d2000 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:44:57] - Request=0xc0033d2000 served
+[DEBUG] [2025-05-20 17:45:01] - Request=0xc0033d23c0 arrived
+[ERROR] [2025-05-20 17:45:01] - Request=0xc0033d23c0 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:45:01] - Request=0xc0033d23c0 served
+[DEBUG] [2025-05-20 17:45:03] - Request=0xc003484140 arrived
+[ERROR] [2025-05-20 17:45:03] - Request=0xc003484140 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:45:03] - Request=0xc003484140 served
+[DEBUG] [2025-05-20 17:45:04] - Request=0xc003484500 arrived
+[ERROR] [2025-05-20 17:45:04] - Request=0xc003484500 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:45:04] - Request=0xc003484500 served
+[DEBUG] [2025-05-20 17:45:05] - Request=0xc003484640 arrived
+[ERROR] [2025-05-20 17:45:05] - Request=0xc003484640 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:45:05] - Request=0xc003484640 served
+[DEBUG] [2025-05-20 17:45:05] - Request=0xc003484780 arrived
+[ERROR] [2025-05-20 17:45:05] - Request=0xc003484780 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:45:05] - Request=0xc003484780 served
+[DEBUG] [2025-05-20 17:45:06] - Request=0xc000a24640 arrived
+[ERROR] [2025-05-20 17:45:06] - Request=0xc000a24640 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:45:06] - Request=0xc000a24640 served
+[DEBUG] [2025-05-20 17:45:08] - Request=0xc000a24780 arrived
+[ERROR] [2025-05-20 17:45:08] - Request=0xc000a24780 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:45:08] - Request=0xc000a24780 served
+[DEBUG] [2025-05-20 17:45:30] - Request=0xc003484dc0 arrived
+[ERROR] [2025-05-20 17:45:30] - Request=0xc003484dc0 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:45:30] - Request=0xc003484dc0 served
+[DEBUG] [2025-05-20 17:45:34] - Request=0xc003484f00 arrived
+[DEBUG] [2025-05-20 17:45:34] - Request=0xc003484f00 served
+[DEBUG] [2025-05-20 17:45:34] - Request=0xc003485180 arrived
+[ERROR] [2025-05-20 17:45:34] - Request=0xc003485180 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:45:34] - Request=0xc003485180 served
+[DEBUG] [2025-05-20 17:45:38] - Request=0xc0034852c0 arrived
+[ERROR] [2025-05-20 17:45:38] - Request=0xc0034852c0 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:45:38] - Request=0xc0034852c0 served
+[DEBUG] [2025-05-20 17:45:42] - Request=0xc003485400 arrived
+[DEBUG] [2025-05-20 17:45:42] - Request=0xc003485400 served
+[INFO] [2025-05-20 17:45:56] - Console: server stopped
+[INFO] [2025-05-20 17:46:09] - Database: connecting...
+[INFO] [2025-05-20 17:46:11] - Database: connection succeeded
+[INFO] [2025-05-20 17:46:11] - Migrations: executing...
+[INFO] [2025-05-20 17:46:11] - Migrations: execution succeeded
+[INFO] [2025-05-20 17:46:11] - Templates: initilizating...
+[FATAL] [2025-05-20 17:46:11] - Templates: initilization failed; error=html/template: pattern matches no files: `static\templates\*.html`
+[INFO] [2025-05-20 17:46:28] - Database: connecting...
+[INFO] [2025-05-20 17:46:30] - Database: connection succeeded
+[INFO] [2025-05-20 17:46:30] - Migrations: executing...
+[INFO] [2025-05-20 17:46:30] - Migrations: execution succeeded
+[INFO] [2025-05-20 17:46:30] - Templates: initilizating...
+[INFO] [2025-05-20 17:46:30] - Templates: initilization succeeded
+[INFO] [2025-05-20 17:46:30] - HTTP server: starting...
+[INFO] [2025-05-20 17:46:30] - HTTP server: start succeeded
+[INFO] [2025-05-20 17:46:30] - Console: initialized
+[DEBUG] [2025-05-20 17:46:32] - Request=0xc00378c140 arrived
+[ERROR] [2025-05-20 17:46:32] - Request=0xc00378c140 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:46:32] - Request=0xc00378c140 served
+[DEBUG] [2025-05-20 17:46:34] - Request=0xc003676140 arrived
+[DEBUG] [2025-05-20 17:46:34] - Request=0xc003676140 served
+[DEBUG] [2025-05-20 17:46:34] - Request=0xc003676280 arrived
+[ERROR] [2025-05-20 17:46:34] - Request=0xc003676280 failed; error=html/template: "styles/indexpage.css" is undefined
+[DEBUG] [2025-05-20 17:46:34] - Request=0xc003676280 served
+[DEBUG] [2025-05-20 17:46:34] - Request=0xc003710140 arrived
+[ERROR] [2025-05-20 17:46:34] - Request=0xc003710140 failed; error=html/template: "scripts/script.js" is undefined
+[DEBUG] [2025-05-20 17:46:34] - Request=0xc003710140 served
+[DEBUG] [2025-05-20 17:46:34] - Request=0xc003710280 arrived
+[ERROR] [2025-05-20 17:46:34] - Request=0xc003710280 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:46:34] - Request=0xc003710280 served
+[DEBUG] [2025-05-20 17:46:38] - Request=0xc0037103c0 arrived
+[DEBUG] [2025-05-20 17:46:38] - Request=0xc0037103c0 served
+[DEBUG] [2025-05-20 17:46:38] - Request=0xc003710500 arrived
+[ERROR] [2025-05-20 17:46:38] - Request=0xc003710500 failed; error=html/template: "styles/indexpage.css" is undefined
+[DEBUG] [2025-05-20 17:46:38] - Request=0xc003710500 served
+[DEBUG] [2025-05-20 17:46:38] - Request=0xc003710000 arrived
+[ERROR] [2025-05-20 17:46:38] - Request=0xc003710000 failed; error=html/template: "scripts/script.js" is undefined
+[DEBUG] [2025-05-20 17:46:38] - Request=0xc003710000 served
+[DEBUG] [2025-05-20 17:46:38] - Request=0xc003710640 arrived
+[ERROR] [2025-05-20 17:46:38] - Request=0xc003710640 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:46:38] - Request=0xc003710640 served
+[DEBUG] [2025-05-20 17:46:39] - Request=0xc003710780 arrived
+[DEBUG] [2025-05-20 17:46:39] - Request=0xc003710780 served
+[DEBUG] [2025-05-20 17:46:39] - Request=0xc0037108c0 arrived
+[ERROR] [2025-05-20 17:46:39] - Request=0xc0037108c0 failed; error=html/template: "scripts/script.js" is undefined
+[DEBUG] [2025-05-20 17:46:39] - Request=0xc0037108c0 served
+[DEBUG] [2025-05-20 17:46:39] - Request=0xc00378c280 arrived
+[ERROR] [2025-05-20 17:46:39] - Request=0xc00378c280 failed; error=html/template: "styles/indexpage.css" is undefined
+[DEBUG] [2025-05-20 17:46:39] - Request=0xc00378c280 served
+[DEBUG] [2025-05-20 17:46:39] - Request=0xc00378c3c0 arrived
+[ERROR] [2025-05-20 17:46:39] - Request=0xc00378c3c0 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:46:39] - Request=0xc00378c3c0 served
+[DEBUG] [2025-05-20 17:47:21] - Request=0xc003710a00 arrived
+[ERROR] [2025-05-20 17:47:21] - Request=0xc003710a00 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:47:21] - Request=0xc003710a00 served
+[DEBUG] [2025-05-20 17:47:22] - Request=0xc003710b40 arrived
+[DEBUG] [2025-05-20 17:47:22] - Request=0xc003710b40 served
+[DEBUG] [2025-05-20 17:47:22] - Request=0xc003710c80 arrived
+[ERROR] [2025-05-20 17:47:22] - Request=0xc003710c80 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:47:22] - Request=0xc003710c80 served
+[DEBUG] [2025-05-20 17:47:23] - Request=0xc0017e9a40 arrived
+[ERROR] [2025-05-20 17:47:23] - Request=0xc0017e9a40 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:47:23] - Request=0xc0017e9a40 served
+[DEBUG] [2025-05-20 17:47:23] - Request=0xc0017e9b80 arrived
+[DEBUG] [2025-05-20 17:47:23] - Request=0xc0017e9b80 served
+[DEBUG] [2025-05-20 17:47:23] - Request=0xc0017e9cc0 arrived
+[ERROR] [2025-05-20 17:47:23] - Request=0xc0017e9cc0 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:47:23] - Request=0xc0017e9cc0 served
+[DEBUG] [2025-05-20 17:47:25] - Request=0xc0017e9e00 arrived
+[ERROR] [2025-05-20 17:47:25] - Request=0xc0017e9e00 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:47:25] - Request=0xc0017e9e00 served
+[DEBUG] [2025-05-20 17:47:28] - Request=0xc00378c500 arrived
+[ERROR] [2025-05-20 17:47:28] - Request=0xc00378c500 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:47:28] - Request=0xc00378c500 served
+[DEBUG] [2025-05-20 17:47:29] - Request=0xc003710dc0 arrived
+[ERROR] [2025-05-20 17:47:29] - Request=0xc003710dc0 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:47:29] - Request=0xc003710dc0 served
+[DEBUG] [2025-05-20 17:47:30] - Request=0xc003710f00 arrived
+[ERROR] [2025-05-20 17:47:30] - Request=0xc003710f00 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:47:30] - Request=0xc003710f00 served
+[INFO] [2025-05-20 17:49:25] - Database: connecting...
+[INFO] [2025-05-20 17:49:26] - Database: connection succeeded
+[INFO] [2025-05-20 17:49:26] - Migrations: executing...
+[INFO] [2025-05-20 17:49:26] - Migrations: execution succeeded
+[INFO] [2025-05-20 17:49:26] - Templates: initilizating...
+[INFO] [2025-05-20 17:49:26] - Templates: initilization succeeded
+[INFO] [2025-05-20 17:49:26] - HTTP server: starting...
+[INFO] [2025-05-20 17:49:26] - HTTP server: start succeeded
+[INFO] [2025-05-20 17:49:26] - Console: initialized
+[DEBUG] [2025-05-20 17:49:29] - Request=0xc00244da40 arrived
+[DEBUG] [2025-05-20 17:49:29] - Request=0xc00244da40 served
+[DEBUG] [2025-05-20 17:49:29] - Request=0xc000a4c3c0 arrived
+[ERROR] [2025-05-20 17:49:29] - Request=0xc000a4c3c0 failed; error=html/template: "scripts/script.js" is undefined
+[DEBUG] [2025-05-20 17:49:29] - Request=0xc003582000 arrived
+[ERROR] [2025-05-20 17:49:29] - Request=0xc003582000 failed; error=html/template: "styles/indexpage.css" is undefined
+[DEBUG] [2025-05-20 17:49:29] - Request=0xc003582000 served
+[DEBUG] [2025-05-20 17:49:29] - Request=0xc000a4c3c0 served
+[DEBUG] [2025-05-20 17:49:29] - Request=0xc003582140 arrived
+[ERROR] [2025-05-20 17:49:29] - Request=0xc003582140 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:49:29] - Request=0xc003582140 served
+[DEBUG] [2025-05-20 17:49:32] - Request=0xc003582280 arrived
+[DEBUG] [2025-05-20 17:49:32] - Request=0xc003582280 served
+[DEBUG] [2025-05-20 17:49:32] - Request=0xc00244db80 arrived
+[ERROR] [2025-05-20 17:49:32] - Request=0xc00244db80 failed; error=html/template: "styles/indexpage.css" is undefined
+[DEBUG] [2025-05-20 17:49:32] - Request=0xc0035823c0 arrived
+[ERROR] [2025-05-20 17:49:32] - Request=0xc0035823c0 failed; error=html/template: "scripts/script.js" is undefined
+[DEBUG] [2025-05-20 17:49:32] - Request=0xc0035823c0 served
+[DEBUG] [2025-05-20 17:49:32] - Request=0xc00244db80 served
+[DEBUG] [2025-05-20 17:49:32] - Request=0xc000a4c500 arrived
+[ERROR] [2025-05-20 17:49:32] - Request=0xc000a4c500 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:49:32] - Request=0xc000a4c500 served
+[DEBUG] [2025-05-20 17:49:49] - Request=0xc000a4c8c0 arrived
+[ERROR] [2025-05-20 17:49:49] - Request=0xc000a4c8c0 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:49:49] - Request=0xc000a4c8c0 served
+[DEBUG] [2025-05-20 17:49:55] - Request=0xc00244dcc0 arrived
+[ERROR] [2025-05-20 17:49:55] - Request=0xc00244dcc0 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:49:55] - Request=0xc00244dcc0 served
+[DEBUG] [2025-05-20 17:50:00] - Request=0xc00244de00 arrived
+[DEBUG] [2025-05-20 17:50:00] - Request=0xc00244de00 served
+[DEBUG] [2025-05-20 17:50:00] - Request=0xc0034d8000 arrived
+[ERROR] [2025-05-20 17:50:00] - Request=0xc0034d8000 failed; error=html/template: "styles/indexpage.css" is undefined
+[DEBUG] [2025-05-20 17:50:00] - Request=0xc0034d8000 served
+[DEBUG] [2025-05-20 17:50:00] - Request=0xc0034d8140 arrived
+[ERROR] [2025-05-20 17:50:00] - Request=0xc0034d8140 failed; error=html/template: "scripts/script.js" is undefined
+[DEBUG] [2025-05-20 17:50:00] - Request=0xc0034d8140 served
+[DEBUG] [2025-05-20 17:50:01] - Request=0xc003534280 arrived
+[ERROR] [2025-05-20 17:50:01] - Request=0xc003534280 failed; error=html/template: "favicon.ico" is undefined
+[DEBUG] [2025-05-20 17:50:01] - Request=0xc003534280 served
+[INFO] [2025-05-20 17:50:28] - Console: server stopped

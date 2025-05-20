@@ -1,1 +1,1 @@
-go run ./back-end -config=back-end/config/debug.cfg 
+go run ./server -config=server/config/debug.cfg 

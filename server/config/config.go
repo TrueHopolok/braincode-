@@ -10,10 +10,10 @@ import (
 )
 
 type Config struct {
-	LogFilepath   string `default:"back-end/server.log"`
+	LogFilepath   string `default:"server/server.log"`
 	Verbose       bool   `default:"false"`
-	DBFilepath    string `default:"back-end/db/db.db"`
-	TemplatesPath string `default:"front-end/templates/"` // TODO(anpir): this should be embedded as well
+	DBFilepath    string `default:"server/db/db.db"`
+	TemplatesPath string `default:"static/"` // TODO(anpir): this should be embedded as well
 }
 
 var path = flag.String("config", "", "path to the config file")

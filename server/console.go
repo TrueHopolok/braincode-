@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/TrueHopolok/braincode-/back-end/logger"
+	"github.com/TrueHopolok/braincode-/server/logger"
 )
 
 // On command encounter in the os.Stdin, the function will be executed

@@ -7,7 +7,7 @@ import (
 	"io/fs"
 	"slices"
 
-	"github.com/TrueHopolok/braincode-/back-end/logger"
+	"github.com/TrueHopolok/braincode-/server/logger"
 )
 
 const migrationVersionTable = "MigrationVersion"
