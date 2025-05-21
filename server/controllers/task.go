@@ -10,6 +10,8 @@ import (
 	"github.com/TrueHopolok/braincode-/server/views"
 )
 
+const MAX_PROBLEMS_ON_PAGE = 20
+
 func Problemset(w http.ResponseWriter, r *http.Request) {
 	logger.Log.Debug("req=%p arrived", r)
 	defer logger.Log.Debug("req=%p served", r)
@@ -40,8 +42,8 @@ func Problemset(w http.ResponseWriter, r *http.Request) {
 
 	var limit, page int
 	limit, err := strconv.Atoi(urldata.Get("limit"))
-	if err != nil {
-		limit = 0
+	if err != nil || limit > MAX_PROBLEMS_ON_PAGE {
+		limit = MAX_PROBLEMS_ON_PAGE
 	}
 	page, err = strconv.Atoi(urldata.Get("page"))
 	if err != nil {
