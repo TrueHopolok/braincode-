@@ -1,11 +1,10 @@
 package main
 
 import (
-	"bufio"
 	"flag"
-	"fmt"
 	"net/http"
 
+	controllers "github.com/TrueHopolok/braincode-/server/controllers"
 	db "github.com/TrueHopolok/braincode-/server/db"
 	logger "github.com/TrueHopolok/braincode-/server/logger"
 	"github.com/TrueHopolok/braincode-/server/prepared"
@@ -43,27 +42,11 @@ func main() {
 	//* HTTP init
 	logger.Log.Info("HTTP server: starting...")
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./frontend/static"))))
-	http.HandleFunc("/", indexHandler)
+	http.HandleFunc("/favicon.ico", func(w http.ResponseWriter, r *http.Request) {})
+	http.HandleFunc("/", controllers.Problemset)
 	go http.ListenAndServe(":8080", nil)
 	logger.Log.Info("HTTP server: start succeeded")
 
 	//* Console init
 	ConsoleHandler()
-}
-
-func indexHandler(w http.ResponseWriter, r *http.Request) {
-	logger.Log.Debug("Request=%p arrived", r)
-	defer logger.Log.Debug("Request=%p served", r)
-	buf := bufio.NewWriter(w)
-	err := prepared.Templates.ExecuteTemplate(buf, "index.html", struct{}{})
-	if err != nil {
-		fmt.Fprint(w, "ERROR")
-		logger.Log.Error("Request=%p failed; error=%s", r, err)
-		return
-	}
-	if err = buf.Flush(); err != nil {
-		fmt.Fprint(w, "ERROR")
-		logger.Log.Error("Request=%p failed; error=%s", r, err)
-		return
-	}
 }

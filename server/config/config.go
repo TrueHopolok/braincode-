@@ -14,6 +14,7 @@ type Config struct {
 	Verbose       bool   `default:"false"`
 	DBFilepath    string `default:"server/db/db.db"`
 	TemplatesPath string `default:"frontend/"` // TODO(anpir): this should be embedded as well
+	DBQueriesPath string `default:"server/db/queries/"`
 }
 
 var path = flag.String("config", "", "path to the config file")

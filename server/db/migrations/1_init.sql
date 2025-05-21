@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS "User" (
 CREATE TABLE IF NOT EXISTS "Task" (
 	"id"	INTEGER NOT NULL,
 	"owner_name"	TEXT NOT NULL,
+	"title"	TEXT NOT NULL,
 	"info"	TEXT NOT NULL,
 	"problem" BLOB NOT NULL,
 	FOREIGN KEY("owner_name") REFERENCES "User"("name") ON DELETE SET NULL,
