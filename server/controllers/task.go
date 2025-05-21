@@ -10,7 +10,7 @@ import (
 	"github.com/TrueHopolok/braincode-/server/views"
 )
 
-const MAX_PROBLEMS_ON_PAGE = 20
+const TASKS_ON_1_PAGE = 20
 
 func Problemset(w http.ResponseWriter, r *http.Request) {
 	logger.Log.Debug("req=%p arrived", r)
@@ -40,16 +40,11 @@ func Problemset(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var limit, page int
-	limit, err := strconv.Atoi(urldata.Get("limit"))
-	if err != nil || limit > MAX_PROBLEMS_ON_PAGE {
-		limit = MAX_PROBLEMS_ON_PAGE
-	}
-	page, err = strconv.Atoi(urldata.Get("page"))
-	if err != nil {
+	page, err := strconv.Atoi(urldata.Get("page"))
+	if err != nil || page < 0 {
 		page = 0
 	}
-	rows, err := models.Problemset(limit, page)
+	rows, err := models.Problemset(TASKS_ON_1_PAGE, page)
 
 	if err := views.Problemset(w, templ, ses.Name, isauth, rows); err != nil {
 		http.Error(w, "Failed to write into the response body", 500)
