@@ -10,11 +10,13 @@ import (
 )
 
 type Config struct {
+	Verbose       bool   `default:"true"`
 	LogFilepath   string `default:"server/server.log"`
-	Verbose       bool   `default:"false"`
-	DBFilepath    string `default:"server/db/db.db"`
-	TemplatesPath string `default:"frontend/"` // TODO(anpir): this should be embedded as well
-	DBQueriesPath string `default:"server/db/queries/"`
+	TemplatesPath string `default:"frontend/"`
+	DBuser        string `default:"root"`
+	DBpass        string `default:"root"`
+	DBname        string `default:"braincode"`
+	DBqueriesPath string `default:"server/db/queries/"`
 }
 
 var path = flag.String("config", "", "path to the config file")

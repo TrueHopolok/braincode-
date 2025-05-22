@@ -3,7 +3,7 @@
 # db
 
 ```go
-import "github.com/TrueHopolok/braincode-/back-end/db"
+import "github.com/TrueHopolok/braincode-/server/db"
 ```
 
 Implements basic realization of database connection and queries. As well as prepared statements to use for the project.
@@ -16,7 +16,7 @@ Implements basic realization of database connection and queries. As well as prep
 
 
 <a name="Init"></a>
-## func [Init](<https://github.com/TrueHopolok/braincode-/blob/main/back-end/db/db.go#L25>)
+## func [Init](<https://github.com/TrueHopolok/braincode-/blob/main/server/db/db.go#L24>)
 
 ```go
 func Init() error
@@ -25,7 +25,7 @@ func Init() error
 Open database and checks if database is reachable
 
 <a name="Migrate"></a>
-## func [Migrate](<https://github.com/TrueHopolok/braincode-/blob/main/back-end/db/migrate.go#L24>)
+## func [Migrate](<https://github.com/TrueHopolok/braincode-/blob/main/server/db/migrate.go#L24>)
 
 ```go
 func Migrate() error
@@ -34,7 +34,7 @@ func Migrate() error
 Migrate executes all embedded migrations.
 
 <a name="DB"></a>
-## type [DB](<https://github.com/TrueHopolok/braincode-/blob/main/back-end/db/db.go#L17-L19>)
+## type [DB](<https://github.com/TrueHopolok/braincode-/blob/main/server/db/db.go#L16-L18>)
 
 Contains pointer to sql.DB but gurantees safety of usage outside the package
 

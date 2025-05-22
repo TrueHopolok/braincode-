@@ -7,7 +7,7 @@ import (
 	"github.com/TrueHopolok/braincode-/server/prepared"
 )
 
-func TaskViewAll(w http.ResponseWriter, templ, username string, isauth bool) error {
+func TaskViewAll(w http.ResponseWriter, templ, username string, isauth bool, lang string) error {
 	// TODO(vadim): to the finished view add all information
 	buf := bufio.NewWriter(w)
 	err := prepared.Templates.ExecuteTemplate(buf, templ, nil)

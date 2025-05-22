@@ -23,6 +23,7 @@ func main() {
 	if err := db.Init(); err != nil {
 		logger.Log.Fatal("Database: connection failed; err=%s", err)
 	}
+	defer db.Conn.Close()
 	logger.Log.Info("Database: connection succeeded")
 
 	//* Database migrate

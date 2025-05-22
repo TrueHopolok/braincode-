@@ -9,7 +9,7 @@ import (
 )
 
 func TaskFindAll(limit, page int) (*sql.Rows, error) {
-	query, err := os.ReadFile(config.Get().DBFilepath + "problemset.sql")
+	query, err := os.ReadFile(config.Get().DBqueriesPath + "task_view_all.sql")
 	if err != nil {
 		return nil, err
 	}

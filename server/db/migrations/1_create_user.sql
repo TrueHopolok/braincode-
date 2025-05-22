@@ -1,0 +1,5 @@
+CREATE TABLE User (
+	name 		VARCHAR(40) PRIMARY KEY,
+	password 	BLOB NOT NULL,
+	salt 		BLOB NOT NULL
+);

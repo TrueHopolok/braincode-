@@ -1,1 +1,1 @@
-go run ./server -config=server/config/debug.cfg 
+go run ./server -config=server/config/default.cfg 

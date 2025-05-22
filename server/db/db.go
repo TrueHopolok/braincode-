@@ -9,8 +9,7 @@ import (
 	"fmt"
 
 	"github.com/TrueHopolok/braincode-/server/config"
-	_ "github.com/ncruces/go-sqlite3/driver"
-	_ "github.com/ncruces/go-sqlite3/embed"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 // Contains pointer to sql.DB but gurantees safety of usage outside the package
@@ -24,7 +23,11 @@ var Conn DB
 // Open database and checks if database is reachable
 func Init() error {
 	var err error
-	sqldb, err := sql.Open("sqlite3", fmt.Sprintf("file:%s", config.Get().DBFilepath))
+	sqldb, err := sql.Open("mysql",
+		fmt.Sprintf("%s:%s@/%s",
+			config.Get().DBuser,
+			config.Get().DBpass,
+			config.Get().DBname))
 	if err != nil {
 		return err
 	}
