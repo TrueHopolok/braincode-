@@ -12,6 +12,7 @@ type TaskInfo struct {
 	Id        int    `json:"Id"`
 	Title     string `json:"Title"`
 	OwnerName string `json:"OwnerName"`
+	IsSolved  bool   `json:"IsSolved"`
 }
 
 type TasksResponse struct {
@@ -22,8 +23,14 @@ type TasksResponse struct {
 const TASKS_AMOUNT_LIMIT = 20
 
 // Get all task names, id and owner_id as well as amount of tasks in json
-func TaskFindAll(page int) ([]byte, error) {
-	query, err := os.ReadFile(config.Get().DBqueriesPath + "task_view_all.sql")
+func TaskFindAll(isauth bool, username string, page int) ([]byte, error) {
+	queryfile := "task_all_"
+	if isauth {
+		queryfile += "isauth.sql"
+	} else {
+		queryfile += "notauth.sql"
+	}
+	query, err := os.ReadFile(config.Get().DBqueriesPath + queryfile)
 	if err != nil {
 		return nil, err
 	}
@@ -34,7 +41,7 @@ func TaskFindAll(page int) ([]byte, error) {
 	}
 	defer tx.Rollback()
 
-	rows, err := tx.Query(string(query), TASKS_AMOUNT_LIMIT, page*TASKS_AMOUNT_LIMIT)
+	rows, err := tx.Query(string(query), username, TASKS_AMOUNT_LIMIT, page*TASKS_AMOUNT_LIMIT)
 	if err != nil {
 		return nil, err
 	}
@@ -42,8 +49,11 @@ func TaskFindAll(page int) ([]byte, error) {
 
 	var rawdata TasksResponse
 	for i := 0; rows.Next(); i++ {
-		rawdata.Rows = append(rawdata.Rows, TaskInfo{0, "", ""})
-		err = rows.Scan(&rawdata.Rows[i].Id, &rawdata.Rows[i].Title, &rawdata.Rows[i].OwnerName, &rawdata.TotalAmount)
+		rawdata.Rows = append(rawdata.Rows, TaskInfo{0, "", "", false})
+		err = rows.Scan(
+			&rawdata.Rows[i].Id, &rawdata.Rows[i].Title,
+			&rawdata.Rows[i].OwnerName, &rawdata.Rows[i].IsSolved,
+			&rawdata.TotalAmount)
 		if err != nil {
 			return nil, err
 		}

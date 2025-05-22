@@ -47,7 +47,7 @@ func Problemset(w http.ResponseWriter, r *http.Request) {
 		if err != nil || page < 0 {
 			page = 0
 		}
-		data, err := models.TaskFindAll(page)
+		data, err := models.TaskFindAll(isauth, ses.Name, page)
 		if err != nil {
 			http.Error(w, "Failed to write into the response body", 500)
 			logger.Log.Error("req=%p failed; error=%s", r, err)
