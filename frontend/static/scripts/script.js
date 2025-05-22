@@ -10,6 +10,7 @@ tasks = [
 ]
 
 function render_task() {
+    return;
     let table = document.createElement('table');
     for(let i = 0; i < tasks.length; i++) {
         let table_row = document.createElement('tr');

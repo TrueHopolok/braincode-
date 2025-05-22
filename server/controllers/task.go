@@ -6,7 +6,6 @@ import (
 	"strconv"
 
 	"github.com/TrueHopolok/braincode-/server/logger"
-	"github.com/TrueHopolok/braincode-/server/models"
 	"github.com/TrueHopolok/braincode-/server/views"
 )
 
@@ -24,31 +23,37 @@ func Problemset(w http.ResponseWriter, r *http.Request) {
 	}
 
 	urldata := r.URL.Query()
-
 	ses, isauth := sessionHandler(w, r)
+	contenttype := r.Header.Get("Content-Type")
 
-	templ := "index.html"
-	lang := urldata.Get("lang")
-	if lang == "ru" {
-		// templ = "index_ru.html" // TODO(vadim): switch to this when it will be done
-		logger.Log.Error("req=%p failed; error=translation is not available yet", r)
-		http.Error(w, "Not implemented yet", 503)
-		return
-	} else if lang != "" && lang != "en" {
-		logger.Log.Debug("req=%p failed; error=user trying to select invalid language", r)
-		http.Error(w, "Such language selection is not allowed", 406)
-		return
-	}
+	switch contenttype {
+	case "text/html", "":
+		templ := "index.html"
+		lang := urldata.Get("lang")
+		if lang == "ru" {
+			// templ = "index_ru.html" // TODO(vadim): switch to this when it will be done
+			notImplemented(w, r, "translation is not available yet")
+			return
+		} else if lang != "" && lang != "en" {
+			http.Error(w, "Such language selection is not allowed", 406)
+			logger.Log.Debug("req=%p lang=%s is not allowed", r, lang)
+			return
+		}
 
-	page, err := strconv.Atoi(urldata.Get("page"))
-	if err != nil || page < 0 {
-		page = 0
-	}
-	rows, err := models.Problemset(TASKS_ON_1_PAGE, page)
-
-	if err := views.Problemset(w, templ, ses.Name, isauth, rows); err != nil {
-		http.Error(w, "Failed to write into the response body", 500)
-		logger.Log.Error("req=%p failed; error=%s", r, err)
-		return
+		if err := views.TaskViewAll(w, templ, ses.Name, isauth); err != nil {
+			http.Error(w, "Failed to write into the response body", 500)
+			logger.Log.Error("req=%p failed; error=%s", r, err)
+		}
+	case "application/json":
+		page, err := strconv.Atoi(urldata.Get("page"))
+		if err != nil || page < 0 {
+			page = 0
+		}
+		notImplemented(w, r, "json retrival not implemented yet")
+		// rows, err := models.TaskFindAll(TASKS_ON_1_PAGE, page)
+		// TODO(vadim): translate rows into json
+	default:
+		http.Error(w, fmt.Sprintf("Content-Type=%s is not allowed\nAllowed=text/html application/json", contenttype), 406)
+		logger.Log.Debug("req=%p Content-Type=%s is not allowed", r, contenttype)
 	}
 }

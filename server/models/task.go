@@ -8,17 +8,17 @@ import (
 	"github.com/TrueHopolok/braincode-/server/db"
 )
 
-func Problemset(limit, page int) (*sql.Rows, error) {
+func TaskFindAll(limit, page int) (*sql.Rows, error) {
+	query, err := os.ReadFile(config.Get().DBFilepath + "problemset.sql")
+	if err != nil {
+		return nil, err
+	}
+
 	tx, err := db.Conn.Begin()
 	if err != nil {
 		return nil, err
 	}
 	defer tx.Rollback()
-
-	query, err := os.ReadFile(config.Get().DBFilepath + "problemset.sql")
-	if err != nil {
-		return nil, err
-	}
 
 	rows, err := tx.Query(string(query), limit, page*limit)
 	if err != nil {
