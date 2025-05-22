@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -10,18 +9,6 @@ import (
 	"github.com/TrueHopolok/braincode-/server/models"
 	"github.com/TrueHopolok/braincode-/server/views"
 )
-
-const TASKS_ON_1_PAGE = 20
-
-type TaskInfo struct {
-	Id    int    `json:"id"`
-	Title string `json:"title"`
-}
-
-type TasksResponse struct {
-	TotalAmount int        `json:"totalAmount"`
-	Rows        []TaskInfo `json:"rows"`
-}
 
 func Problemset(w http.ResponseWriter, r *http.Request) {
 	logger.Log.Debug("req=%p arrived", r)
@@ -60,25 +47,13 @@ func Problemset(w http.ResponseWriter, r *http.Request) {
 		if err != nil || page < 0 {
 			page = 0
 		}
-		rows, err := models.TaskFindAll(TASKS_ON_1_PAGE, page)
+		data, err := models.TaskFindAll(page)
 		if err != nil {
 			http.Error(w, "Failed to write into the response body", 500)
 			logger.Log.Error("req=%p failed; error=%s", r, err)
 			return
 		}
-		var data TasksResponse
-		for i := 0; rows.Next(); i++ {
-			data.Rows = append(data.Rows, TaskInfo{0, ""})
-			rows.Scan(&data.Rows[i].Id, &data.Rows[i].Title, &data.TotalAmount)
-		}
-		logger.Log.Debug("%v", data)
-		raw, err := json.Marshal(data)
-		if err != nil {
-			http.Error(w, "Failed to write into the response body", 500)
-			logger.Log.Error("req=%p failed; error=%s", r, err)
-			return
-		}
-		if _, err = w.Write(raw); err != nil {
+		if _, err = w.Write(data); err != nil {
 			http.Error(w, "Failed to write into the response body", 500)
 			logger.Log.Error("req=%p failed; error=%s", r, err)
 		}

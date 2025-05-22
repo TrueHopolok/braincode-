@@ -1,14 +1,26 @@
 package models
 
 import (
-	"database/sql"
+	"encoding/json"
 	"os"
 
 	"github.com/TrueHopolok/braincode-/server/config"
 	"github.com/TrueHopolok/braincode-/server/db"
 )
 
-func TaskFindAll(limit, page int) (*sql.Rows, error) {
+type TaskInfo struct {
+	Id    int    `json:"id"`
+	Title string `json:"title"`
+}
+
+type TasksResponse struct {
+	TotalAmount int        `json:"totalAmount"`
+	Rows        []TaskInfo `json:"rows"`
+}
+
+const TASKS_AMOUNT_LIMIT = 20
+
+func TaskFindAll(page int) ([]byte, error) {
 	query, err := os.ReadFile(config.Get().DBqueriesPath + "task_view_all.sql")
 	if err != nil {
 		return nil, err
@@ -20,10 +32,21 @@ func TaskFindAll(limit, page int) (*sql.Rows, error) {
 	}
 	defer tx.Rollback()
 
-	rows, err := tx.Query(string(query), limit, page*limit)
+	rows, err := tx.Query(string(query), TASKS_AMOUNT_LIMIT, page*TASKS_AMOUNT_LIMIT)
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
-	return rows, tx.Commit()
+	var rawdata TasksResponse
+	for i := 0; rows.Next(); i++ {
+		rawdata.Rows = append(rawdata.Rows, TaskInfo{0, ""})
+		err = rows.Scan(&rawdata.Rows[i].Id, &rawdata.Rows[i].Title, &rawdata.TotalAmount)
+		if err != nil {
+			return nil, err
+		}
+	}
+	jsondata, err := json.Marshal(rawdata)
+
+	return jsondata, tx.Commit()
 }

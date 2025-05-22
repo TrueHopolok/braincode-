@@ -1,3 +1,3 @@
-SELECT id, title, COUNT(*) OVER(PARTITION BY id) AS task_amount
+SELECT id, title, COUNT(*) OVER() AS totalAmount
 FROM task
 LIMIT ? OFFSET ?;
