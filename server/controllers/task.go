@@ -22,14 +22,13 @@ func Problemset(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	urldata := r.URL.Query()
 	ses, isauth := sessionHandler(w, r)
 	contenttype := r.Header.Get("Content-Type")
 
 	switch contenttype {
 	case "text/html", "":
 		templ := "index.html"
-		lang := urldata.Get("lang")
+		lang := r.URL.Query().Get("lang")
 		if lang == "ru" {
 			// templ = "index_ru.html" // TODO(vadim): switch to this when it will be done
 			notImplemented(w, r, "translation is not available yet")
@@ -45,7 +44,7 @@ func Problemset(w http.ResponseWriter, r *http.Request) {
 			logger.Log.Error("req=%p failed; error=%s", r, err)
 		}
 	case "application/json":
-		page, err := strconv.Atoi(urldata.Get("page"))
+		page, err := strconv.Atoi(r.Header.Get("Page"))
 		if err != nil || page < 0 {
 			page = 0
 		}
