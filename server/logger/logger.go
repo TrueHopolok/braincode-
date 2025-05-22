@@ -31,4 +31,5 @@ func Start() {
 	if err != nil {
 		log.Fatalln(err)
 	}
+	Log.Line()
 }

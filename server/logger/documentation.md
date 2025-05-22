@@ -3,7 +3,7 @@
 # logger
 
 ```go
-import "github.com/TrueHopolok/braincode-/back-end/logger"
+import "github.com/TrueHopolok/braincode-/server/logger"
 ```
 
 Implements initialization, global calls and destruction for custom plog logger
@@ -23,7 +23,7 @@ var Log *plog.Logger
 ```
 
 <a name="Start"></a>
-## func [Start](<https://github.com/TrueHopolok/braincode-/blob/main/back-end/logger/logger.go#L18>)
+## func [Start](<https://github.com/TrueHopolok/braincode-/blob/main/server/logger/logger.go#L18>)
 
 ```go
 func Start()
