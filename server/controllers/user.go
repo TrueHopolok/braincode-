@@ -9,7 +9,7 @@ import (
 	"github.com/TrueHopolok/braincode-/server/views"
 )
 
-func getRegistrationPage(w http.ResponseWriter, r *http.Request) {
+func getpageRegister(w http.ResponseWriter, r *http.Request) {
 	ses, isauth := sessionHandler(w, r)
 
 	ok, isenglish := langHandler(w, r)
@@ -30,8 +30,8 @@ func getRegistrationPage(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func postRegistrationPage(w http.ResponseWriter, r *http.Request) {
-	errResponseNotImplemented(w, r, "postRegistrationPage")
+func userRegister(w http.ResponseWriter, r *http.Request) {
+	errResponseNotImplemented(w, r, "userRegister")
 	// TODO(vadim): add post req handler
 	// Check data and type of request
 	// Return either error in registration/login or user data as sesion token
@@ -43,15 +43,15 @@ func RegistrationPage(w http.ResponseWriter, r *http.Request) {
 
 	switch r.Method {
 	case "GET":
-		getRegistrationPage(w, r)
+		getpageRegister(w, r)
 	case "POST":
-		postRegistrationPage(w, r)
+		userRegister(w, r)
 	default:
 		errResponseMethodNotAllowed(w, r, "GET", "POST")
 	}
 }
 
-func getLoginPage(w http.ResponseWriter, r *http.Request) {
+func getpageLogin(w http.ResponseWriter, r *http.Request) {
 	ses, isauth := sessionHandler(w, r)
 
 	ok, isenglish := langHandler(w, r)
@@ -72,7 +72,7 @@ func getLoginPage(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func postLoginPage(w http.ResponseWriter, r *http.Request) {
+func userAuth(w http.ResponseWriter, r *http.Request) {
 	if err := r.ParseForm(); err != nil {
 		http.Error(w, "Invalid login form provided", 406)
 		logger.Log.Debug("res=%p invalid login form", r)
@@ -117,9 +117,9 @@ func LoginPage(w http.ResponseWriter, r *http.Request) {
 
 	switch r.Method {
 	case "GET":
-		getLoginPage(w, r)
+		getpageLogin(w, r)
 	case "POST":
-		postLoginPage(w, r)
+		userAuth(w, r)
 	default:
 		errResponseMethodNotAllowed(w, r, "GET", "POST")
 	}

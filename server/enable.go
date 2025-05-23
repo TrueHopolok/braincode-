@@ -14,7 +14,7 @@ func EnableFileHandlers() {
 }
 
 func EnableControllerHandlers() {
-	http.HandleFunc("/", controllers.Problemset)
+	http.HandleFunc("/", controllers.ProblemsetPage)
 	http.HandleFunc("/task/", controllers.TaskPage)
 	http.HandleFunc("/login/", controllers.LoginPage)
 	http.HandleFunc("/register/", controllers.RegistrationPage)

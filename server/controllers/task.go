@@ -10,7 +10,7 @@ import (
 	"github.com/TrueHopolok/braincode-/server/views"
 )
 
-func Problemset(w http.ResponseWriter, r *http.Request) {
+func ProblemsetPage(w http.ResponseWriter, r *http.Request) {
 	logger.Log.Debug("req=%p arrived", r)
 	defer logger.Log.Debug("req=%p served", r)
 
@@ -56,7 +56,7 @@ func Problemset(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func getTaskPage(w http.ResponseWriter, r *http.Request) {
+func getpageTask(w http.ResponseWriter, r *http.Request) {
 	ses, isauth := sessionHandler(w, r)
 
 	ok, isenglish := langHandler(w, r)
@@ -107,7 +107,7 @@ func TaskPage(w http.ResponseWriter, r *http.Request) {
 
 	switch r.Method {
 	case "GET":
-		getTaskPage(w, r)
+		getpageTask(w, r)
 	case "POST":
 		submitSolution(w, r)
 	default:
