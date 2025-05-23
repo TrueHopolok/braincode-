@@ -89,20 +89,22 @@ func postLoginPage(w http.ResponseWriter, r *http.Request) {
 		logger.Log.Debug("res=%p invalid login form", r)
 		return
 	}
-	salt, found, err := models.UserFindSalt(username) // TODO(vadim): add functional
+	salt, found, err := models.UserFindSalt(username)
 	if err != nil {
 		errResponseFatal(w, r, err)
 		return
 	} else if !found {
-		errResponseNotImplemented(w, r, "invalid username or password") // TODO(vadim): redo to normal response
+		http.Error(w, "Incorrect username or password", 406)
+		logger.Log.Debug("res=%p incorrect username or password", r)
 		return
 	}
-	found, err = models.UserFindLogin(username, PSH(password, salt)) // TODO(vadim): add functional
+	found, err = models.UserFindLogin(username, PSH(password, salt))
 	if err != nil {
 		errResponseFatal(w, r, err)
 		return
 	} else if !found {
-		errResponseNotImplemented(w, r, "invalid username or password") // TODO(vadim): redo to normal response
+		http.Error(w, "Incorrect username or password", 406)
+		logger.Log.Debug("res=%p incorrect username or password", r)
 		return
 	}
 	w.Header().Set("Session", session.New(username).CreateJWT())
