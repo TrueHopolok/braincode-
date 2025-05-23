@@ -4,7 +4,6 @@ import (
 	"flag"
 	"net/http"
 
-	controllers "github.com/TrueHopolok/braincode-/server/controllers"
 	db "github.com/TrueHopolok/braincode-/server/db"
 	logger "github.com/TrueHopolok/braincode-/server/logger"
 	"github.com/TrueHopolok/braincode-/server/prepared"
@@ -42,9 +41,9 @@ func main() {
 
 	//* HTTP init
 	logger.Log.Info("HTTP server: starting...")
-	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./frontend/static"))))
+	EnableFileHandlers()
 	http.HandleFunc("/favicon.ico", func(w http.ResponseWriter, r *http.Request) {})
-	http.HandleFunc("/", controllers.Problemset)
+	EnableControllerHandlers()
 	go http.ListenAndServe(":8080", nil)
 	logger.Log.Info("HTTP server: start succeeded")
 

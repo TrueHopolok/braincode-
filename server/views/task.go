@@ -4,11 +4,26 @@ import (
 	"bufio"
 	"net/http"
 
+	"github.com/TrueHopolok/braincode-/server/models"
 	"github.com/TrueHopolok/braincode-/server/prepared"
 )
 
-func TaskViewAll(w http.ResponseWriter, templ, username string, isauth bool, lang string) error {
+// Show 1 task page. Expects all information to be valid.
+func TaskViewOne(w http.ResponseWriter, r *http.Request, username string, isauth, isenglish bool, task models.Task) error {
 	// TODO(vadim): to the finished view add all information
+	templ := "taskpage.html" // lang depended
+	buf := bufio.NewWriter(w)
+	err := prepared.Templates.ExecuteTemplate(buf, templ, nil)
+	if err != nil {
+		return err
+	}
+	return buf.Flush()
+}
+
+// Show problemset page. Expects all information to be valid.
+func TaskViewAll(w http.ResponseWriter, username string, isauth, isenglish bool) error {
+	// TODO(vadim): to the finished view add all information
+	templ := "index.html" // lang depended
 	buf := bufio.NewWriter(w)
 	err := prepared.Templates.ExecuteTemplate(buf, templ, nil)
 	if err != nil {

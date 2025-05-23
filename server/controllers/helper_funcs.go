@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/TrueHopolok/braincode-/server/logger"
@@ -11,6 +12,7 @@ import (
 // Get session token from the request header.
 // Validates it.
 // If valid: updates the token and writes it into a header.
+// If invalid or expired: return empty string as a name and false in aiauth field.
 func sessionHandler(w http.ResponseWriter, r *http.Request) (session.Session, bool) {
 	token := r.Header.Get("session")
 	var ses session.Session
@@ -18,13 +20,70 @@ func sessionHandler(w http.ResponseWriter, r *http.Request) (session.Session, bo
 	if isauth {
 		ses.UpdateExpiration()
 		w.Header().Add("session", ses.CreateJWT())
+	} else {
+		ses.Name = ""
 	}
 	return ses, isauth
 }
 
+// Return 2 booleans that tell what language does user want.
+// In case of invalid parameter, function will return false in isvalid field.
+// On invalid parameter will output an error, thus this must be last write into response.
+func langHandler(w http.ResponseWriter, r *http.Request) (isenglish bool, isvalid bool) {
+	lang := r.URL.Query().Get("lang")
+	if lang == "ru" {
+		return false, true
+	} else if lang != "" && lang != "en" {
+		http.Error(w, "Such language selection is not allowed", 406)
+		logger.Log.Debug("req=%p lang=%s is not allowed", r, lang)
+		return false, false
+	}
+	return true, true
+}
+
+// This should be the last write into the response!
+//
 // Can be used to temporarly substitue some code.
-// Will return 503 error code as http response and write into a logger an given message.
-func notImplemented(w http.ResponseWriter, r *http.Request, e string) {
-	http.Error(w, "Not implemented yet", 503)
-	logger.Log.Error("req=%p failed; error=%s", r, e)
+// Will return 503 error code as http response and write into a logger that given feature is not implemented.
+func errResponseNotImplemented(w http.ResponseWriter, r *http.Request, feature string) {
+	feature = fmt.Sprintf("%s not implemented yet", feature)
+	http.Error(w, feature, 503)
+	logger.Log.Error("req=%p failed; error=%s", r, feature)
+}
+
+// This should be the last write into the response!
+//
+// Used to display not allowed method error.
+// Will add all provided methods into the both response and logger.
+func errResponseMethodNotAllowed(w http.ResponseWriter, r *http.Request, allowedMethods ...string) {
+	result := fmt.Sprintf("Method=%s is not allowed\nAllowed=", r.Method)
+	for _, method := range allowedMethods {
+		result += method
+		w.Header().Add("Allow", method)
+	}
+	http.Error(w, result, 405)
+	logger.Log.Debug("req=%p method=%s is not allowed", r, r.Method)
+}
+
+// This should be the last write into the response!
+//
+// Write an error into the both response and logger.
+// Should be used in case some internal error in execution happened,
+// not for user invalid request handling.
+func errResponseFatal(w http.ResponseWriter, r *http.Request, err error) {
+	http.Error(w, "Failed to write into the response body", 500)
+	logger.Log.Error("req=%p failed; error=%s", r, err)
+}
+
+// This should be the last write into the response!
+//
+// Write into response that given content-type is not allowed.
+// Also writes into the logger for debbuging purposes.
+func errResponseContentTypeNotAllowed(w http.ResponseWriter, r *http.Request, allowedTypes ...string) {
+	result := fmt.Sprintf("Content-Type=%s is not allowed\nAllowed=", r.Header.Get("Content-Type"))
+	for _, contenttype := range allowedTypes {
+		result += contenttype
+	}
+	http.Error(w, result, 406)
+	logger.Log.Debug("req=%p Content-Type=%s is not allowed", r, r.Header.Get("Content-Type"))
 }

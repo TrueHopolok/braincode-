@@ -15,50 +15,97 @@ func Problemset(w http.ResponseWriter, r *http.Request) {
 	defer logger.Log.Debug("req=%p served", r)
 
 	if r.Method != "GET" {
-		http.Error(w, fmt.Sprintf("Method=%s is not allowed\nAllowed=GET", r.Method), 405)
-		w.Header().Set("Allow", "GET")
-		logger.Log.Debug("req=%p method=%s is not allowed", r, r.Method)
+		errResponseMethodNotAllowed(w, r, "GET")
 		return
 	}
 
 	ses, isauth := sessionHandler(w, r)
-	contenttype := r.Header.Get("Content-Type")
 
-	switch contenttype {
+	switch r.Header.Get("Content-Type") {
 	case "text/html", "":
-		templ := "index.html"
-		lang := r.URL.Query().Get("lang")
-		if lang == "ru" {
-			// templ = "index_ru.html" // TODO(vadim): switch to this when it will be done
-			notImplemented(w, r, "translation is not available yet")
+		ok, isenglish := langHandler(w, r)
+		if !ok {
 			return
-		} else if lang != "" && lang != "en" {
-			http.Error(w, "Such language selection is not allowed", 406)
-			logger.Log.Debug("req=%p lang=%s is not allowed", r, lang)
+		} else if !isenglish {
+			errResponseNotImplemented(w, r, "translation")
 			return
 		}
 
-		if err := views.TaskViewAll(w, templ, ses.Name, isauth, lang); err != nil {
-			http.Error(w, "Failed to write into the response body", 500)
-			logger.Log.Error("req=%p failed; error=%s", r, err)
+		if err := views.TaskViewAll(w, ses.Name, isauth, isenglish); err != nil {
+			errResponseFatal(w, r, err)
 		}
 	case "application/json":
 		page, err := strconv.Atoi(r.Header.Get("Page"))
 		if err != nil || page < 0 {
 			page = 0
 		}
-		data, err := models.TaskFindAll(isauth, ses.Name, page)
+
+		// TODO(vadim): add proper search and user-only filter
+		data, err := models.TaskFindAll(ses.Name, page)
 		if err != nil {
-			http.Error(w, "Failed to write into the response body", 500)
-			logger.Log.Error("req=%p failed; error=%s", r, err)
+			errResponseFatal(w, r, err)
 			return
 		}
+
 		if _, err = w.Write(data); err != nil {
-			http.Error(w, "Failed to write into the response body", 500)
-			logger.Log.Error("req=%p failed; error=%s", r, err)
+			errResponseFatal(w, r, err)
 		}
 	default:
-		http.Error(w, fmt.Sprintf("Content-Type=%s is not allowed\nAllowed=text/html application/json", contenttype), 406)
-		logger.Log.Debug("req=%p Content-Type=%s is not allowed", r, contenttype)
+		errResponseContentTypeNotAllowed(w, r, "text/html", "application/json")
+	}
+}
+
+func getTaskPage(w http.ResponseWriter, r *http.Request) {
+	ses, isauth := sessionHandler(w, r)
+
+	ok, isenglish := langHandler(w, r)
+	if !ok {
+		return
+	} else if !isenglish {
+		errResponseNotImplemented(w, r, "translation")
+		return
+	}
+
+	if r.Header.Get("Content-Type") != "text/html" && r.Header.Get("Content-Type") != "" {
+		errResponseContentTypeNotAllowed(w, r, "text/html")
+		return
+	}
+
+	staskid := r.URL.Query().Get("id")
+	taskid, err := strconv.Atoi(staskid)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Invalid provided task-id=%s\nWant an integer", staskid), 406)
+		logger.Log.Debug("res=%p task-id=%s is not a valid integer", r, staskid)
+		return
+	}
+	task, err := models.TaskFindOne(ses.Name, taskid)
+	if err = views.TaskViewOne(w, r, ses.Name, isauth, isenglish, task); err != nil {
+		errResponseFatal(w, r, err)
+	}
+
+	if err = views.TaskViewOne(w, r, ses.Name, isauth, isenglish, task); err != nil {
+		errResponseFatal(w, r, err)
+	}
+}
+
+func postTaskPage(w http.ResponseWriter, r *http.Request) {
+	errResponseNotImplemented(w, r, "postTaskPage")
+	// TODO(vadim): add post req handler
+	// Check if auth
+	// Get a submission
+	// Save into to the database
+}
+
+func Taskpage(w http.ResponseWriter, r *http.Request) {
+	logger.Log.Debug("req=%p query=%s arrived", r, r.URL.Path)      //? DEBUG(vadim): added url path
+	defer logger.Log.Debug("req=%p query=%s served", r, r.URL.Path) //? DEBUG(vadim): added url path
+
+	switch r.Method {
+	case "GET":
+		getTaskPage(w, r)
+	case "POST":
+		postTaskPage(w, r)
+	default:
+		errResponseMethodNotAllowed(w, r, "GET", "POST")
 	}
 }
