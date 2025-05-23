@@ -93,8 +93,8 @@ func getTaskPage(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func postTaskPage(w http.ResponseWriter, r *http.Request) {
-	errResponseNotImplemented(w, r, "postTaskPage")
+func submitSolution(w http.ResponseWriter, r *http.Request) {
+	errResponseNotImplemented(w, r, "submitSolution")
 	// TODO(vadim): add post req handler
 	// Check if auth
 	// Get a submission
@@ -109,7 +109,7 @@ func TaskPage(w http.ResponseWriter, r *http.Request) {
 	case "GET":
 		getTaskPage(w, r)
 	case "POST":
-		postTaskPage(w, r)
+		submitSolution(w, r)
 	default:
 		errResponseMethodNotAllowed(w, r, "GET", "POST")
 	}
