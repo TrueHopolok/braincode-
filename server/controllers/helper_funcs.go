@@ -6,7 +6,23 @@ import (
 
 	"github.com/TrueHopolok/braincode-/server/logger"
 	"github.com/TrueHopolok/braincode-/server/session"
+	"golang.org/x/crypto/argon2"
 )
+
+const (
+	PSH_TIME = 1
+	PSH_MEM  = 64 * 1024
+	PSH_THR  = 4
+	PSH_LEN  = 64
+)
+
+// PSH - Password Salted then Hashed
+//
+// Function that get password, salt, combines them then hashes using Argon2 method.
+// Result can be used in database for checking the similarities.
+func PSH(pass string, salt []byte) []byte {
+	return argon2.IDKey([]byte(pass), salt, PSH_TIME, PSH_MEM, PSH_THR, PSH_LEN)
+}
 
 // Function is used for most cases except: registration, login and logout requests.
 // Get session token from the request header.
@@ -14,12 +30,12 @@ import (
 // If valid: updates the token and writes it into a header.
 // If invalid or expired: return empty string as a name and false in aiauth field.
 func sessionHandler(w http.ResponseWriter, r *http.Request) (session.Session, bool) {
-	token := r.Header.Get("session")
+	token := r.Header.Get("Session")
 	var ses session.Session
 	isauth := ses.ValidateJWT(token) && !ses.IsExpired()
 	if isauth {
 		ses.UpdateExpiration()
-		w.Header().Add("session", ses.CreateJWT())
+		w.Header().Add("Session", ses.CreateJWT())
 	} else {
 		ses.Name = ""
 	}

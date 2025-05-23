@@ -4,6 +4,8 @@ import (
 	"net/http"
 
 	"github.com/TrueHopolok/braincode-/server/logger"
+	"github.com/TrueHopolok/braincode-/server/models"
+	"github.com/TrueHopolok/braincode-/server/session"
 	"github.com/TrueHopolok/braincode-/server/views"
 )
 
@@ -29,7 +31,7 @@ func getRegistrationPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func postRegistrationPage(w http.ResponseWriter, r *http.Request) {
-	errResponseNotImplemented(w, r, "postLoginPage")
+	errResponseNotImplemented(w, r, "postRegistrationPage")
 	// TODO(vadim): add post req handler
 	// Check data and type of request
 	// Return either error in registration/login or user data as sesion token
@@ -71,10 +73,40 @@ func getLoginPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func postLoginPage(w http.ResponseWriter, r *http.Request) {
-	errResponseNotImplemented(w, r, "postLoginPage")
-	// TODO(vadim): add post req handler
-	// Check data and type of request
-	// Return either error in registration/login or user data as sesion token
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, "Invalid login form provided", 406)
+		logger.Log.Debug("res=%p invalid login form", r)
+		return
+	}
+	username := r.PostFormValue("username")
+	password := r.PostFormValue("password")
+	if len(username) < 3 {
+		http.Error(w, "Invalid login form provided\nUsername is too short", 406)
+		logger.Log.Debug("res=%p invalid login form", r)
+		return
+	} else if len(password) < 8 {
+		http.Error(w, "Invalid login form provided\nPassword is too short", 406)
+		logger.Log.Debug("res=%p invalid login form", r)
+		return
+	}
+	salt, found, err := models.UserFindSalt(username) // TODO(vadim): add functional
+	if err != nil {
+		errResponseFatal(w, r, err)
+		return
+	} else if !found {
+		errResponseNotImplemented(w, r, "invalid username or password") // TODO(vadim): redo to normal response
+		return
+	}
+	found, err = models.UserFindLogin(username, PSH(password, salt)) // TODO(vadim): add functional
+	if err != nil {
+		errResponseFatal(w, r, err)
+		return
+	} else if !found {
+		errResponseNotImplemented(w, r, "invalid username or password") // TODO(vadim): redo to normal response
+		return
+	}
+	w.Header().Set("Session", session.New(username).CreateJWT())
+	errResponseNotImplemented(w, r, "success")
 }
 
 func LoginPage(w http.ResponseWriter, r *http.Request) {

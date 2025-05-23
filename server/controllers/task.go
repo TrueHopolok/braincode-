@@ -79,7 +79,15 @@ func getTaskPage(w http.ResponseWriter, r *http.Request) {
 		logger.Log.Debug("res=%p task-id=%s is not a valid integer", r, staskid)
 		return
 	}
-	task, err := models.TaskFindOne(ses.Name, taskid)
+	task, found, err := models.TaskFindOne(ses.Name, taskid)
+	if err != nil {
+		errResponseFatal(w, r, err)
+		return
+	} else if !found {
+		http.Error(w, fmt.Sprintf("Invalid provided task-id=%d\nSuch task does not exists", taskid), 406)
+		logger.Log.Debug("res=%p task-id=%d not found", r, taskid)
+		return
+	}
 	if err = views.TaskFindOne(w, r, ses.Name, isauth, isenglish, task); err != nil {
 		errResponseFatal(w, r, err)
 	}

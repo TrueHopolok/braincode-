@@ -13,6 +13,7 @@ require (
 	github.com/go-sql-driver/mysql v1.9.2
 	github.com/mcuadros/go-defaults v1.2.0
 	github.com/yuin/gopher-lua v1.1.1
+	golang.org/x/crypto v0.36.0
 )
 
 require (
@@ -57,7 +58,6 @@ require (
 	github.com/subosito/gotenv v1.2.0 // indirect
 	github.com/x-cray/logrus-prefixed-formatter v0.5.2 // indirect
 	github.com/xanzy/ssh-agent v0.3.0 // indirect
-	golang.org/x/crypto v0.36.0 // indirect
 	golang.org/x/mod v0.24.0 // indirect
 	golang.org/x/net v0.37.0 // indirect
 	golang.org/x/sync v0.12.0 // indirect

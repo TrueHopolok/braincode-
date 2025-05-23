@@ -29,16 +29,16 @@ type Problemset struct {
 const TASKS_AMOUNT_LIMIT = 20
 
 // Get info about single task by given id and returns it as a struct
-func TaskFindOne(username string, taskid int) (Task, error) {
+func TaskFindOne(username string, taskid int) (Task, bool, error) {
 	queryfile := "find_task_one.sql"
 	query, err := os.ReadFile(config.Get().DBqueriesPath + queryfile)
 	if err != nil {
-		return Task{}, err
+		return Task{}, false, err
 	}
 
 	tx, err := db.Conn.Begin()
 	if err != nil {
-		return Task{}, err
+		return Task{}, false, err
 	}
 	defer tx.Rollback()
 
@@ -48,10 +48,15 @@ func TaskFindOne(username string, taskid int) (Task, error) {
 		&res.General.Id, &res.General.OwnerName,
 		&res.General.Title, &res.Info,
 		&res.General.Score); err != nil {
-		return Task{}, err
+		if err == sql.ErrNoRows {
+			return Task{}, false, nil
+		} else {
+			return Task{}, false, err
+		}
+
 	}
 
-	return res, tx.Commit()
+	return res, true, tx.Commit()
 }
 
 // Get all task names, id and owner_id as well as amount of tasks in json
