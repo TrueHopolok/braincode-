@@ -1,4 +1,4 @@
-SELECT t.id, t.owner_name, t.title, t.problem, (
+SELECT t.id, t.owner_name, t.title, t.info, (
     SELECT MAX(s.score)
     FROM Status AS s
     WHERE s.task_id = t.id

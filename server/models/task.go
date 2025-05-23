@@ -11,7 +11,7 @@ import (
 
 type Task struct {
 	General TaskInfo
-	Problem []byte
+	Info    string
 }
 
 type TaskInfo struct {
@@ -46,7 +46,7 @@ func TaskFindOne(username string, taskid int) (Task, error) {
 	var res Task
 	if err := row.Scan(
 		&res.General.Id, &res.General.OwnerName,
-		&res.General.Title, &res.Problem,
+		&res.General.Title, &res.Info,
 		&res.General.Score); err != nil {
 		return Task{}, err
 	}

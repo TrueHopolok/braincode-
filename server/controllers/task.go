@@ -31,7 +31,7 @@ func Problemset(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		if err := views.TaskViewAll(w, ses.Name, isauth, isenglish); err != nil {
+		if err := views.TaskFindAll(w, ses.Name, isauth, isenglish); err != nil {
 			errResponseFatal(w, r, err)
 		}
 	case "application/json":
@@ -80,11 +80,7 @@ func getTaskPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	task, err := models.TaskFindOne(ses.Name, taskid)
-	if err = views.TaskViewOne(w, r, ses.Name, isauth, isenglish, task); err != nil {
-		errResponseFatal(w, r, err)
-	}
-
-	if err = views.TaskViewOne(w, r, ses.Name, isauth, isenglish, task); err != nil {
+	if err = views.TaskFindOne(w, r, ses.Name, isauth, isenglish, task); err != nil {
 		errResponseFatal(w, r, err)
 	}
 }
@@ -97,9 +93,9 @@ func postTaskPage(w http.ResponseWriter, r *http.Request) {
 	// Save into to the database
 }
 
-func Taskpage(w http.ResponseWriter, r *http.Request) {
-	logger.Log.Debug("req=%p query=%s arrived", r, r.URL.Path)      //? DEBUG(vadim): added url path
-	defer logger.Log.Debug("req=%p query=%s served", r, r.URL.Path) //? DEBUG(vadim): added url path
+func TaskPage(w http.ResponseWriter, r *http.Request) {
+	logger.Log.Debug("req=%p arrived", r)
+	defer logger.Log.Debug("req=%p served", r)
 
 	switch r.Method {
 	case "GET":
