@@ -40,8 +40,9 @@ func Problemset(w http.ResponseWriter, r *http.Request) {
 			page = 0
 		}
 
-		// TODO(vadim): add proper search and user-only filter
-		data, err := models.TaskFindAll(ses.Name, page)
+		search := r.Header.Get("Search")
+		filter := r.Header.Get("Filter") == "user-only"
+		data, err := models.TaskFindAll(ses.Name, search, filter, isauth, page)
 		if err != nil {
 			errResponseFatal(w, r, err)
 			return

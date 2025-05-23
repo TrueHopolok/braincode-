@@ -1,5 +1,5 @@
-SELECT t.id, t.owner_name, t.title, t.problem, EXISTS(
-    SELECT *
+SELECT t.id, t.owner_name, t.title, t.problem, (
+    SELECT MAX(s.score)
     FROM Status AS s
     WHERE s.task_id = t.id
     AND s.owner_name = ?

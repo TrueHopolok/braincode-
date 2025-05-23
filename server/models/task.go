@@ -1,6 +1,7 @@
 package models
 
 import (
+	"database/sql"
 	"encoding/json"
 	"os"
 
@@ -14,10 +15,10 @@ type Task struct {
 }
 
 type TaskInfo struct {
-	Id        int    `json:"Id"`
-	Title     string `json:"Title"`
-	OwnerName string `json:"OwnerName"`
-	IsSolved  bool   `json:"IsSolved"`
+	Id        int             `json:"Id"`
+	Title     string          `json:"Title"`
+	OwnerName string          `json:"OwnerName"`
+	Score     sql.NullFloat64 `json:"Score"`
 }
 
 type Problemset struct {
@@ -43,7 +44,10 @@ func TaskFindOne(username string, taskid int) (Task, error) {
 
 	row := tx.QueryRow(string(query), username, taskid)
 	var res Task
-	if err := row.Scan(); err != nil {
+	if err := row.Scan(
+		&res.General.Id, &res.General.OwnerName,
+		&res.General.Title, &res.Problem,
+		&res.General.Score); err != nil {
 		return Task{}, err
 	}
 
@@ -51,7 +55,7 @@ func TaskFindOne(username string, taskid int) (Task, error) {
 }
 
 // Get all task names, id and owner_id as well as amount of tasks in json
-func TaskFindAll(username string, page int) ([]byte, error) {
+func TaskFindAll(username, search string, filter, isauth bool, page int) ([]byte, error) {
 	queryfile := "find_task_all.sql"
 	query, err := os.ReadFile(config.Get().DBqueriesPath + queryfile)
 	if err != nil {
@@ -64,7 +68,12 @@ func TaskFindAll(username string, page int) ([]byte, error) {
 	}
 	defer tx.Rollback()
 
-	rows, err := tx.Query(string(query), username, TASKS_AMOUNT_LIMIT, page*TASKS_AMOUNT_LIMIT)
+	rows, err := tx.Query(string(query),
+		username,
+		search,
+		username,
+		!(filter && isauth),
+		TASKS_AMOUNT_LIMIT, TASKS_AMOUNT_LIMIT*page)
 	if err != nil {
 		return nil, err
 	}
@@ -72,10 +81,10 @@ func TaskFindAll(username string, page int) ([]byte, error) {
 
 	var rawdata Problemset
 	for i := 0; rows.Next(); i++ {
-		rawdata.Rows = append(rawdata.Rows, TaskInfo{0, "", "", false})
+		rawdata.Rows = append(rawdata.Rows, TaskInfo{0, "", "", sql.NullFloat64{}})
 		err = rows.Scan(
 			&rawdata.Rows[i].Id, &rawdata.Rows[i].Title,
-			&rawdata.Rows[i].OwnerName, &rawdata.Rows[i].IsSolved,
+			&rawdata.Rows[i].OwnerName, &rawdata.Rows[i].Score,
 			&rawdata.TotalAmount)
 		if err != nil {
 			return nil, err
