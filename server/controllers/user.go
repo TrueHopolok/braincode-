@@ -31,10 +31,38 @@ func getpageRegister(w http.ResponseWriter, r *http.Request) {
 }
 
 func userRegister(w http.ResponseWriter, r *http.Request) {
-	errResponseNotImplemented(w, r, "userRegister")
-	// TODO(vadim): add post req handler
-	// Check data and type of request
-	// Return either error in registration/login or user data as sesion token
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, "Invalid login form provided", 406)
+		logger.Log.Debug("res=%p invalid login form", r)
+		return
+	}
+	username := r.PostFormValue("username")
+	password := r.PostFormValue("password")
+	if len(username) < 3 {
+		http.Error(w, "Invalid login form provided\nUsername is too short", 406)
+		logger.Log.Debug("res=%p invalid login form", r)
+		return
+	} else if len(password) < 8 {
+		http.Error(w, "Invalid login form provided\nPassword is too short", 406)
+		logger.Log.Debug("res=%p invalid login form", r)
+		return
+	}
+	_, found, err := models.UserFindSalt(username)
+	if err != nil {
+		errResponseFatal(w, r, err)
+		return
+	} else if !found {
+		http.Error(w, "User with such username exists", 406)
+		logger.Log.Debug("res=%p trying to create same user", r)
+		return
+	}
+	salt := SaltGen()
+	if err = models.UserCreate(username, PSH(password, salt), salt); err != nil {
+		errResponseFatal(w, r, err)
+		return
+	}
+	w.Header().Set("Session", session.New(username).CreateJWT())
+	errResponseNotImplemented(w, r, "success") // TODO(vadim): finish with valid response
 }
 
 func RegistrationPage(w http.ResponseWriter, r *http.Request) {
@@ -108,7 +136,7 @@ func userAuth(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Session", session.New(username).CreateJWT())
-	errResponseNotImplemented(w, r, "success")
+	errResponseNotImplemented(w, r, "success") // TODO(vadim): finish with valid response
 }
 
 func LoginPage(w http.ResponseWriter, r *http.Request) {

@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"crypto/rand"
 	"fmt"
 	"net/http"
 
@@ -22,6 +23,15 @@ const (
 // Result can be used in database for checking the similarities.
 func PSH(pass string, salt []byte) []byte {
 	return argon2.IDKey([]byte(pass), salt, PSH_TIME, PSH_MEM, PSH_THR, PSH_LEN)
+}
+
+// Generates crypto-random salt for a user's password.
+func SaltGen() []byte {
+	salt := make([]byte, PSH_LEN)
+	if _, err := rand.Read(salt); err != nil {
+		logger.Log.Fatal("crypto rand raised error=%s", err)
+	}
+	return salt
 }
 
 // Function is used for most cases except: registration, login and logout requests.

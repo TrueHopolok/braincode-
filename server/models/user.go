@@ -2,11 +2,40 @@ package models
 
 import (
 	"database/sql"
+	"errors"
 	"os"
 
 	"github.com/TrueHopolok/braincode-/server/config"
 	"github.com/TrueHopolok/braincode-/server/db"
 )
+
+func UserCreate(username string, password, salt []byte) error {
+	queryfile := "create_user.sql"
+	query, err := os.ReadFile(config.Get().DBqueriesPath + queryfile)
+	if err != nil {
+		return err
+	}
+
+	tx, err := db.Conn.Begin()
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+
+	res, err := tx.Exec(string(query), username, password, salt)
+	if err != nil {
+		return err
+	}
+	n, err := res.RowsAffected()
+	if err != nil {
+		return err
+	}
+	if n != 1 {
+		return errors.New("invalid amount of inserted rows")
+	}
+
+	return tx.Commit()
+}
 
 func UserFindSalt(username string) ([]byte, bool, error) {
 	queryfile := "find_user_salt.sql"
