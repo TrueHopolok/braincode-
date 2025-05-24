@@ -1,5 +1,5 @@
 Task list TODO:
-- Registration
+- Finish login and registration success response
 - User Stats
 - Task Submition
 - Task Upload
