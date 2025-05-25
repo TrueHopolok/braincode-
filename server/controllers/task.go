@@ -125,11 +125,42 @@ func getTask(w http.ResponseWriter, r *http.Request) {
 }
 
 func submitSolution(w http.ResponseWriter, r *http.Request) {
-	errResp_NotImplemented(w, r, "submitSolution")
-	// TODO(vadim): add post req handler
-	// Check if auth
-	// Get a submission
-	// Save into to the database
+	username, isauth := sessionHandler(w, r)
+	if !isauth {
+		denyResp_NotAuthorized(w, r)
+		return
+	}
+
+	staskid := r.URL.Query().Get("id")
+	taskid, err := strconv.Atoi(staskid)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Invalid provided task-id=%s\nWant an integer", staskid), 406)
+		logger.Log.Debug("res=%p task-id=%s is not a valid integer", r, staskid)
+		return
+	}
+
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, "Invalid login form provided", 406)
+		logger.Log.Debug("res=%p invalid login form", r)
+		return
+	}
+	solution := r.PostFormValue("solution")
+
+	found, isvalid, err := models.SubmissionCreate(username, taskid, solution)
+	if err != nil {
+		errResp_Fatal(w, r, err)
+		return
+	} else if !found {
+		http.Error(w, fmt.Sprintf("Invalid provided task-id=%d\nSuch task does not exists", taskid), 406)
+		logger.Log.Debug("res=%p task-id=%d not found", r, taskid)
+		return
+	} else if !isvalid {
+		http.Error(w, fmt.Sprintf("Given solution is invalid brainfunk code"), 406)
+		logger.Log.Debug("req=%p invalid brainfunk code", r)
+		return
+	}
+
+	redirect2main(w, r, "submitSolution")
 }
 
 func TaskPage(w http.ResponseWriter, r *http.Request) {

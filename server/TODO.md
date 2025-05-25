@@ -1,4 +1,4 @@
 Task list TODO:
-- Task Submition
+- Task Submition (in process)
 - Task Upload
-- Views... shit
+- Translation, views and lots of testing

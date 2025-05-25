@@ -1,0 +1,1 @@
+INSERT INTO Submission (owner_name, task_id, solution, score, timestamp) VALUES (?, ?, ?, ?, ?);
