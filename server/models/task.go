@@ -86,7 +86,7 @@ func TaskFindAll(username, search string, filter, isauth bool, page int) ([]byte
 
 	var rawdata Problemset
 	for i := 0; rows.Next(); i++ {
-		rawdata.Rows = append(rawdata.Rows, TaskInfo{0, "", "", sql.NullFloat64{}})
+		rawdata.Rows = append(rawdata.Rows, TaskInfo{})
 		err = rows.Scan(
 			&rawdata.Rows[i].Id, &rawdata.Rows[i].Title,
 			&rawdata.Rows[i].OwnerName, &rawdata.Rows[i].Score,

@@ -1,7 +1,9 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/TrueHopolok/braincode-/server/logger"
 	"github.com/TrueHopolok/braincode-/server/models"
@@ -14,45 +16,83 @@ func StatsPage(w http.ResponseWriter, r *http.Request) {
 	defer logger.Log.Debug("req=%p served", r)
 
 	if r.Method != "GET" {
-		errResponseMethodNotAllowed(w, r, "GET")
+		denyResp_MethodNotAllowed(w, r, "GET")
 		return
 	}
 
 	username, isauth := sessionHandler(w, r)
 	if !isauth {
-		errResponseNotAuthorized(w, r)
+		denyResp_NotAuthorized(w, r)
 		return
 	}
 
-	if contenttype := r.Header.Get("Content-Type"); contenttype != "" && contenttype != "text/html" {
-		errResponseContentTypeNotAllowed(w, r, "text/html")
-		return
-	}
+	switch r.Header.Get("Content-Type") {
+	case "text/html", "":
+		ok, isenglish := langHandler(w, r)
+		if !ok {
+			return
+		} else if !isenglish {
+			errResp_NotImplemented(w, r, "translation")
+			return
+		}
 
-	ok, isenglish := langHandler(w, r)
-	if !ok {
-		return
-	} else if !isenglish {
-		errResponseNotImplemented(w, r, "translation")
-		return
-	}
+		acceptance_rate, solved_rate, err := models.UserFindInfo(username)
+		if err != nil {
+			errResp_Fatal(w, r, err)
+			return
+		}
 
-	acceptance_rate, solved_rate, err := models.UserFindInfo(username)
-	if err != nil {
-		errResponseFatal(w, r, err)
-		return
-	}
+		if err = views.UserFindInfo(w, r, acceptance_rate, solved_rate); err != nil {
+			errResp_Fatal(w, r, err)
+			return
+		}
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	case "application/json":
+		page, err := strconv.Atoi(r.Header.Get("Page"))
+		if err != nil || page < 0 {
+			page = 0
+		}
 
-	if err = views.UserFindInfo(w, r, acceptance_rate, solved_rate); err != nil {
-		errResponseFatal(w, r, err)
-		return
+		data, err := models.SubmissionFindAll(username, page)
+		if err != nil {
+			errResp_Fatal(w, r, err)
+			return
+		}
+
+		if _, err = w.Write(data); err != nil {
+			errResp_Fatal(w, r, err)
+		}
+		w.Header().Set("Content-Type", "application/json")
+	case "application/brainfunk":
+		ssubid := r.URL.Query().Get("id")
+		subid, err := strconv.Atoi(ssubid)
+		if err != nil {
+			http.Error(w, fmt.Sprintf("Invalid provided submission-id=%s\nWant an integer", ssubid), 406)
+			logger.Log.Debug("res=%p submission-id=%s is not a valid integer", r, ssubid)
+			return
+		}
+		solution, found, err := models.SubmissionFindOne(username, subid)
+		if err != nil {
+			errResp_Fatal(w, r, err)
+			return
+		} else if !found {
+			http.Error(w, fmt.Sprintf("Invalid provided task-id=%d\nSuch task does not exists", subid), 406)
+			logger.Log.Debug("res=%p task-id=%d not found", r, subid)
+			return
+		}
+
+		if _, err = w.Write([]byte(solution)); err != nil {
+			errResp_Fatal(w, r, err)
+		}
+		w.Header().Set("Content-Type", "application/brainfunk")
+	default:
+		denyResp_ContentTypeNotAllowed(w, r, "text/html", "application/json", "application/brainfunk")
 	}
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 }
 
 func getpageRegister(w http.ResponseWriter, r *http.Request) {
 	if contenttype := r.Header.Get("Content-Type"); contenttype != "" && contenttype != "text/html" {
-		errResponseContentTypeNotAllowed(w, r, "text/html")
+		denyResp_ContentTypeNotAllowed(w, r, "text/html")
 		return
 	}
 
@@ -60,14 +100,14 @@ func getpageRegister(w http.ResponseWriter, r *http.Request) {
 	if !ok {
 		return
 	} else if !isenglish {
-		errResponseNotImplemented(w, r, "translation")
+		errResp_NotImplemented(w, r, "translation")
 		return
 	}
 
 	username, isauth := sessionHandler(w, r)
 
 	if err := views.UserCreate(w, r, username, isauth, isenglish); err != nil {
-		errResponseFatal(w, r, err)
+		errResp_Fatal(w, r, err)
 	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 }
@@ -91,7 +131,7 @@ func userRegister(w http.ResponseWriter, r *http.Request) {
 	}
 	_, found, err := models.UserFindSalt(username)
 	if err != nil {
-		errResponseFatal(w, r, err)
+		errResp_Fatal(w, r, err)
 		return
 	} else if !found {
 		http.Error(w, "User with such username exists", 406)
@@ -100,7 +140,7 @@ func userRegister(w http.ResponseWriter, r *http.Request) {
 	}
 	salt := SaltGen()
 	if err = models.UserCreate(username, PSH(password, salt), salt); err != nil {
-		errResponseFatal(w, r, err)
+		errResp_Fatal(w, r, err)
 		return
 	}
 	w.Header().Set("Session", session.New(username).CreateJWT())
@@ -117,13 +157,13 @@ func RegistrationPage(w http.ResponseWriter, r *http.Request) {
 	case "POST":
 		userRegister(w, r)
 	default:
-		errResponseMethodNotAllowed(w, r, "GET", "POST")
+		denyResp_MethodNotAllowed(w, r, "GET", "POST")
 	}
 }
 
 func getpageLogin(w http.ResponseWriter, r *http.Request) {
 	if contenttype := r.Header.Get("Content-Type"); contenttype != "" && contenttype != "text/html" {
-		errResponseContentTypeNotAllowed(w, r, "text/html")
+		denyResp_ContentTypeNotAllowed(w, r, "text/html")
 		return
 	}
 
@@ -131,14 +171,14 @@ func getpageLogin(w http.ResponseWriter, r *http.Request) {
 	if !ok {
 		return
 	} else if !isenglish {
-		errResponseNotImplemented(w, r, "translation")
+		errResp_NotImplemented(w, r, "translation")
 		return
 	}
 
 	username, isauth := sessionHandler(w, r)
 
 	if err := views.UserFindLogin(w, r, username, isauth, isenglish); err != nil {
-		errResponseFatal(w, r, err)
+		errResp_Fatal(w, r, err)
 	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 }
@@ -162,7 +202,7 @@ func userAuth(w http.ResponseWriter, r *http.Request) {
 	}
 	salt, found, err := models.UserFindSalt(username)
 	if err != nil {
-		errResponseFatal(w, r, err)
+		errResp_Fatal(w, r, err)
 		return
 	} else if !found {
 		http.Error(w, "Incorrect username or password", 406)
@@ -171,7 +211,7 @@ func userAuth(w http.ResponseWriter, r *http.Request) {
 	}
 	found, err = models.UserFindLogin(username, PSH(password, salt))
 	if err != nil {
-		errResponseFatal(w, r, err)
+		errResp_Fatal(w, r, err)
 		return
 	} else if !found {
 		http.Error(w, "Incorrect username or password", 406)
@@ -192,6 +232,6 @@ func LoginPage(w http.ResponseWriter, r *http.Request) {
 	case "POST":
 		userAuth(w, r)
 	default:
-		errResponseMethodNotAllowed(w, r, "GET", "POST")
+		denyResp_MethodNotAllowed(w, r, "GET", "POST")
 	}
 }

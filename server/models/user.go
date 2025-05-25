@@ -9,6 +9,7 @@ import (
 	"github.com/TrueHopolok/braincode-/server/db"
 )
 
+// Return stats for given username
 func UserFindInfo(username string) (acceptance_rate sql.NullFloat64, solved_rate sql.NullFloat64, err error) {
 	queryfile := "find_user_info.sql"
 	query, err := os.ReadFile(config.Get().DBqueriesPath + queryfile)
@@ -31,6 +32,7 @@ func UserFindInfo(username string) (acceptance_rate sql.NullFloat64, solved_rate
 	return
 }
 
+// Return salt for given username
 func UserFindSalt(username string) ([]byte, bool, error) {
 	queryfile := "find_user_salt.sql"
 	query, err := os.ReadFile(config.Get().DBqueriesPath + queryfile)
@@ -57,6 +59,7 @@ func UserFindSalt(username string) ([]byte, bool, error) {
 	return salt, true, tx.Commit()
 }
 
+// Return if user exists given username and password
 func UserFindLogin(username string, password []byte) (bool, error) {
 	queryfile := "find_user_login.sql"
 	query, err := os.ReadFile(config.Get().DBqueriesPath + queryfile)
@@ -82,6 +85,7 @@ func UserFindLogin(username string, password []byte) (bool, error) {
 	return true, tx.Commit()
 }
 
+// Create a user with given username, PSH and salt
 func UserCreate(username string, password, salt []byte) error {
 	queryfile := "create_user.sql"
 	query, err := os.ReadFile(config.Get().DBqueriesPath + queryfile)

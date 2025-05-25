@@ -15,7 +15,7 @@ func ProblemsetPage(w http.ResponseWriter, r *http.Request) {
 	defer logger.Log.Debug("req=%p served", r)
 
 	if r.Method != "GET" {
-		errResponseMethodNotAllowed(w, r, "GET")
+		denyResp_MethodNotAllowed(w, r, "GET")
 		return
 	}
 
@@ -27,12 +27,12 @@ func ProblemsetPage(w http.ResponseWriter, r *http.Request) {
 		if !ok {
 			return
 		} else if !isenglish {
-			errResponseNotImplemented(w, r, "translation")
+			errResp_NotImplemented(w, r, "translation")
 			return
 		}
 
 		if err := views.TaskFindAll(w, username, isauth, isenglish); err != nil {
-			errResponseFatal(w, r, err)
+			errResp_Fatal(w, r, err)
 		}
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	case "application/json":
@@ -45,22 +45,22 @@ func ProblemsetPage(w http.ResponseWriter, r *http.Request) {
 		filter := r.Header.Get("Filter") == "user-only"
 		data, err := models.TaskFindAll(username, search, filter, isauth, page)
 		if err != nil {
-			errResponseFatal(w, r, err)
+			errResp_Fatal(w, r, err)
 			return
 		}
 
 		if _, err = w.Write(data); err != nil {
-			errResponseFatal(w, r, err)
+			errResp_Fatal(w, r, err)
 		}
 		w.Header().Set("Content-Type", "application/json")
 	default:
-		errResponseContentTypeNotAllowed(w, r, "text/html", "application/json")
+		denyResp_ContentTypeNotAllowed(w, r, "text/html", "application/json")
 	}
 }
 
 func getpageTask(w http.ResponseWriter, r *http.Request) {
 	if contenttype := r.Header.Get("Content-Type"); contenttype != "" && contenttype != "text/html" {
-		errResponseContentTypeNotAllowed(w, r, "text/html")
+		denyResp_ContentTypeNotAllowed(w, r, "text/html")
 		return
 	}
 
@@ -68,7 +68,7 @@ func getpageTask(w http.ResponseWriter, r *http.Request) {
 	if !ok {
 		return
 	} else if !isenglish {
-		errResponseNotImplemented(w, r, "translation")
+		errResp_NotImplemented(w, r, "translation")
 		return
 	}
 
@@ -83,7 +83,7 @@ func getpageTask(w http.ResponseWriter, r *http.Request) {
 	}
 	task, found, err := models.TaskFindOne(username, taskid)
 	if err != nil {
-		errResponseFatal(w, r, err)
+		errResp_Fatal(w, r, err)
 		return
 	} else if !found {
 		http.Error(w, fmt.Sprintf("Invalid provided task-id=%d\nSuch task does not exists", taskid), 406)
@@ -91,13 +91,13 @@ func getpageTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if err = views.TaskFindOne(w, r, username, isauth, isenglish, task); err != nil {
-		errResponseFatal(w, r, err)
+		errResp_Fatal(w, r, err)
 	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 }
 
 func submitSolution(w http.ResponseWriter, r *http.Request) {
-	errResponseNotImplemented(w, r, "submitSolution")
+	errResp_NotImplemented(w, r, "submitSolution")
 	// TODO(vadim): add post req handler
 	// Check if auth
 	// Get a submission
@@ -114,6 +114,6 @@ func TaskPage(w http.ResponseWriter, r *http.Request) {
 	case "POST":
 		submitSolution(w, r)
 	default:
-		errResponseMethodNotAllowed(w, r, "GET", "POST")
+		denyResp_MethodNotAllowed(w, r, "GET", "POST")
 	}
 }

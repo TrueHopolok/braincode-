@@ -71,7 +71,7 @@ func langHandler(w http.ResponseWriter, r *http.Request) (isenglish bool, isvali
 //
 // Can be used to temporarly substitue some code.
 // Will return 503 error code as http response and write into a logger that given feature is not implemented.
-func errResponseNotImplemented(w http.ResponseWriter, r *http.Request, feature string) {
+func errResp_NotImplemented(w http.ResponseWriter, r *http.Request, feature string) {
 	feature = fmt.Sprintf("%s not implemented yet", feature)
 	http.Error(w, feature, 503)
 	logger.Log.Error("req=%p failed; error=%s", r, feature)
@@ -79,9 +79,19 @@ func errResponseNotImplemented(w http.ResponseWriter, r *http.Request, feature s
 
 // This should be the last write into the response!
 //
+// Write an error into the both response and logger.
+// Should be used in case some internal error in execution happened,
+// not for user invalid request handling.
+func errResp_Fatal(w http.ResponseWriter, r *http.Request, err error) {
+	http.Error(w, "Failed to write into the response body", 500)
+	logger.Log.Error("req=%p failed; error=%s", r, err)
+}
+
+// This should be the last write into the response!
+//
 // Used to display not allowed method error.
 // Will add all provided methods into the both response and logger.
-func errResponseMethodNotAllowed(w http.ResponseWriter, r *http.Request, allowedMethods ...string) {
+func denyResp_MethodNotAllowed(w http.ResponseWriter, r *http.Request, allowedMethods ...string) {
 	result := fmt.Sprintf("Method=%s is not allowed\nAllowed=", r.Method)
 	for _, method := range allowedMethods {
 		result += method
@@ -93,19 +103,9 @@ func errResponseMethodNotAllowed(w http.ResponseWriter, r *http.Request, allowed
 
 // This should be the last write into the response!
 //
-// Write an error into the both response and logger.
-// Should be used in case some internal error in execution happened,
-// not for user invalid request handling.
-func errResponseFatal(w http.ResponseWriter, r *http.Request, err error) {
-	http.Error(w, "Failed to write into the response body", 500)
-	logger.Log.Error("req=%p failed; error=%s", r, err)
-}
-
-// This should be the last write into the response!
-//
 // Write into response that given content-type is not allowed.
 // Also writes into the logger for debbuging purposes.
-func errResponseContentTypeNotAllowed(w http.ResponseWriter, r *http.Request, allowedTypes ...string) {
+func denyResp_ContentTypeNotAllowed(w http.ResponseWriter, r *http.Request, allowedTypes ...string) {
 	result := fmt.Sprintf("Content-Type=%s is not allowed\nAllowed=", r.Header.Get("Content-Type"))
 	for _, contenttype := range allowedTypes {
 		result += contenttype
@@ -118,7 +118,7 @@ func errResponseContentTypeNotAllowed(w http.ResponseWriter, r *http.Request, al
 //
 // Output that user is not authorized to use this page.
 // Writes in both logger and response.
-func errResponseNotAuthorized(w http.ResponseWriter, r *http.Request) {
+func denyResp_NotAuthorized(w http.ResponseWriter, r *http.Request) {
 	http.Error(w, "Login into account to use this page", 401)
 	logger.Log.Debug("req=%p user trying to access page while unauthorized", r)
 }
