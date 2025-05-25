@@ -7,8 +7,10 @@ import (
 	"os"
 	"time"
 
+	"github.com/TrueHopolok/braincode-/judge"
 	"github.com/TrueHopolok/braincode-/server/config"
 	"github.com/TrueHopolok/braincode-/server/db"
+	"github.com/TrueHopolok/braincode-/server/logger"
 )
 
 const SUBMISSIONS_AMOUNT_LIMIT = 20
@@ -117,8 +119,8 @@ func SubmissionCreate(username string, taskid int, solution string) (found, isva
 	defer tx.Rollback()
 
 	row := tx.QueryRow(string(query1), taskid)
-	var rawproblem []byte
-	if err = row.Scan(&rawproblem); err != nil {
+	var rawprb []byte
+	if err = row.Scan(&rawprb); err != nil {
 		if err == sql.ErrNoRows {
 			return false, false, nil
 		} else {
@@ -129,10 +131,42 @@ func SubmissionCreate(username string, taskid int, solution string) (found, isva
 		return true, false, err
 	}
 
-	// TODO(vadim): JUDGE to recieve score and check if solution is valid
-	score := 1.0
+	prb, err := unmarshalProblem(rawprb)
+	if err != nil {
+		logger.Log.Warn("task-id=%d corrupt entry", taskid)
+		return true, false, err
+	}
+	jdg := judge.NewJudge(4)
+	rawverdict := jdg.Judge(prb, solution)
+	if err = jdg.Close(); err != nil {
+		logger.Log.Fatal("judge error=%s", err)
+	}
+	var (
+		verdict judge.Status = 0
+		comment string       = ""
+		score   float64      = 0
+	)
+	for i := range rawverdict {
+		for j := range rawverdict[i] {
+			verdict = rawverdict[i][j].Status
+			if verdict != judge.StatusAccept {
+				comment = rawverdict[i][j].Comment
+				break
+			}
+		}
+		if comment != "" {
+			break
+		}
+	}
+	if comment == "" {
+		score = judge.CalculateScore(rawverdict)
+	}
 
-	res, err := tx.Exec(string(query2), username, taskid, solution, score, time.Now())
+	res, err := tx.Exec(string(query2),
+		username, taskid,
+		verdict, comment,
+		solution, score,
+		time.Now())
 	if err != nil {
 		return true, true, err
 	}
