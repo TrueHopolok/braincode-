@@ -1,4 +1,4 @@
 SELECT solution
-FROM submission
+FROM Submission
 WHERE id = ?
 AND owner_name = ?;

@@ -9,6 +9,34 @@ import (
 	"github.com/TrueHopolok/braincode-/server/db"
 )
 
+func UserDelete(username string) error {
+	queryfile := "delete_user.sql"
+	query, err := os.ReadFile(config.Get().DBqueriesPath + queryfile)
+	if err != nil {
+		return err
+	}
+
+	tx, err := db.Conn.Begin()
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+
+	res, err := tx.Exec(string(query), username)
+	if err != nil {
+		return err
+	}
+	n, err := res.RowsAffected()
+	if err != nil {
+		return err
+	}
+	if n != 1 {
+		return errors.New("invalid amount of deleted rows")
+	}
+
+	return tx.Commit()
+}
+
 // Return stats for given username
 func UserFindInfo(username string) (acceptance_rate sql.NullFloat64, solved_rate sql.NullFloat64, err error) {
 	queryfile := "find_user_info.sql"

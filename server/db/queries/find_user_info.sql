@@ -21,5 +21,5 @@ SELECT
 			FROM task
 		)
 	) AS solved_rate
-FROM submission AS s
+FROM Submission AS s
 WHERE s.owner_name = ?;

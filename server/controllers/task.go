@@ -58,7 +58,7 @@ func ProblemsetPage(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func getpageTask(w http.ResponseWriter, r *http.Request) {
+func getTask(w http.ResponseWriter, r *http.Request) {
 	if contenttype := r.Header.Get("Content-Type"); contenttype != "" && contenttype != "text/html" {
 		denyResp_ContentTypeNotAllowed(w, r, "text/html")
 		return
@@ -110,7 +110,7 @@ func TaskPage(w http.ResponseWriter, r *http.Request) {
 
 	switch r.Method {
 	case "GET":
-		getpageTask(w, r)
+		getTask(w, r)
 	case "POST":
 		submitSolution(w, r)
 	default:
