@@ -131,8 +131,8 @@ func SubmissionCreate(username string, taskid int, solution string) (found, isva
 		return true, false, err
 	}
 
-	prb, err := unmarshalProblem(rawprb)
-	if err != nil {
+	var prb judge.Problem
+	if err = prb.UnmarshalBinary(rawprb); err != nil {
 		logger.Log.Warn("task-id=%d corrupt entry", taskid)
 		return true, false, err
 	}
