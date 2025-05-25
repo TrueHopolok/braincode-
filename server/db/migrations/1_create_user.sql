@@ -3,4 +3,4 @@ CREATE TABLE User (
 	password 	BLOB NOT NULL,
 	salt 		BLOB NOT NULL,
 	CONSTRAINT CHK_name CHECK(LENGTH(name) > 3)
-);
+) ENGINE=INNODB;
