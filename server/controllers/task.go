@@ -59,7 +59,10 @@ func ProblemsetPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func getpageTask(w http.ResponseWriter, r *http.Request) {
-	username, isauth := sessionHandler(w, r)
+	if contenttype := r.Header.Get("Content-Type"); contenttype != "" && contenttype != "text/html" {
+		errResponseContentTypeNotAllowed(w, r, "text/html")
+		return
+	}
 
 	ok, isenglish := langHandler(w, r)
 	if !ok {
@@ -69,10 +72,7 @@ func getpageTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if r.Header.Get("Content-Type") != "text/html" && r.Header.Get("Content-Type") != "" {
-		errResponseContentTypeNotAllowed(w, r, "text/html")
-		return
-	}
+	username, isauth := sessionHandler(w, r)
 
 	staskid := r.URL.Query().Get("id")
 	taskid, err := strconv.Atoi(staskid)

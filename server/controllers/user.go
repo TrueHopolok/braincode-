@@ -10,17 +10,24 @@ import (
 )
 
 func StatsPage(w http.ResponseWriter, r *http.Request) {
+	logger.Log.Debug("req=%p arrived", r)
+	defer logger.Log.Debug("req=%p served", r)
+
+	if r.Method != "GET" {
+		errResponseMethodNotAllowed(w, r, "GET")
+		return
+	}
+
+	if contenttype := r.Header.Get("Content-Type"); contenttype != "" && contenttype != "text/html" {
+		errResponseContentTypeNotAllowed(w, r, "text/html")
+		return
+	}
+
 	_, isauth := sessionHandler(w, r)
 	if !isauth {
 		errResponseNotAuthorized(w, r)
 		return
 	}
-	// TODO(vadim): finish getting user stats
-	errResponseNotImplemented(w, r, "StatsPage")
-}
-
-func getpageRegister(w http.ResponseWriter, r *http.Request) {
-	username, isauth := sessionHandler(w, r)
 
 	ok, isenglish := langHandler(w, r)
 	if !ok {
@@ -30,10 +37,25 @@ func getpageRegister(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if r.Header.Get("Content-Type") != "text/html" && r.Header.Get("Content-Type") != "" {
+	// TODO(vadim): finish getting user stats
+	errResponseNotImplemented(w, r, "StatsPage")
+}
+
+func getpageRegister(w http.ResponseWriter, r *http.Request) {
+	if contenttype := r.Header.Get("Content-Type"); contenttype != "" && contenttype != "text/html" {
 		errResponseContentTypeNotAllowed(w, r, "text/html")
 		return
 	}
+
+	ok, isenglish := langHandler(w, r)
+	if !ok {
+		return
+	} else if !isenglish {
+		errResponseNotImplemented(w, r, "translation")
+		return
+	}
+
+	username, isauth := sessionHandler(w, r)
 
 	if err := views.UserCreate(w, r, username, isauth, isenglish); err != nil {
 		errResponseFatal(w, r, err)
@@ -91,7 +113,10 @@ func RegistrationPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func getpageLogin(w http.ResponseWriter, r *http.Request) {
-	username, isauth := sessionHandler(w, r)
+	if contenttype := r.Header.Get("Content-Type"); contenttype != "" && contenttype != "text/html" {
+		errResponseContentTypeNotAllowed(w, r, "text/html")
+		return
+	}
 
 	ok, isenglish := langHandler(w, r)
 	if !ok {
@@ -101,10 +126,7 @@ func getpageLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if r.Header.Get("Content-Type") != "text/html" && r.Header.Get("Content-Type") != "" {
-		errResponseContentTypeNotAllowed(w, r, "text/html")
-		return
-	}
+	username, isauth := sessionHandler(w, r)
 
 	if err := views.UserFindLogin(w, r, username, isauth, isenglish); err != nil {
 		errResponseFatal(w, r, err)
