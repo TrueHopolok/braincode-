@@ -67,6 +67,12 @@ func langHandler(w http.ResponseWriter, r *http.Request) (isenglish bool, isvali
 	return true, true
 }
 
+// Redirects user to main/problemset page with 303 error code (SeeOther)
+func redirect2main(w http.ResponseWriter, r *http.Request, action string) {
+	http.Redirect(w, r, "/", 303)
+	logger.Log.Debug("req=%p user redirect after %s", r, action)
+}
+
 // This should be the last write into the response!
 //
 // Can be used to temporarly substitue some code.

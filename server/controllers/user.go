@@ -17,8 +17,7 @@ func userDelete(w http.ResponseWriter, r *http.Request, username string) {
 		return
 	}
 	w.Header().Del("Session")
-	w.WriteHeader(204)
-	// TODO(vadim): add redirect to main page
+	redirect2main(w, r, "delete")
 }
 
 func getStats(w http.ResponseWriter, r *http.Request, username string) {
@@ -160,7 +159,7 @@ func userRegister(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Session", session.New(username).CreateJWT())
-	w.WriteHeader(204)
+	redirect2main(w, r, "register")
 }
 
 func RegistrationPage(w http.ResponseWriter, r *http.Request) {
@@ -235,7 +234,7 @@ func userAuth(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Session", session.New(username).CreateJWT())
-	w.WriteHeader(204)
+	redirect2main(w, r, "login")
 }
 
 func LoginPage(w http.ResponseWriter, r *http.Request) {
