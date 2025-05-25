@@ -18,14 +18,14 @@ func StatsPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if contenttype := r.Header.Get("Content-Type"); contenttype != "" && contenttype != "text/html" {
-		errResponseContentTypeNotAllowed(w, r, "text/html")
-		return
-	}
-
 	_, isauth := sessionHandler(w, r)
 	if !isauth {
 		errResponseNotAuthorized(w, r)
+		return
+	}
+
+	if contenttype := r.Header.Get("Content-Type"); contenttype != "" && contenttype != "text/html" {
+		errResponseContentTypeNotAllowed(w, r, "text/html")
 		return
 	}
 
