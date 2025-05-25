@@ -17,7 +17,7 @@ func userDelete(w http.ResponseWriter, r *http.Request, username string) {
 		return
 	}
 	w.Header().Del("Session")
-	redirect2main(w, r, "delete")
+	redirect2main(w, r, "userDelete")
 }
 
 func getStats(w http.ResponseWriter, r *http.Request, username string) {
@@ -43,7 +43,7 @@ func getStats(w http.ResponseWriter, r *http.Request, username string) {
 		}
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	case "application/json":
-		page, err := strconv.Atoi(r.Header.Get("Page"))
+		page, err := strconv.Atoi(r.URL.Query().Get("id"))
 		if err != nil || page < 0 {
 			page = 0
 		}
@@ -159,7 +159,7 @@ func userRegister(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Session", session.New(username).CreateJWT())
-	redirect2main(w, r, "register")
+	redirect2main(w, r, "userRegister")
 }
 
 func RegistrationPage(w http.ResponseWriter, r *http.Request) {
@@ -234,7 +234,7 @@ func userAuth(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Session", session.New(username).CreateJWT())
-	redirect2main(w, r, "login")
+	redirect2main(w, r, "userLogin")
 }
 
 func LoginPage(w http.ResponseWriter, r *http.Request) {

@@ -9,6 +9,7 @@ import (
 	"github.com/TrueHopolok/braincode-/server/db"
 )
 
+// Deletes user form the database
 func UserDelete(username string) error {
 	queryfile := "delete_user.sql"
 	query, err := os.ReadFile(config.Get().DBqueriesPath + queryfile)

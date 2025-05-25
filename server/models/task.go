@@ -3,6 +3,7 @@ package models
 import (
 	"database/sql"
 	"encoding/json"
+	"errors"
 	"os"
 
 	"github.com/TrueHopolok/braincode-/server/config"
@@ -27,6 +28,35 @@ type Problemset struct {
 }
 
 const TASKS_AMOUNT_LIMIT = 20
+
+// Deletes task from the database
+func TaskDelete(username string, taskid int) error {
+	queryfile := "delete_task.sql"
+	query, err := os.ReadFile(config.Get().DBqueriesPath + queryfile)
+	if err != nil {
+		return err
+	}
+
+	tx, err := db.Conn.Begin()
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+
+	res, err := tx.Exec(string(query), username, taskid)
+	if err != nil {
+		return err
+	}
+	n, err := res.RowsAffected()
+	if err != nil {
+		return err
+	}
+	if n != 1 {
+		return errors.New("invalid amount of deleted rows")
+	}
+
+	return tx.Commit()
+}
 
 // Get info about single task by given id and returns it as a struct
 func TaskFindOne(username string, taskid int) (Task, bool, error) {

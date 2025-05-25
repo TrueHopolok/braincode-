@@ -10,15 +10,29 @@ import (
 	"github.com/TrueHopolok/braincode-/server/views"
 )
 
-func ProblemsetPage(w http.ResponseWriter, r *http.Request) {
-	logger.Log.Debug("req=%p arrived", r)
-	defer logger.Log.Debug("req=%p served", r)
-
-	if r.Method != "GET" {
-		denyResp_MethodNotAllowed(w, r, "GET")
+func taskDelete(w http.ResponseWriter, r *http.Request) {
+	username, isauth := sessionHandler(w, r)
+	if !isauth {
+		denyResp_NotAuthorized(w, r)
 		return
 	}
 
+	staskid := r.URL.Query().Get("id")
+	taskid, err := strconv.Atoi(staskid)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Invalid provided task-id=%s\nWant an integer", staskid), 406)
+		logger.Log.Debug("res=%p task-id=%s is not a valid integer", r, staskid)
+		return
+	}
+
+	if err := models.TaskDelete(username, taskid); err != nil {
+		errResp_Fatal(w, r, err)
+		return
+	}
+	redirect2main(w, r, "taskDelete")
+}
+
+func getProblemset(w http.ResponseWriter, r *http.Request) {
 	username, isauth := sessionHandler(w, r)
 
 	switch r.Header.Get("Content-Type") {
@@ -36,13 +50,13 @@ func ProblemsetPage(w http.ResponseWriter, r *http.Request) {
 		}
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	case "application/json":
-		page, err := strconv.Atoi(r.Header.Get("Page"))
+		page, err := strconv.Atoi(r.URL.Query().Get("id"))
 		if err != nil || page < 0 {
 			page = 0
 		}
 
-		search := r.Header.Get("Search")
-		filter := r.Header.Get("Filter") == "user-only"
+		search := r.URL.Query().Get("id")
+		filter := r.URL.Query().Get("id") == "user-only"
 		data, err := models.TaskFindAll(username, search, filter, isauth, page)
 		if err != nil {
 			errResp_Fatal(w, r, err)
@@ -55,6 +69,20 @@ func ProblemsetPage(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 	default:
 		denyResp_ContentTypeNotAllowed(w, r, "text/html", "application/json")
+	}
+}
+
+func ProblemsetPage(w http.ResponseWriter, r *http.Request) {
+	logger.Log.Debug("req=%p arrived", r)
+	defer logger.Log.Debug("req=%p served", r)
+
+	switch r.Method {
+	case "GET":
+		getProblemset(w, r)
+	case "DELETE":
+		taskDelete(w, r)
+	default:
+		denyResp_MethodNotAllowed(w, r, "GET", "DELETE")
 	}
 }
 
