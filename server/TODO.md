@@ -1,9 +1,8 @@
 Task list TODO:
-- User Stats
-- Task Submition
-- Task Upload
 - User Deletion
 - Task Deletion
+- Task Submition
+- Task Upload
 - Views... shit
 
 The possible requests that frontend need to handle:
