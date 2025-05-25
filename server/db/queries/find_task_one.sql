@@ -1,5 +1,5 @@
 SELECT t.id, t.owner_name, t.title, t.info, (
-    SELECT MAX(s.score)
+    SELECT s.score
     FROM Status AS s
     WHERE s.task_id = t.id
     AND s.owner_name = ?

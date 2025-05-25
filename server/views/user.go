@@ -2,13 +2,13 @@ package views
 
 import (
 	"bufio"
+	"database/sql"
 	"net/http"
 
-	"github.com/TrueHopolok/braincode-/server/models"
 	"github.com/TrueHopolok/braincode-/server/prepared"
 )
 
-func UserFindInfo(w http.ResponseWriter, r *http.Request, userinfo models.User) error {
+func UserFindInfo(w http.ResponseWriter, r *http.Request, acceptance_rate, solved_rate sql.NullFloat64) error {
 	// TODO(vadim): to the finished view add all information
 	templ := "TODO.html" // lang depended
 	buf := bufio.NewWriter(w)

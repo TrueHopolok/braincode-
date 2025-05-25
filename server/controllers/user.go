@@ -37,13 +37,13 @@ func StatsPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userinfo, err := models.UserFindInfo(username)
+	acceptance_rate, solved_rate, err := models.UserFindInfo(username)
 	if err != nil {
 		errResponseFatal(w, r, err)
 		return
 	}
 
-	if err = views.UserFindInfo(w, r, userinfo); err != nil {
+	if err = views.UserFindInfo(w, r, acceptance_rate, solved_rate); err != nil {
 		errResponseFatal(w, r, err)
 		return
 	}

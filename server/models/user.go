@@ -9,29 +9,26 @@ import (
 	"github.com/TrueHopolok/braincode-/server/db"
 )
 
-type User struct {
-}
-
-func UserFindInfo(username string) (User, error) {
+func UserFindInfo(username string) (acceptance_rate sql.NullFloat64, solved_rate sql.NullFloat64, err error) {
 	queryfile := "find_user_info.sql"
 	query, err := os.ReadFile(config.Get().DBqueriesPath + queryfile)
 	if err != nil {
-		return User{}, err
+		return
 	}
 
 	tx, err := db.Conn.Begin()
 	if err != nil {
-		return User{}, err
+		return
 	}
 	defer tx.Rollback()
 
 	row := tx.QueryRow(string(query), username)
-	var res User
-	if err := row.Scan(); err != nil {
-		return User{}, err
+	if err = row.Scan(&acceptance_rate, &solved_rate); err != nil {
+		return
 	}
 
-	return res, tx.Commit()
+	err = tx.Commit()
+	return
 }
 
 func UserFindSalt(username string) ([]byte, bool, error) {
