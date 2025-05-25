@@ -39,7 +39,7 @@ func SaltGen() []byte {
 // Validates it.
 // If valid: updates the token and writes it into a header.
 // If invalid or expired: return empty string as a name and false in aiauth field.
-func sessionHandler(w http.ResponseWriter, r *http.Request) (session.Session, bool) {
+func sessionHandler(w http.ResponseWriter, r *http.Request) (string, bool) {
 	token := r.Header.Get("Session")
 	var ses session.Session
 	isauth := ses.ValidateJWT(token) && !ses.IsExpired()
@@ -49,7 +49,7 @@ func sessionHandler(w http.ResponseWriter, r *http.Request) (session.Session, bo
 	} else {
 		ses.Name = ""
 	}
-	return ses, isauth
+	return ses.Name, isauth
 }
 
 // Return 2 booleans that tell what language does user want.

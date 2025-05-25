@@ -20,7 +20,7 @@ func StatsPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func getpageRegister(w http.ResponseWriter, r *http.Request) {
-	ses, isauth := sessionHandler(w, r)
+	username, isauth := sessionHandler(w, r)
 
 	ok, isenglish := langHandler(w, r)
 	if !ok {
@@ -35,7 +35,7 @@ func getpageRegister(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := views.UserCreate(w, r, ses.Name, isauth, isenglish); err != nil {
+	if err := views.UserCreate(w, r, username, isauth, isenglish); err != nil {
 		errResponseFatal(w, r, err)
 	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
@@ -91,7 +91,7 @@ func RegistrationPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func getpageLogin(w http.ResponseWriter, r *http.Request) {
-	ses, isauth := sessionHandler(w, r)
+	username, isauth := sessionHandler(w, r)
 
 	ok, isenglish := langHandler(w, r)
 	if !ok {
@@ -106,7 +106,7 @@ func getpageLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := views.UserFindLogin(w, r, ses.Name, isauth, isenglish); err != nil {
+	if err := views.UserFindLogin(w, r, username, isauth, isenglish); err != nil {
 		errResponseFatal(w, r, err)
 	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")

@@ -19,7 +19,7 @@ func ProblemsetPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ses, isauth := sessionHandler(w, r)
+	username, isauth := sessionHandler(w, r)
 
 	switch r.Header.Get("Content-Type") {
 	case "text/html", "":
@@ -31,7 +31,7 @@ func ProblemsetPage(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		if err := views.TaskFindAll(w, ses.Name, isauth, isenglish); err != nil {
+		if err := views.TaskFindAll(w, username, isauth, isenglish); err != nil {
 			errResponseFatal(w, r, err)
 		}
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
@@ -43,7 +43,7 @@ func ProblemsetPage(w http.ResponseWriter, r *http.Request) {
 
 		search := r.Header.Get("Search")
 		filter := r.Header.Get("Filter") == "user-only"
-		data, err := models.TaskFindAll(ses.Name, search, filter, isauth, page)
+		data, err := models.TaskFindAll(username, search, filter, isauth, page)
 		if err != nil {
 			errResponseFatal(w, r, err)
 			return
@@ -59,7 +59,7 @@ func ProblemsetPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func getpageTask(w http.ResponseWriter, r *http.Request) {
-	ses, isauth := sessionHandler(w, r)
+	username, isauth := sessionHandler(w, r)
 
 	ok, isenglish := langHandler(w, r)
 	if !ok {
@@ -81,7 +81,7 @@ func getpageTask(w http.ResponseWriter, r *http.Request) {
 		logger.Log.Debug("res=%p task-id=%s is not a valid integer", r, staskid)
 		return
 	}
-	task, found, err := models.TaskFindOne(ses.Name, taskid)
+	task, found, err := models.TaskFindOne(username, taskid)
 	if err != nil {
 		errResponseFatal(w, r, err)
 		return
@@ -90,7 +90,7 @@ func getpageTask(w http.ResponseWriter, r *http.Request) {
 		logger.Log.Debug("res=%p task-id=%d not found", r, taskid)
 		return
 	}
-	if err = views.TaskFindOne(w, r, ses.Name, isauth, isenglish, task); err != nil {
+	if err = views.TaskFindOne(w, r, username, isauth, isenglish, task); err != nil {
 		errResponseFatal(w, r, err)
 	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
