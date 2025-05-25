@@ -43,7 +43,7 @@ func StatsPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err = views.UserFindInfo(userinfo); err != nil {
+	if err = views.UserFindInfo(w, r, userinfo); err != nil {
 		errResponseFatal(w, r, err)
 		return
 	}
