@@ -1,5 +1,4 @@
 Task list TODO:
-- Finish login and registration success response
 - User Stats
 - Task Submition
 - Task Upload
@@ -12,3 +11,8 @@ The possible requests that frontend need to handle:
 - In all  requests - session-token as header parameter
 - In post requests - content-type as header parameter
 - Other info depends on requests (probablly post requests)
+
+The responses:
+- Status code
+- Content-type
+- Session
