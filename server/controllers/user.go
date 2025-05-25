@@ -18,7 +18,7 @@ func StatsPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, isauth := sessionHandler(w, r)
+	username, isauth := sessionHandler(w, r)
 	if !isauth {
 		errResponseNotAuthorized(w, r)
 		return
@@ -37,8 +37,17 @@ func StatsPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// TODO(vadim): finish getting user stats
-	errResponseNotImplemented(w, r, "StatsPage")
+	userinfo, err := models.UserFindInfo(username)
+	if err != nil {
+		errResponseFatal(w, r, err)
+		return
+	}
+
+	if err = views.UserFindInfo(userinfo); err != nil {
+		errResponseFatal(w, r, err)
+		return
+	}
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 }
 
 func getpageRegister(w http.ResponseWriter, r *http.Request) {

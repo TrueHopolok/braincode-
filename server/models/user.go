@@ -9,32 +9,29 @@ import (
 	"github.com/TrueHopolok/braincode-/server/db"
 )
 
-func UserCreate(username string, password, salt []byte) error {
-	queryfile := "create_user.sql"
+type User struct {
+}
+
+func UserFindInfo(username string) (User, error) {
+	queryfile := "find_user_info.sql"
 	query, err := os.ReadFile(config.Get().DBqueriesPath + queryfile)
 	if err != nil {
-		return err
+		return User{}, err
 	}
 
 	tx, err := db.Conn.Begin()
 	if err != nil {
-		return err
+		return User{}, err
 	}
 	defer tx.Rollback()
 
-	res, err := tx.Exec(string(query), username, password, salt)
-	if err != nil {
-		return err
-	}
-	n, err := res.RowsAffected()
-	if err != nil {
-		return err
-	}
-	if n != 1 {
-		return errors.New("invalid amount of inserted rows")
+	row := tx.QueryRow(string(query), username)
+	var res User
+	if err := row.Scan(); err != nil {
+		return User{}, err
 	}
 
-	return tx.Commit()
+	return res, tx.Commit()
 }
 
 func UserFindSalt(username string) ([]byte, bool, error) {
@@ -86,4 +83,32 @@ func UserFindLogin(username string, password []byte) (bool, error) {
 	}
 
 	return true, tx.Commit()
+}
+
+func UserCreate(username string, password, salt []byte) error {
+	queryfile := "create_user.sql"
+	query, err := os.ReadFile(config.Get().DBqueriesPath + queryfile)
+	if err != nil {
+		return err
+	}
+
+	tx, err := db.Conn.Begin()
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+
+	res, err := tx.Exec(string(query), username, password, salt)
+	if err != nil {
+		return err
+	}
+	n, err := res.RowsAffected()
+	if err != nil {
+		return err
+	}
+	if n != 1 {
+		return errors.New("invalid amount of inserted rows")
+	}
+
+	return tx.Commit()
 }
