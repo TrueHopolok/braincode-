@@ -34,6 +34,7 @@ func ProblemsetPage(w http.ResponseWriter, r *http.Request) {
 		if err := views.TaskFindAll(w, ses.Name, isauth, isenglish); err != nil {
 			errResponseFatal(w, r, err)
 		}
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	case "application/json":
 		page, err := strconv.Atoi(r.Header.Get("Page"))
 		if err != nil || page < 0 {
@@ -51,6 +52,7 @@ func ProblemsetPage(w http.ResponseWriter, r *http.Request) {
 		if _, err = w.Write(data); err != nil {
 			errResponseFatal(w, r, err)
 		}
+		w.Header().Set("Content-Type", "application/json")
 	default:
 		errResponseContentTypeNotAllowed(w, r, "text/html", "application/json")
 	}
@@ -91,6 +93,7 @@ func getpageTask(w http.ResponseWriter, r *http.Request) {
 	if err = views.TaskFindOne(w, r, ses.Name, isauth, isenglish, task); err != nil {
 		errResponseFatal(w, r, err)
 	}
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 }
 
 func submitSolution(w http.ResponseWriter, r *http.Request) {

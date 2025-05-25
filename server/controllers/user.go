@@ -28,6 +28,7 @@ func getpageRegister(w http.ResponseWriter, r *http.Request) {
 	if err := views.UserCreate(w, r, ses.Name, isauth, isenglish); err != nil {
 		errResponseFatal(w, r, err)
 	}
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 }
 
 func userRegister(w http.ResponseWriter, r *http.Request) {
@@ -62,7 +63,7 @@ func userRegister(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Session", session.New(username).CreateJWT())
-	errResponseNotImplemented(w, r, "success") // TODO(vadim): finish with valid response
+	w.WriteHeader(204)
 }
 
 func RegistrationPage(w http.ResponseWriter, r *http.Request) {
@@ -98,6 +99,7 @@ func getpageLogin(w http.ResponseWriter, r *http.Request) {
 	if err := views.UserFindLogin(w, r, ses.Name, isauth, isenglish); err != nil {
 		errResponseFatal(w, r, err)
 	}
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 }
 
 func userAuth(w http.ResponseWriter, r *http.Request) {
@@ -136,7 +138,7 @@ func userAuth(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Session", session.New(username).CreateJWT())
-	errResponseNotImplemented(w, r, "success") // TODO(vadim): finish with valid response
+	w.WriteHeader(204)
 }
 
 func LoginPage(w http.ResponseWriter, r *http.Request) {
