@@ -9,6 +9,16 @@ import (
 	"github.com/TrueHopolok/braincode-/server/views"
 )
 
+func StatsPage(w http.ResponseWriter, r *http.Request) {
+	_, isauth := sessionHandler(w, r)
+	if !isauth {
+		errResponseNotAuthorized(w, r)
+		return
+	}
+	// TODO(vadim): finish getting user stats
+	errResponseNotImplemented(w, r, "StatsPage")
+}
+
 func getpageRegister(w http.ResponseWriter, r *http.Request) {
 	ses, isauth := sessionHandler(w, r)
 

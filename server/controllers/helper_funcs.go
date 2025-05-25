@@ -113,3 +113,12 @@ func errResponseContentTypeNotAllowed(w http.ResponseWriter, r *http.Request, al
 	http.Error(w, result, 406)
 	logger.Log.Debug("req=%p Content-Type=%s is not allowed", r, r.Header.Get("Content-Type"))
 }
+
+// This should be the last write into the response!
+//
+// Output that user is not authorized to use this page.
+// Writes in both logger and response.
+func errResponseNotAuthorized(w http.ResponseWriter, r *http.Request) {
+	http.Error(w, "Login into account to use this page", 401)
+	logger.Log.Debug("req=%p user trying to access page while unauthorized", r)
+}
