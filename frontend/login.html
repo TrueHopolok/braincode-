@@ -8,9 +8,10 @@
     <title>Login - Braincode</title>
 </head>
 <body>
-
+    
     <header>
         <div class="container">
+            
             <div class="header">
                 
                 <div class="header-logo">
@@ -23,9 +24,12 @@
                         <a href="#">EN</a>
                         <a href="#">RU</a>
                     </div>
+                    <div class="login">
+                        <a href="registration.html">Registration</a>
+                    </div>
                 </div>
-            
             </div>
+    
         </div>
     </header>
 
@@ -39,12 +43,19 @@
         </div>
     </nav>
 
-    <div class="login_form">
-        <form action="">
-            <label>Login</label>
-            <input type="text">
-            <label>Password</label>
-            <input type="password">
+    <div class="auth_form">
+        <div class="form_text">Login</div>
+        <form action="" method="">
+            <label for="uname"><b>Username</b></label>
+            <input type="text" placeholder="Enter Username" name="uname" required>
+
+            <label for="psw"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" name="psw" required>
+
+            <button type="submit">Login</button>
+            <label>
+            <input type="checkbox" checked="checked" name="remember"> Remember me
+            </label>
         </form>
     </div>
 </body>
