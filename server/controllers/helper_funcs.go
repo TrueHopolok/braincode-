@@ -140,3 +140,12 @@ func denyResp_NotAuthorized(w http.ResponseWriter, r *http.Request) {
 	http.Error(w, "Login into account to use this page", 401)
 	logger.Log.Debug("req=%p user trying to access page while unauthorized", r)
 }
+
+// This should be the last write into the response!
+//
+// Output that user is authorized be should not be to use this page.
+// Writes in both logger and response.
+func denyResp_DenyAuthorized(w http.ResponseWriter, r *http.Request) {
+	http.Error(w, "Logout to access this page", 403)
+	logger.Log.Debug("req=%p user required to logout to access that page", r)
+}

@@ -37,7 +37,7 @@ func getStats(w http.ResponseWriter, r *http.Request, username string) {
 			return
 		}
 
-		if err = views.UserFindInfo(w, r, acceptance_rate, solved_rate); err != nil {
+		if err = views.UserFindInfo(w, r, username, isenglish, acceptance_rate, solved_rate); err != nil {
 			errResp_Fatal(w, r, err)
 			return
 		}
@@ -111,6 +111,12 @@ func getRegistration(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	_, isauth := sessionHandler(w, r)
+	if isauth {
+		denyResp_DenyAuthorized(w, r)
+		return
+	}
+
 	ok, isenglish := langHandler(w, r)
 	if !ok {
 		return
@@ -119,9 +125,7 @@ func getRegistration(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	username, isauth := sessionHandler(w, r)
-
-	if err := views.UserCreate(w, r, username, isauth, isenglish); err != nil {
+	if err := views.UserCreate(w, r, isenglish); err != nil {
 		errResp_Fatal(w, r, err)
 	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
@@ -182,6 +186,12 @@ func getLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	_, isauth := sessionHandler(w, r)
+	if isauth {
+		denyResp_DenyAuthorized(w, r)
+		return
+	}
+
 	ok, isenglish := langHandler(w, r)
 	if !ok {
 		return
@@ -190,9 +200,7 @@ func getLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	username, isauth := sessionHandler(w, r)
-
-	if err := views.UserFindLogin(w, r, username, isauth, isenglish); err != nil {
+	if err := views.UserFindLogin(w, r, isenglish); err != nil {
 		errResp_Fatal(w, r, err)
 	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")

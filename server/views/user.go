@@ -8,33 +8,51 @@ import (
 	"github.com/TrueHopolok/braincode-/server/prepared"
 )
 
-func UserFindInfo(w http.ResponseWriter, r *http.Request, acceptance_rate, solved_rate sql.NullFloat64) error {
-	// TODO(vadim): to the finished view add all information
-	templ := "TODO.html" // lang depended
+// Show user's stats via template with prepared section to handle fetch request of submitions. Expects all information to be valid.
+func UserFindInfo(w http.ResponseWriter, r *http.Request, username string, isenglish bool, acceptance_rate, solved_rate sql.NullFloat64) error {
+	var templ string // ? TODO(misha): lang dependency
+	if isenglish {
+		templ = "TODO.html"
+	} else {
+		templ = "TODO.html"
+	}
+
 	buf := bufio.NewWriter(w)
-	err := prepared.Templates.ExecuteTemplate(buf, templ, nil)
+	err := prepared.Templates.ExecuteTemplate(buf, templ, nil) // TODO(vadim): add struct info into the page
 	if err != nil {
 		return err
 	}
 	return buf.Flush()
 }
 
-func UserFindLogin(w http.ResponseWriter, r *http.Request, username string, isauth, isenglish bool) error {
-	// TODO(vadim): to the finished view add all information
-	templ := "login.html" // lang depended
+// Show login page. Expects all information to be valid.
+func UserFindLogin(w http.ResponseWriter, r *http.Request, isenglish bool) error {
+	var templ string // ? TODO(misha): lang dependency
+	if isenglish {
+		templ = "login.html"
+	} else {
+		templ = "TODO.html"
+	}
+
 	buf := bufio.NewWriter(w)
-	err := prepared.Templates.ExecuteTemplate(buf, templ, nil)
+	err := prepared.Templates.ExecuteTemplate(buf, templ, nil) // No struct info is needed
 	if err != nil {
 		return err
 	}
 	return buf.Flush()
 }
 
-func UserCreate(w http.ResponseWriter, r *http.Request, username string, isauth, isenglish bool) error {
-	// TODO(vadim): to the finished view add all information
-	templ := "registration.html" // lang depended
+// Show registration page. Expects all information to be valid.
+func UserCreate(w http.ResponseWriter, r *http.Request, isenglish bool) error {
+	var templ string // ? TODO(misha): lang dependency
+	if isenglish {
+		templ = "registration.html"
+	} else {
+		templ = "TODO.html"
+	}
+
 	buf := bufio.NewWriter(w)
-	err := prepared.Templates.ExecuteTemplate(buf, templ, nil)
+	err := prepared.Templates.ExecuteTemplate(buf, templ, nil) // No struct info is needed
 	if err != nil {
 		return err
 	}
