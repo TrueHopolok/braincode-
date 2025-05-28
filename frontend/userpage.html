@@ -4,39 +4,75 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="static/styles/userpage.css">
+    <link rel="stylesheet" href="static/styles/indexpage.css">
     <title>Document</title>
 </head>
 <body>
-     <div class="container">
+    
+    <header>
+        <div class="container">
+            
+            <div class="header">
+                
+                <div class="header-logo">
+                    <img src="https://placehold.co/50" alt="!"> <!--TODO: alt center-->
+                    <div class="logo-text">Braincode</div>
+                </div>
+                
+                <div class="header-user">
+                    <div class="language">
+                        <a href="#">EN</a>
+                        <a href="#">RU</a>
+                    </div>
+                    <div class="login">
+                        <a href="userpage.html">Username</a>
+                    </div>
+                </div>
+            </div>
+    
+        </div>
+    </header>
+
+    <nav class="navigation">
+        <div class="container">
+            <ul class="nav-ul">
+                <li id="problem-set" class="nav-ul-element"><a href="#">PROBLEMSET</a></li>
+                <li id="problem-upload" class="nav-ul-element"><a href="#">PROBLEMUPLOAD</a></li>
+                <li class="nav-ul-element"><a href="#">LOG OUT</a></li>
+              </ul>
+        </div>
+    </nav>
+    
+    <div class="container">
         <div class="user_info">
             <div class="name">user1234</div>
         </div>
 
         <div class="user_stats">
-            <div class="solutions_date">
-                <div class="solution_month">
-                    <div>x problems</div>
-                    <div>solved for the last month</div>
+            <div class="stats_block">
+                <div class="solutions_date">
+                    <div class="solution_month">
+                        <div>x problems</div>
+                        <div>solved for the last month</div>
+                    </div>
+                    <div class="solution_year">
+                        <div>x problems</div>
+                        <div>solved for the last year</div>
+                    </div>
+                    <div class="solution_all">
+                        <div>x problems</div>
+                        <div>solved for all time</div>
+                    </div>     
                 </div>
-                <div class="solution_year">
-                    <div>x problems</div>
-                    <div>solved for the last year</div>
-                </div>
-                <div class="solution_all">
-                    <div>x problems</div>
-                    <div>solved for all time</div>
-                </div>     
             </div>
-            
-            <div class="submission_list">
+            <div class="stats_block">
                 <div>Submission list</div>
             </div>
 
-            <div class="submission_accrate">
+            <div class="stats_block">
                 <div>Acceptance Rate</div>
             </div>
         </div>
-
      </div>
 </body>
 </html>

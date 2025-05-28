@@ -20,14 +20,11 @@
                 
                 <div class="header-user">
                     <div class="language">
-                        <a href="?lang=en">EN</a> <!--TODO: save it with js -->
-                        <a href="?lang=ru">RU</a> <!--TODO: save it with js -->
+                        <a href="#">EN</a>
+                        <a href="#">RU</a>
                     </div>
                     <div class="login">
-                        {{if not .IsAuth}}
-                        <a href="/login/">{{if .IsEnglish}}Login{{else}}Войти{{end}}</a>
-                        <a href="/register/">{{if .IsEnglish}}Registration{{else}}Регистрация{{end}}</a>
-                        {{end}}
+                        <a href="userpage.html">Username</a>
                     </div>
                 </div>
             </div>
@@ -40,6 +37,7 @@
             <ul class="nav-ul">
                 <li id="problem-set" class="nav-ul-element"><a href="#">PROBLEMSET</a></li>
                 <li id="problem-upload" class="nav-ul-element"><a href="#">PROBLEMUPLOAD</a></li>
+                <li class="nav-ul-element"><a href="#">LOG OUT</a></li>
               </ul>
         </div>
     </nav>
@@ -50,9 +48,7 @@
                 <input class="section-search" type="text">
                 <div class="section-user">
                     <input type="checkbox">
-                    {{if .IsAuth}}
-                    <div>{{if .IsEnglish}}USER's PROBLEMS{{else}}ЗАДАЧИ ПОЛЬЗОВАТЕЛЯ{{end}}</div>
-                    {{end}}
+                    <div>USER PROBLEM</div>
                 </div>
             </div>
 
