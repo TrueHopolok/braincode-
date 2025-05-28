@@ -10,7 +10,7 @@ import (
 
 // Show 1 task page. Expects all information to be valid.
 func TaskFindOne(w http.ResponseWriter, r *http.Request, username string, isauth, isenglish bool, task models.Task) error {
-	// TODO(vadim): to the finished view add all information
+	// TODO(vadim): wait for markleft finish
 	templ := "taskpage.html" // lang depended
 	buf := bufio.NewWriter(w)
 	err := prepared.Templates.ExecuteTemplate(buf, templ, nil)
@@ -22,10 +22,17 @@ func TaskFindOne(w http.ResponseWriter, r *http.Request, username string, isauth
 
 // Show problemset page. Expects all information to be valid.
 func TaskFindAll(w http.ResponseWriter, username string, isauth, isenglish bool) error {
-	// TODO(vadim): to the finished view add all information
-	templ := "index.html" // lang depended
+	templ := "index.html" //? lang depended
 	buf := bufio.NewWriter(w)
-	err := prepared.Templates.ExecuteTemplate(buf, templ, nil)
+	err := prepared.Templates.ExecuteTemplate(buf, templ, struct {
+		IsAuth    bool
+		IsEnglish bool
+		Username  string
+	}{
+		IsAuth:    isauth,
+		IsEnglish: isenglish,
+		Username:  username,
+	})
 	if err != nil {
 		return err
 	}
@@ -33,11 +40,12 @@ func TaskFindAll(w http.ResponseWriter, username string, isauth, isenglish bool)
 }
 
 // Show the upload task page. Expects all information to be valid.
-func TaskCreate(w http.ResponseWriter, r *http.Request) error {
-	// TODO(vadim): to the finished view add all information
-	templ := "TODO.html" // lang depended
+//
+// ! TODO(anpir): finish markleft
+func TaskCreate(w http.ResponseWriter, r *http.Request, username string, isenglish bool) error {
+	templ := "TODO.html" //? lang depended
 	buf := bufio.NewWriter(w)
-	err := prepared.Templates.ExecuteTemplate(buf, templ, nil)
+	err := prepared.Templates.ExecuteTemplate(buf, templ, nil) //TODO(vadim): add struct info into the page
 	if err != nil {
 		return err
 	}
