@@ -111,12 +111,6 @@ func getRegistration(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, isauth := sessionHandler(w, r)
-	if isauth {
-		denyResp_DenyAuthorized(w, r)
-		return
-	}
-
 	ok, isenglish := langHandler(w, r)
 	if !ok {
 		return
@@ -170,6 +164,12 @@ func RegistrationPage(w http.ResponseWriter, r *http.Request) {
 	logger.Log.Debug("req=%p arrived", r)
 	defer logger.Log.Debug("req=%p served", r)
 
+	_, isauth := sessionHandler(w, r)
+	if isauth {
+		denyResp_DenyAuthorized(w, r)
+		return
+	}
+
 	switch r.Method {
 	case "GET":
 		getRegistration(w, r)
@@ -183,12 +183,6 @@ func RegistrationPage(w http.ResponseWriter, r *http.Request) {
 func getLogin(w http.ResponseWriter, r *http.Request) {
 	if contenttype := r.Header.Get("Content-Type"); contenttype != "" && contenttype != "text/html" {
 		denyResp_ContentTypeNotAllowed(w, r, "text/html")
-		return
-	}
-
-	_, isauth := sessionHandler(w, r)
-	if isauth {
-		denyResp_DenyAuthorized(w, r)
 		return
 	}
 
@@ -248,6 +242,12 @@ func userAuth(w http.ResponseWriter, r *http.Request) {
 func LoginPage(w http.ResponseWriter, r *http.Request) {
 	logger.Log.Debug("req=%p arrived", r)
 	defer logger.Log.Debug("req=%p served", r)
+
+	_, isauth := sessionHandler(w, r)
+	if isauth {
+		denyResp_DenyAuthorized(w, r)
+		return
+	}
 
 	switch r.Method {
 	case "GET":

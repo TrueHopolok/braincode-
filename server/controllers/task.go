@@ -177,3 +177,44 @@ func TaskPage(w http.ResponseWriter, r *http.Request) {
 		denyResp_MethodNotAllowed(w, r, "GET", "POST")
 	}
 }
+
+func getUpload(w http.ResponseWriter, r *http.Request, username string) {
+	if contenttype := r.Header.Get("Content-Type"); contenttype != "" && contenttype != "text/html" {
+		denyResp_ContentTypeNotAllowed(w, r, "text/html")
+		return
+	}
+
+	ok, isenglish := langHandler(w, r)
+	if !ok {
+		return
+	} else if !isenglish {
+		errResp_NotImplemented(w, r, "translation")
+		return
+	}
+
+	errResp_NotImplemented(w, r, "getUpload")
+}
+
+func uploadTask(w http.ResponseWriter, r *http.Request, username string) {
+	errResp_NotImplemented(w, r, "uploadTask")
+}
+
+func UploadPage(w http.ResponseWriter, r *http.Request) {
+	logger.Log.Debug("req=%p arrived", r)
+	defer logger.Log.Debug("req=%p served", r)
+
+	username, isauth := sessionHandler(w, r)
+	if !isauth {
+		denyResp_NotAuthorized(w, r)
+		return
+	}
+
+	switch r.Method {
+	case "GET":
+		getUpload(w, r, username)
+	case "POST":
+		uploadTask(w, r, username)
+	default:
+		denyResp_MethodNotAllowed(w, r, "GET", "POST")
+	}
+}
