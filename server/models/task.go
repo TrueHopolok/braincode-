@@ -12,7 +12,7 @@ import (
 
 type Task struct {
 	General TaskInfo
-	Info    string
+	Info    []byte
 }
 
 type TaskInfo struct {
@@ -84,7 +84,6 @@ func TaskFindOne(username string, taskid int) (Task, bool, error) {
 		} else {
 			return Task{}, false, err
 		}
-
 	}
 
 	return res, true, tx.Commit()

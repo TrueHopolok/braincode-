@@ -118,6 +118,7 @@ func getTask(w http.ResponseWriter, r *http.Request) {
 		logger.Log.Debug("res=%p task-id=%d not found", r, taskid)
 		return
 	}
+	// TODO(VADIM): add markleft handler to info and then pass it to view
 	if err = views.TaskFindOne(w, r, username, isauth, isenglish, task); err != nil {
 		errResp_Fatal(w, r, err)
 	}
