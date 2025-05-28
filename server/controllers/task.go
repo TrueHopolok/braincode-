@@ -161,7 +161,7 @@ func submitSolution(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	redirect2main(w, r, "submitSolution")
+	redirect2stats(w, r, "submitSolution")
 }
 
 func TaskPage(w http.ResponseWriter, r *http.Request) {
