@@ -17,7 +17,8 @@ type Task struct {
 
 type TaskInfo struct {
 	Id        int             `json:"Id"`
-	Title     string          `json:"Title"`
+	TitleEn   string          `json:"TitleEn"`
+	TitleRu   string          `json:"TitleRu"`
 	OwnerName string          `json:"OwnerName"`
 	Score     sql.NullFloat64 `json:"Score"`
 }
@@ -76,8 +77,8 @@ func TaskFindOne(username string, taskid int) (Task, bool, error) {
 	var res Task
 	if err := row.Scan(
 		&res.General.Id, &res.General.OwnerName,
-		&res.General.Title, &res.Info,
-		&res.General.Score); err != nil {
+		&res.General.TitleEn, &res.General.TitleRu,
+		&res.Info, &res.General.Score); err != nil {
 		if err == sql.ErrNoRows {
 			return Task{}, false, nil
 		} else {
@@ -106,6 +107,7 @@ func TaskFindAll(username, search string, filter, isauth bool, page int) ([]byte
 	rows, err := tx.Query(string(query),
 		username,
 		search,
+		search,
 		username,
 		!(filter && isauth),
 		TASKS_AMOUNT_LIMIT, TASKS_AMOUNT_LIMIT*page)
@@ -118,7 +120,7 @@ func TaskFindAll(username, search string, filter, isauth bool, page int) ([]byte
 	for i := 0; rows.Next(); i++ {
 		rawdata.Rows = append(rawdata.Rows, TaskInfo{})
 		err = rows.Scan(
-			&rawdata.Rows[i].Id, &rawdata.Rows[i].Title,
+			&rawdata.Rows[i].Id, &rawdata.Rows[i].TitleEn, &rawdata.Rows[i].TitleRu,
 			&rawdata.Rows[i].OwnerName, &rawdata.Rows[i].Score,
 			&rawdata.TotalAmount)
 		if err != nil {
