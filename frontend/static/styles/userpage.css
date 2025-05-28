@@ -3,3 +3,12 @@
     max-width: 1200px;
     margin: 0 auto;
 }
+
+.solutions_date {
+    display: flex;
+    justify-content: space-between;
+}
+
+.stats_block {
+    margin: 20px 0 ;
+}
