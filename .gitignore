@@ -1,3 +1,1 @@
-back-end/server.log
-back-end/db/db.db
-db.db-journal
+server/server.log

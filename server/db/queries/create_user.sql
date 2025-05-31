@@ -1,0 +1,1 @@
+INSERT INTO User (name, password, salt) VALUES (?, ?, ?);

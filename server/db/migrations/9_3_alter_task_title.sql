@@ -1,0 +1,2 @@
+ALTER TABLE Task
+ADD title_ru NVARCHAR(40) NOT NULL;

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/styles/indexpage.css">
+    <link rel="stylesheet" href="static/styles/loginregpage.css">
+    <title>Register - Braincode</title>
+</head>
+<body>
+    <header>
+        <div class="container">
+            
+            <div class="header">
+                
+                <div class="header-logo">
+                    <img src="https://placehold.co/50" alt="!"> <!--TODO: alt center-->
+                    <div class="logo-text">Braincode</div>
+                </div>
+                
+                <div class="header-user">
+                    <div class="language">
+                        <a href="?lang=en">EN</a> <!--TODO(misha): save it with js -->
+                        <a href="?lang=ru">RU</a> <!--TODO(misha): save it with js -->
+                    </div>
+                    <div class="login">
+                        <a href="/login/">Login</a>
+                    </div>
+                </div>
+            </div>
+    
+        </div>
+    </header>
+
+    <nav class="navigation">
+        <div class="container">
+            <ul class="nav-ul">
+                <li id="problem-set" class="nav-ul-element"><a href="/">PROBLEMSET</a></li>
+                <li id="problem-upload" class="nav-ul-element"><a href="/upload/">PROBLEMUPLOAD</a></li>
+                <li class="nav-ul-element"><a href="/">BACK</a></li>
+              </ul>
+        </div>
+    </nav>
+
+
+
+    <div class="auth_form">
+        <div class="form_text">Registration</div>
+        <form action="" method="">
+            <label for="uname"><b>Username</b></label>
+            <input type="text" placeholder="Enter Username" name="uname" required>
+
+            <label for="psw"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" name="psw" required>
+
+            <button type="submit">Registration</button>
+        </form>
+    </div>
+</body>
+</html>
