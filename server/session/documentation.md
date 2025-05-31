@@ -3,7 +3,7 @@
 # session
 
 ```go
-import "github.com/TrueHopolok/braincode-/back-end/session"
+import "github.com/TrueHopolok/braincode-/server/session"
 ```
 
 Implements:
@@ -36,7 +36,7 @@ const EXPIRATION_TIME = 1.0
 ```
 
 <a name="SetKey"></a>
-## func [SetKey](<https://github.com/TrueHopolok/braincode-/blob/main/back-end/session/keys.go#L46>)
+## func [SetKey](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/keys.go#L46>)
 
 ```go
 func SetKey(new_cur_key []byte) error
@@ -50,7 +50,7 @@ Updates keys:
 - current key is set to a given key
 
 <a name="SwitchKey"></a>
-## func [SwitchKey](<https://github.com/TrueHopolok/braincode-/blob/main/back-end/session/keys.go#L33>)
+## func [SwitchKey](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/keys.go#L33>)
 
 ```go
 func SwitchKey()
@@ -62,7 +62,7 @@ Updates keys:
 - current key randomly generates
 
 <a name="Session"></a>
-## type [Session](<https://github.com/TrueHopolok/braincode-/blob/main/back-end/session/session.go#L24-L27>)
+## type [Session](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/session.go#L24-L27>)
 
 Stores all info about session.
 
@@ -76,7 +76,7 @@ type Session struct {
 ```
 
 <a name="New"></a>
-### func [New](<https://github.com/TrueHopolok/braincode-/blob/main/back-end/session/session.go#L29>)
+### func [New](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/session.go#L29>)
 
 ```go
 func New(name string) Session
@@ -85,7 +85,7 @@ func New(name string) Session
 
 
 <a name="Session.CreateJWT"></a>
-### func \(Session\) [CreateJWT](<https://github.com/TrueHopolok/braincode-/blob/main/back-end/session/jwt.go#L29>)
+### func \(Session\) [CreateJWT](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/jwt.go#L29>)
 
 ```go
 func (ses Session) CreateJWT() string
@@ -94,7 +94,7 @@ func (ses Session) CreateJWT() string
 Create jwt with information from provided session. May panic if somehow json or hmac packages fail.
 
 <a name="Session.IsExpired"></a>
-### func \(Session\) [IsExpired](<https://github.com/TrueHopolok/braincode-/blob/main/back-end/session/session.go#L37>)
+### func \(Session\) [IsExpired](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/session.go#L37>)
 
 ```go
 func (ses Session) IsExpired() bool
@@ -103,7 +103,7 @@ func (ses Session) IsExpired() bool
 
 
 <a name="Session.UpdateExpiration"></a>
-### func \(\*Session\) [UpdateExpiration](<https://github.com/TrueHopolok/braincode-/blob/main/back-end/session/session.go#L33>)
+### func \(\*Session\) [UpdateExpiration](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/session.go#L33>)
 
 ```go
 func (ses *Session) UpdateExpiration()
@@ -112,7 +112,7 @@ func (ses *Session) UpdateExpiration()
 
 
 <a name="Session.ValidateJWT"></a>
-### func \(\*Session\) [ValidateJWT](<https://github.com/TrueHopolok/braincode-/blob/main/back-end/session/jwt.go#L45>)
+### func \(\*Session\) [ValidateJWT](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/jwt.go#L45>)
 
 ```go
 func (ses *Session) ValidateJWT(token string) bool

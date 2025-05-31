@@ -45,6 +45,8 @@ type Checker struct {
 	useSolution bool
 }
 
+var ErrNotAChecker = errors.New("not a checker")
+
 // NewChecker parses source and creates a new Checker.
 func NewChecker(source string) (Checker, error) {
 	chunks, err := parse.Parse(strings.NewReader(source), "checker.lua")
@@ -77,7 +79,7 @@ func newChecker(chunks []ast.Stmt) (Checker, error) {
 	che := s.GetGlobal("checker") != lua.LNil
 
 	if !sol && !che {
-		return Checker{}, errors.New("either checker or solution must be defined")
+		return Checker{}, fmt.Errorf("%w: either checker or solution must be defined", ErrNotAChecker)
 	}
 
 	return Checker{

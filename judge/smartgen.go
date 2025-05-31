@@ -2,7 +2,7 @@ package judge
 
 type smartGenerator struct{ InputGenerator }
 
-func (s *smartGenerator) GenerateInput() (_ [][]string, _ error) {
+func (s *smartGenerator) GenerateInput() ([][]string, error) {
 	const maxCachable = 1024 * 128 // 128 KiB
 
 	res, err := s.InputGenerator.GenerateInput()
