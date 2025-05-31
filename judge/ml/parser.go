@@ -2,6 +2,7 @@ package ml
 
 import (
 	"bufio"
+	"cmp"
 	"errors"
 	"fmt"
 	"io"
@@ -116,7 +117,7 @@ func (pctx *parserContext) Buf() *strings.Builder {
 func (pctx *parserContext) PushPath(b *rawBlock) (pop func()) {
 	n := len(pctx.path)
 
-	pctx.path = fmt.Appendf(pctx.path, "in block %q (line %d): ", blockToString[b.kind], b.line)
+	pctx.path = fmt.Appendf(pctx.path, "in block %q (line %d): ", cmp.Or(blockToString[b.kind], b.rawName), b.line)
 
 	isOk := false
 
@@ -533,6 +534,7 @@ type rawBlock struct {
 	kind     blockType
 	children []*rawBlock
 	data     string // only set for text and locale blocks
+	rawName  string
 }
 
 type parser struct {
@@ -620,8 +622,9 @@ func (p *parser) writeLine(line string) {
 			kind = blockInvalid
 		}
 		b := &rawBlock{
-			kind: kind,
-			line: p.line,
+			kind:    kind,
+			line:    p.line,
+			rawName: name,
 		}
 		s.children = append(s.children, b)
 		p.state = append(p.state, b)
@@ -657,7 +660,8 @@ func (p *parser) writeLine(line string) {
 				data: data,
 				line: p.line,
 			}},
-			line: p.line,
+			line:    p.line,
+			rawName: name,
 		})
 	}
 }
@@ -694,8 +698,6 @@ func (p *parser) finish() (Document, error) {
 	}
 
 	for _, c := range root.children {
-		pop := pctx.PushPath(c)
-
 		var locale string
 		var content []*rawBlock
 		if c.kind == blockLang {
@@ -717,9 +719,6 @@ func (p *parser) finish() (Document, error) {
 		})
 
 		pctx.CurrentLocale.Blocks = append(pctx.CurrentLocale.Blocks, blocks...)
-
-		pop()
-
 	}
 
 	var badLocales []string
