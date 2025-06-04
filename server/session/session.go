@@ -8,7 +8,10 @@ Package can be used in multithreads.
 */
 package session
 
-import "time"
+import (
+	"net/http"
+	"time"
+)
 
 //go:generate go tool github.com/princjef/gomarkdoc/cmd/gomarkdoc -o documentation.md
 
@@ -36,4 +39,29 @@ func (ses *Session) UpdateExpiration() {
 
 func (ses Session) IsExpired() bool {
 	return ses.Expire.Before(time.Now())
+}
+
+func (ses Session) IsZero() bool {
+	return ses.Name == "" && ses.Expire.IsZero()
+}
+
+func Login(s Session, w http.ResponseWriter) {
+	http.SetCookie(w, &http.Cookie{
+		Name:     AuthCookieName,
+		Value:    s.CreateJWT(),
+		MaxAge:   int(time.Until(s.Expire).Seconds()),
+		Secure:   true,
+		HttpOnly: true,
+		SameSite: http.SameSiteDefaultMode,
+	})
+}
+
+// Logout deletes the auth cookie. Caller is responsible for not using any remaining session  values.
+func Logout(w http.ResponseWriter) {
+	http.SetCookie(w, &http.Cookie{
+		Name:     AuthCookieName,
+		MaxAge:   -1,
+		Secure:   true,
+		HttpOnly: true,
+	})
 }

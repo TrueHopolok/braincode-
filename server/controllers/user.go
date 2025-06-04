@@ -11,16 +11,19 @@ import (
 	"github.com/TrueHopolok/braincode-/server/views"
 )
 
-func userDelete(w http.ResponseWriter, r *http.Request, username string) {
+func userDelete(w http.ResponseWriter, r *http.Request) {
+	username := session.Get(r.Context()).Name
 	if err := models.UserDelete(username); err != nil {
 		errResp_Fatal(w, r, err)
 		return
 	}
-	w.Header().Del("Session")
+	session.Logout(w)
 	redirect2main(w, r, "userDelete")
 }
 
-func getStats(w http.ResponseWriter, r *http.Request, username string) {
+func getStats(w http.ResponseWriter, r *http.Request) {
+	username := session.Get(r.Context()).Name
+
 	switch r.Header.Get("Content-Type") {
 	case "text/html", "":
 		ok, isenglish := langHandler(w, r)
@@ -89,17 +92,11 @@ func StatsPage(w http.ResponseWriter, r *http.Request) {
 	logger.Log.Debug("req=%p arrived", r)
 	defer logger.Log.Debug("req=%p served", r)
 
-	username, isauth := sessionHandler(w, r)
-	if !isauth {
-		denyResp_NotAuthorized(w, r)
-		return
-	}
-
 	switch r.Method {
 	case "GET":
-		getStats(w, r, username)
+		getStats(w, r)
 	case "DELETE":
-		userDelete(w, r, username)
+		userDelete(w, r)
 	default:
 		denyResp_MethodNotAllowed(w, r, "GET", "DELETE")
 	}
@@ -163,12 +160,6 @@ func userRegister(w http.ResponseWriter, r *http.Request) {
 func RegistrationPage(w http.ResponseWriter, r *http.Request) {
 	logger.Log.Debug("req=%p arrived", r)
 	defer logger.Log.Debug("req=%p served", r)
-
-	_, isauth := sessionHandler(w, r)
-	if isauth {
-		denyResp_DenyAuthorized(w, r)
-		return
-	}
 
 	switch r.Method {
 	case "GET":
@@ -235,25 +226,28 @@ func userAuth(w http.ResponseWriter, r *http.Request) {
 		logger.Log.Debug("res=%p incorrect username or password", r)
 		return
 	}
-	w.Header().Set("Session", session.New(username).CreateJWT())
+
+	ses := session.New(username)
+	session.Login(ses, w)
 	redirect2main(w, r, "userLogin")
+}
+
+func userLogout(w http.ResponseWriter, r *http.Request) {
+	session.Logout(w)
+	redirect2main(w, r, "userLogin") // TODO(anpir): this should redirect to login page
 }
 
 func LoginPage(w http.ResponseWriter, r *http.Request) {
 	logger.Log.Debug("req=%p arrived", r)
 	defer logger.Log.Debug("req=%p served", r)
 
-	_, isauth := sessionHandler(w, r)
-	if isauth {
-		denyResp_DenyAuthorized(w, r)
-		return
-	}
-
 	switch r.Method {
 	case "GET":
 		getLogin(w, r)
 	case "POST":
 		userAuth(w, r)
+	case "DELETE":
+		userLogout(w, r)
 	default:
 		denyResp_MethodNotAllowed(w, r, "GET", "POST")
 	}
