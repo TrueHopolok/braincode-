@@ -17,23 +17,121 @@ Package can be used in multithreads.
 ## Index
 
 - [Constants](<#constants>)
+- [func AuthMiddleware\(h http.Handler\) http.Handler](<#AuthMiddleware>)
+- [func AuthMiddlewareFunc\(f http.HandlerFunc\) http.Handler](<#AuthMiddlewareFunc>)
+- [func Login\(s Session, w http.ResponseWriter\)](<#Login>)
+- [func Logout\(w http.ResponseWriter\)](<#Logout>)
+- [func Middleware\(h http.Handler\) http.Handler](<#Middleware>)
+- [func MiddlewareFunc\(f http.HandlerFunc\) http.Handler](<#MiddlewareFunc>)
+- [func NoAuthMiddleware\(h http.Handler\) http.Handler](<#NoAuthMiddleware>)
+- [func NoAuthMiddlewareFunc\(f http.HandlerFunc\) http.Handler](<#NoAuthMiddlewareFunc>)
 - [func SetKey\(new\_cur\_key \[\]byte\) error](<#SetKey>)
 - [func SwitchKey\(\)](<#SwitchKey>)
 - [type Session](<#Session>)
+  - [func Get\(ctx context.Context\) Session](<#Get>)
   - [func New\(name string\) Session](<#New>)
   - [func \(ses Session\) CreateJWT\(\) string](<#Session.CreateJWT>)
   - [func \(ses Session\) IsExpired\(\) bool](<#Session.IsExpired>)
+  - [func \(ses Session\) IsZero\(\) bool](<#Session.IsZero>)
   - [func \(ses \*Session\) UpdateExpiration\(\)](<#Session.UpdateExpiration>)
   - [func \(ses \*Session\) ValidateJWT\(token string\) bool](<#Session.ValidateJWT>)
 
 
 ## Constants
 
+<a name="AuthCookieName"></a>
+
+```go
+const AuthCookieName = "auth"
+```
+
 <a name="EXPIRATION_TIME"></a>Session expiration time messarued in hours
 
 ```go
 const EXPIRATION_TIME = 1.0
 ```
+
+<a name="AuthMiddleware"></a>
+## func [AuthMiddleware](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/middleware.go#L87>)
+
+```go
+func AuthMiddleware(h http.Handler) http.Handler
+```
+
+AuthMiddleware wraps h making it reject all requests which are not authorized.
+
+AuthMiddleware modifies the context of request, [Session](<#Session>) can be retrieved with [Get](<#Get>).
+
+<a name="AuthMiddlewareFunc"></a>
+## func [AuthMiddlewareFunc](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/middleware.go#L142>)
+
+```go
+func AuthMiddlewareFunc(f http.HandlerFunc) http.Handler
+```
+
+See [AuthMiddleware](<#AuthMiddleware>)
+
+<a name="Login"></a>
+## func [Login](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/session.go#L48>)
+
+```go
+func Login(s Session, w http.ResponseWriter)
+```
+
+
+
+<a name="Logout"></a>
+## func [Logout](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/session.go#L60>)
+
+```go
+func Logout(w http.ResponseWriter)
+```
+
+Logout deletes the auth cookie. Caller is responsible for not using any remaining session values.
+
+<a name="Middleware"></a>
+## func [Middleware](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/middleware.go#L33>)
+
+```go
+func Middleware(h http.Handler) http.Handler
+```
+
+Middleware wraps h, making it parse and validate sessions.
+
+If request is properly authenticated, [Get](<#Get>)\(r.Context\(\)\) will return a non\-zero [Session](<#Session>). Otherwise, session will be unset.
+
+Prefer [AuthMiddleware](<#AuthMiddleware>) or [NoAuthMiddleware](<#NoAuthMiddleware>) if a resource is only available to authorized or unauthorized users. [Middleware](<#Middleware>) should only be used when handler has different behavior depending on authentication status.
+
+<a name="MiddlewareFunc"></a>
+## func [MiddlewareFunc](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/middleware.go#L80>)
+
+```go
+func MiddlewareFunc(f http.HandlerFunc) http.Handler
+```
+
+See [Middleware](<#Middleware>)
+
+<a name="NoAuthMiddleware"></a>
+## func [NoAuthMiddleware](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/middleware.go#L151>)
+
+```go
+func NoAuthMiddleware(h http.Handler) http.Handler
+```
+
+NoAuthMiddleware wraps h making it reject all requests which have authentication headers set.
+
+NoAuthMiddleware deletes session from the context.
+
+Note that requests with invalid Cookie headers will still be rejected.
+
+<a name="NoAuthMiddlewareFunc"></a>
+## func [NoAuthMiddlewareFunc](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/middleware.go#L181>)
+
+```go
+func NoAuthMiddlewareFunc(f http.HandlerFunc) http.Handler
+```
+
+See [NoAuthMiddleware](<#NoAuthMiddleware>)
 
 <a name="SetKey"></a>
 ## func [SetKey](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/keys.go#L46>)
@@ -62,7 +160,8 @@ Updates keys:
 - current key randomly generates
 
 <a name="Session"></a>
-## type [Session](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/session.go#L24-L27>)
+## type [Session](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/session.go#L27-L30>)
+
 
 Stores all info about session.
 
@@ -75,8 +174,19 @@ type Session struct {
 }
 ```
 
+<a name="Get"></a>
+### func [Get](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/middleware.go#L18>)
+
+```go
+func Get(ctx context.Context) Session
+```
+
+Get retrieves value of session from ctx.
+
+If no such value exists, returns a zero value [Session](<#Session>), which will satisfy [Session.IsZero](<#Session.IsZero>)
+
 <a name="New"></a>
-### func [New](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/session.go#L29>)
+### func [New](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/session.go#L32>)
 
 ```go
 func New(name string) Session
@@ -85,16 +195,18 @@ func New(name string) Session
 
 
 <a name="Session.CreateJWT"></a>
-### func \(Session\) [CreateJWT](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/jwt.go#L29>)
+### func \(Session\) [CreateJWT](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/jwt.go#L26>)
 
 ```go
 func (ses Session) CreateJWT() string
 ```
 
-Create jwt with information from provided session. May panic if somehow json or hmac packages fail.
+Create jwt with information from provided session.
+
+May panic if somehow JSON serialization or HMAC hash fail.
 
 <a name="Session.IsExpired"></a>
-### func \(Session\) [IsExpired](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/session.go#L37>)
+### func \(Session\) [IsExpired](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/session.go#L40>)
 
 ```go
 func (ses Session) IsExpired() bool
@@ -102,8 +214,17 @@ func (ses Session) IsExpired() bool
 
 
 
+<a name="Session.IsZero"></a>
+### func \(Session\) [IsZero](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/session.go#L44>)
+
+```go
+func (ses Session) IsZero() bool
+```
+
+
+
 <a name="Session.UpdateExpiration"></a>
-### func \(\*Session\) [UpdateExpiration](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/session.go#L33>)
+### func \(\*Session\) [UpdateExpiration](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/session.go#L36>)
 
 ```go
 func (ses *Session) UpdateExpiration()
@@ -112,16 +233,18 @@ func (ses *Session) UpdateExpiration()
 
 
 <a name="Session.ValidateJWT"></a>
-### func \(\*Session\) [ValidateJWT](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/jwt.go#L45>)
+### func \(\*Session\) [ValidateJWT](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/jwt.go#L42>)
 
 ```go
 func (ses *Session) ValidateJWT(token string) bool
 ```
 
-Check if given jwt is valid using keysin memory. Decoded information will save into provided session. May panic if somehow json or hmac packages fail, but that should be possible.
+ValidateJWT parses given token into ses, reporting whether token is valid.
 
-```
-if jwt is invalid: ses is unchanged
-```
+May panic if token was create on a different version or given a different JSON schema.
+
+Receiver is unchanged in case token is invalid.
+
+This function is safe to use with user input.
 
 Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)

@@ -6,7 +6,6 @@ import (
 	"net/http"
 
 	"github.com/TrueHopolok/braincode-/server/logger"
-	"github.com/TrueHopolok/braincode-/server/session"
 	"golang.org/x/crypto/argon2"
 )
 
@@ -34,24 +33,6 @@ func SaltGen() []byte {
 	return salt
 }
 
-// Function is used for most cases except: registration, login and logout requests.
-// Get session token from the request header.
-// Validates it.
-// If valid: updates the token and writes it into a header.
-// If invalid or expired: return empty string as a name and false in aiauth field.
-func sessionHandler(w http.ResponseWriter, r *http.Request) (string, bool) {
-	token := r.Header.Get("Session")
-	var ses session.Session
-	isauth := ses.ValidateJWT(token) && !ses.IsExpired()
-	if isauth {
-		ses.UpdateExpiration()
-		w.Header().Add("Session", ses.CreateJWT())
-	} else {
-		ses.Name = ""
-	}
-	return ses.Name, isauth
-}
-
 // Return 2 booleans that tell what language does user want.
 // In case of invalid parameter, function will return false in isvalid field.
 // On invalid parameter will output an error, thus this must be last write into response.
@@ -72,7 +53,7 @@ func langHandler(w http.ResponseWriter, r *http.Request) (isenglish bool, isvali
 // Redirects user to main/problemset page with 303 error code (SeeOther)
 // Output in logger the given action for debugging purposes
 func redirect2main(w http.ResponseWriter, r *http.Request, action string) {
-	http.Redirect(w, r, "/", 303)
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 	logger.Log.Debug("req=%p user redirect after %s", r, action)
 }
 
@@ -88,10 +69,10 @@ func redirect2stats(w http.ResponseWriter, r *http.Request, action string) {
 // This should be the last write into the response!
 //
 // Can be used to temporarly substitue some code.
-// Will return 503 error code as http response and write into a logger that given feature is not implemented.
+// Will return 503 error code (ServiceUnavailable) as http response and write into a logger that given feature is not implemented.
 func errResp_NotImplemented(w http.ResponseWriter, r *http.Request, feature string) {
 	feature = fmt.Sprintf("%s not implemented yet", feature)
-	http.Error(w, feature, 503)
+	http.Error(w, feature, http.StatusServiceUnavailable)
 	logger.Log.Error("req=%p failed; error=%s", r, feature)
 }
 
@@ -101,7 +82,7 @@ func errResp_NotImplemented(w http.ResponseWriter, r *http.Request, feature stri
 // Should be used in case some internal error in execution happened,
 // not for user invalid request handling.
 func errResp_Fatal(w http.ResponseWriter, r *http.Request, err error) {
-	http.Error(w, "Failed to write into the response body", 500)
+	http.Error(w, "Failed to write into the response body", http.StatusInternalServerError)
 	logger.Log.Error("req=%p failed; error=%s", r, err)
 }
 
@@ -115,7 +96,7 @@ func denyResp_MethodNotAllowed(w http.ResponseWriter, r *http.Request, allowedMe
 		result += method
 		w.Header().Add("Allow", method)
 	}
-	http.Error(w, result, 405)
+	http.Error(w, result, http.StatusMethodNotAllowed)
 	logger.Log.Debug("req=%p method=%s is not allowed", r, r.Method)
 }
 
@@ -128,7 +109,7 @@ func denyResp_ContentTypeNotAllowed(w http.ResponseWriter, r *http.Request, allo
 	for _, contenttype := range allowedTypes {
 		result += contenttype
 	}
-	http.Error(w, result, 406)
+	http.Error(w, result, http.StatusNotAcceptable)
 	logger.Log.Debug("req=%p Content-Type=%s is not allowed", r, r.Header.Get("Content-Type"))
 }
 
@@ -137,7 +118,7 @@ func denyResp_ContentTypeNotAllowed(w http.ResponseWriter, r *http.Request, allo
 // Output that user is not authorized to use this page.
 // Writes in both logger and response.
 func denyResp_NotAuthorized(w http.ResponseWriter, r *http.Request) {
-	http.Error(w, "Login into account to use this page", 401)
+	http.Error(w, "Login into account to use this page", http.StatusUnauthorized)
 	logger.Log.Debug("req=%p user trying to access page while unauthorized", r)
 }
 
@@ -146,6 +127,6 @@ func denyResp_NotAuthorized(w http.ResponseWriter, r *http.Request) {
 // Output that user is authorized be should not be to use this page.
 // Writes in both logger and response.
 func denyResp_DenyAuthorized(w http.ResponseWriter, r *http.Request) {
-	http.Error(w, "Logout to access this page", 403)
+	http.Error(w, "Logout to access this page", http.StatusForbidden)
 	logger.Log.Debug("req=%p user required to logout to access that page", r)
 }

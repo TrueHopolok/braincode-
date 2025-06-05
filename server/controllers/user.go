@@ -11,16 +11,19 @@ import (
 	"github.com/TrueHopolok/braincode-/server/views"
 )
 
-func userDelete(w http.ResponseWriter, r *http.Request, username string) {
+func userDelete(w http.ResponseWriter, r *http.Request) {
+	username := session.Get(r.Context()).Name
 	if err := models.UserDelete(username); err != nil {
 		errResp_Fatal(w, r, err)
 		return
 	}
-	w.Header().Del("Session")
+	session.Logout(w)
 	redirect2main(w, r, "userDelete")
 }
 
-func getStats(w http.ResponseWriter, r *http.Request, username string) {
+func getStats(w http.ResponseWriter, r *http.Request) {
+	username := session.Get(r.Context()).Name
+
 	switch r.Header.Get("Content-Type") {
 	case "text/html", "":
 		ok, isenglish := langHandler(w, r)
@@ -62,7 +65,7 @@ func getStats(w http.ResponseWriter, r *http.Request, username string) {
 		ssubid := r.URL.Query().Get("id")
 		subid, err := strconv.Atoi(ssubid)
 		if err != nil {
-			http.Error(w, fmt.Sprintf("Invalid provided submission-id=%s\nWant an integer", ssubid), 406)
+			http.Error(w, fmt.Sprintf("Invalid provided submission-id=%s\nWant an integer", ssubid), http.StatusNotAcceptable)
 			logger.Log.Debug("res=%p submission-id=%s is not a valid integer", r, ssubid)
 			return
 		}
@@ -71,7 +74,7 @@ func getStats(w http.ResponseWriter, r *http.Request, username string) {
 			errResp_Fatal(w, r, err)
 			return
 		} else if !found {
-			http.Error(w, fmt.Sprintf("Invalid provided task-id=%d\nSuch task does not exists", subid), 406)
+			http.Error(w, fmt.Sprintf("Invalid provided task-id=%d\nSuch task does not exists", subid), http.StatusNotAcceptable)
 			logger.Log.Debug("res=%p task-id=%d not found", r, subid)
 			return
 		}
@@ -89,17 +92,11 @@ func StatsPage(w http.ResponseWriter, r *http.Request) {
 	logger.Log.Debug("req=%p arrived", r)
 	defer logger.Log.Debug("req=%p served", r)
 
-	username, isauth := sessionHandler(w, r)
-	if !isauth {
-		denyResp_NotAuthorized(w, r)
-		return
-	}
-
 	switch r.Method {
 	case "GET":
-		getStats(w, r, username)
+		getStats(w, r)
 	case "DELETE":
-		userDelete(w, r, username)
+		userDelete(w, r)
 	default:
 		denyResp_MethodNotAllowed(w, r, "GET", "DELETE")
 	}
@@ -127,18 +124,18 @@ func getRegistration(w http.ResponseWriter, r *http.Request) {
 
 func userRegister(w http.ResponseWriter, r *http.Request) {
 	if err := r.ParseForm(); err != nil {
-		http.Error(w, "Invalid login form provided", 406)
+		http.Error(w, "Invalid login form provided", http.StatusNotAcceptable)
 		logger.Log.Debug("res=%p invalid login form", r)
 		return
 	}
 	username := r.PostFormValue("username")
 	password := r.PostFormValue("password")
 	if len(username) < 3 {
-		http.Error(w, "Invalid login form provided\nUsername is too short", 406)
+		http.Error(w, "Invalid login form provided\nUsername is too short", http.StatusNotAcceptable)
 		logger.Log.Debug("res=%p invalid login form", r)
 		return
 	} else if len(password) < 8 {
-		http.Error(w, "Invalid login form provided\nPassword is too short", 406)
+		http.Error(w, "Invalid login form provided\nPassword is too short", http.StatusNotAcceptable)
 		logger.Log.Debug("res=%p invalid login form", r)
 		return
 	}
@@ -147,7 +144,7 @@ func userRegister(w http.ResponseWriter, r *http.Request) {
 		errResp_Fatal(w, r, err)
 		return
 	} else if !found {
-		http.Error(w, "User with such username exists", 406)
+		http.Error(w, "User with such username exists", http.StatusNotAcceptable)
 		logger.Log.Debug("res=%p trying to create same user", r)
 		return
 	}
@@ -163,12 +160,6 @@ func userRegister(w http.ResponseWriter, r *http.Request) {
 func RegistrationPage(w http.ResponseWriter, r *http.Request) {
 	logger.Log.Debug("req=%p arrived", r)
 	defer logger.Log.Debug("req=%p served", r)
-
-	_, isauth := sessionHandler(w, r)
-	if isauth {
-		denyResp_DenyAuthorized(w, r)
-		return
-	}
 
 	switch r.Method {
 	case "GET":
@@ -202,18 +193,18 @@ func getLogin(w http.ResponseWriter, r *http.Request) {
 
 func userAuth(w http.ResponseWriter, r *http.Request) {
 	if err := r.ParseForm(); err != nil {
-		http.Error(w, "Invalid login form provided", 406)
+		http.Error(w, "Invalid login form provided", http.StatusNotAcceptable)
 		logger.Log.Debug("res=%p invalid login form", r)
 		return
 	}
 	username := r.PostFormValue("username")
 	password := r.PostFormValue("password")
 	if len(username) < 3 {
-		http.Error(w, "Invalid login form provided\nUsername is too short", 406)
+		http.Error(w, "Invalid login form provided\nUsername is too short", http.StatusNotAcceptable)
 		logger.Log.Debug("res=%p invalid login form", r)
 		return
 	} else if len(password) < 8 {
-		http.Error(w, "Invalid login form provided\nPassword is too short", 406)
+		http.Error(w, "Invalid login form provided\nPassword is too short", http.StatusNotAcceptable)
 		logger.Log.Debug("res=%p invalid login form", r)
 		return
 	}
@@ -222,7 +213,7 @@ func userAuth(w http.ResponseWriter, r *http.Request) {
 		errResp_Fatal(w, r, err)
 		return
 	} else if !found {
-		http.Error(w, "Incorrect username or password", 406)
+		http.Error(w, "Incorrect username or password", http.StatusNotAcceptable)
 		logger.Log.Debug("res=%p incorrect username or password", r)
 		return
 	}
@@ -231,11 +222,18 @@ func userAuth(w http.ResponseWriter, r *http.Request) {
 		errResp_Fatal(w, r, err)
 		return
 	} else if !found {
-		http.Error(w, "Incorrect username or password", 406)
+		http.Error(w, "Incorrect username or password", http.StatusNotAcceptable)
 		logger.Log.Debug("res=%p incorrect username or password", r)
 		return
 	}
-	w.Header().Set("Session", session.New(username).CreateJWT())
+
+	ses := session.New(username)
+	session.Login(ses, w)
+	redirect2main(w, r, "userLogin")
+}
+
+func userLogout(w http.ResponseWriter, r *http.Request) {
+	session.Logout(w)
 	redirect2main(w, r, "userLogin")
 }
 
@@ -243,18 +241,14 @@ func LoginPage(w http.ResponseWriter, r *http.Request) {
 	logger.Log.Debug("req=%p arrived", r)
 	defer logger.Log.Debug("req=%p served", r)
 
-	_, isauth := sessionHandler(w, r)
-	if isauth {
-		denyResp_DenyAuthorized(w, r)
-		return
-	}
-
 	switch r.Method {
 	case "GET":
 		getLogin(w, r)
 	case "POST":
 		userAuth(w, r)
+	case "DELETE":
+		userLogout(w, r)
 	default:
-		denyResp_MethodNotAllowed(w, r, "GET", "POST")
+		denyResp_MethodNotAllowed(w, r, "GET", "POST", "DELETE")
 	}
 }

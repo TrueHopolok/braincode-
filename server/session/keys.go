@@ -9,7 +9,7 @@ import (
 const key_size = 32
 
 type keyChain struct {
-	mut sync.Mutex 
+	mut sync.Mutex
 	prv []byte
 	cur []byte
 }
@@ -27,11 +27,11 @@ func init() {
 
 /*
 Updates keys:
- - previous key become previously current key
- - current key randomly generates   
+  - previous key become previously current key
+  - current key randomly generates
 */
 func SwitchKey() {
-	keys.mut.Lock() 
+	keys.mut.Lock()
 	defer keys.mut.Unlock()
 	copy(keys.prv, keys.cur)
 	rand.Read(keys.cur)
@@ -41,7 +41,7 @@ func SwitchKey() {
 /*
 Updates keys:
  - previous key become previously current key
- - current key is set to a given key   
+ - current key is set to a given key
 */
 func SetKey(new_cur_key []byte) error {
 	if len(new_cur_key) != key_size {
@@ -52,4 +52,4 @@ func SetKey(new_cur_key []byte) error {
 	copy(keys.prv, keys.cur)
 	copy(keys.cur, new_cur_key)
 	return nil
-} 
+}

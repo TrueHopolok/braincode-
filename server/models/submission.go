@@ -87,6 +87,9 @@ func SubmissionFindAll(username string, page int) ([]byte, error) {
 		}
 	}
 	jsondata, err := json.Marshal(rawdata)
+	if err != nil {
+		return nil, err
+	}
 
 	return jsondata, tx.Commit()
 }

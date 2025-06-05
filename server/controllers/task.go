@@ -7,20 +7,17 @@ import (
 
 	"github.com/TrueHopolok/braincode-/server/logger"
 	"github.com/TrueHopolok/braincode-/server/models"
+	"github.com/TrueHopolok/braincode-/server/session"
 	"github.com/TrueHopolok/braincode-/server/views"
 )
 
 func taskDelete(w http.ResponseWriter, r *http.Request) {
-	username, isauth := sessionHandler(w, r)
-	if !isauth {
-		denyResp_NotAuthorized(w, r)
-		return
-	}
+	username := session.Get(r.Context()).Name
 
 	staskid := r.URL.Query().Get("id")
 	taskid, err := strconv.Atoi(staskid)
 	if err != nil {
-		http.Error(w, fmt.Sprintf("Invalid provided task-id=%s\nWant an integer", staskid), 406)
+		http.Error(w, fmt.Sprintf("Invalid provided task-id=%s\nWant an integer", staskid), http.StatusInternalServerError)
 		logger.Log.Debug("res=%p task-id=%s is not a valid integer", r, staskid)
 		return
 	}
@@ -33,7 +30,9 @@ func taskDelete(w http.ResponseWriter, r *http.Request) {
 }
 
 func getProblemset(w http.ResponseWriter, r *http.Request) {
-	username, isauth := sessionHandler(w, r)
+	ses := session.Get(r.Context())
+	username := ses.Name
+	isauth := !ses.IsZero()
 
 	switch r.Header.Get("Content-Type") {
 	case "text/html", "":
@@ -100,12 +99,14 @@ func getTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	username, isauth := sessionHandler(w, r)
+	ses := session.Get(r.Context())
+	username := ses.Name
+	isauth := !ses.IsZero()
 
 	staskid := r.URL.Query().Get("id")
 	taskid, err := strconv.Atoi(staskid)
 	if err != nil {
-		http.Error(w, fmt.Sprintf("Invalid provided task-id=%s\nWant an integer", staskid), 406)
+		http.Error(w, fmt.Sprintf("Invalid provided task-id=%s\nWant an integer", staskid), http.StatusNotAcceptable)
 		logger.Log.Debug("res=%p task-id=%s is not a valid integer", r, staskid)
 		return
 	}
@@ -114,49 +115,45 @@ func getTask(w http.ResponseWriter, r *http.Request) {
 		errResp_Fatal(w, r, err)
 		return
 	} else if !found {
-		http.Error(w, fmt.Sprintf("Invalid provided task-id=%d\nSuch task does not exists", taskid), 406)
+		http.Error(w, fmt.Sprintf("Invalid provided task-id=%d\nSuch task does not exists", taskid), http.StatusNotAcceptable)
 		logger.Log.Debug("res=%p task-id=%d not found", r, taskid)
 		return
 	}
 	// TODO(VADIM): add markleft handler to info and then pass it to view
 	if err = views.TaskFindOne(w, r, username, isauth, isenglish, task); err != nil {
 		errResp_Fatal(w, r, err)
+		return
 	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 }
 
 func submitSolution(w http.ResponseWriter, r *http.Request) {
-	username, isauth := sessionHandler(w, r)
-	if !isauth {
-		denyResp_NotAuthorized(w, r)
-		return
-	}
-
 	staskid := r.URL.Query().Get("id")
 	taskid, err := strconv.Atoi(staskid)
 	if err != nil {
-		http.Error(w, fmt.Sprintf("Invalid provided task-id=%s\nWant an integer", staskid), 406)
+		http.Error(w, fmt.Sprintf("Invalid provided task-id=%s\nWant an integer", staskid), http.StatusNotAcceptable)
 		logger.Log.Debug("res=%p task-id=%s is not a valid integer", r, staskid)
 		return
 	}
 
 	if err := r.ParseForm(); err != nil {
-		http.Error(w, "Invalid login form provided", 406)
+		http.Error(w, "Invalid login form provided", http.StatusNotAcceptable)
 		logger.Log.Debug("res=%p invalid login form", r)
 		return
 	}
 	solution := r.PostFormValue("solution")
 
+	username := session.Get(r.Context()).Name
 	found, isvalid, err := models.SubmissionCreate(username, taskid, solution)
 	if err != nil {
 		errResp_Fatal(w, r, err)
 		return
 	} else if !found {
-		http.Error(w, fmt.Sprintf("Invalid provided task-id=%d\nSuch task does not exists", taskid), 406)
+		http.Error(w, fmt.Sprintf("Invalid provided task-id=%d\nSuch task does not exists", taskid), http.StatusNotAcceptable)
 		logger.Log.Debug("res=%p task-id=%d not found", r, taskid)
 		return
 	} else if !isvalid {
-		http.Error(w, fmt.Sprintf("Given solution is invalid brainfunk code"), 406)
+		http.Error(w, "Given solution is invalid brainfunk code", http.StatusNotAcceptable)
 		logger.Log.Debug("req=%p invalid brainfunk code", r)
 		return
 	}
@@ -178,7 +175,7 @@ func TaskPage(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func getUpload(w http.ResponseWriter, r *http.Request, username string) {
+func getUpload(w http.ResponseWriter, r *http.Request) {
 	if contenttype := r.Header.Get("Content-Type"); contenttype != "" && contenttype != "text/html" {
 		denyResp_ContentTypeNotAllowed(w, r, "text/html")
 		return
@@ -195,7 +192,7 @@ func getUpload(w http.ResponseWriter, r *http.Request, username string) {
 	errResp_NotImplemented(w, r, "getUpload")
 }
 
-func uploadTask(w http.ResponseWriter, r *http.Request, username string) {
+func uploadTask(w http.ResponseWriter, r *http.Request) {
 	errResp_NotImplemented(w, r, "uploadTask")
 }
 
@@ -203,17 +200,11 @@ func UploadPage(w http.ResponseWriter, r *http.Request) {
 	logger.Log.Debug("req=%p arrived", r)
 	defer logger.Log.Debug("req=%p served", r)
 
-	username, isauth := sessionHandler(w, r)
-	if !isauth {
-		denyResp_NotAuthorized(w, r)
-		return
-	}
-
 	switch r.Method {
 	case "GET":
-		getUpload(w, r, username)
+		getUpload(w, r)
 	case "POST":
-		uploadTask(w, r, username)
+		uploadTask(w, r)
 	default:
 		denyResp_MethodNotAllowed(w, r, "GET", "POST")
 	}
