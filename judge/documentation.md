@@ -14,6 +14,7 @@ import "github.com/TrueHopolok/braincode-/judge"
 - [func MarshalChecker\(c OutputChecker\) \(\[\]byte, error\)](<#MarshalChecker>)
 - [func MarshalGenerator\(g InputGenerator\) \(\[\]byte, error\)](<#MarshalGenerator>)
 - [type InputGenerator](<#InputGenerator>)
+  - [func CombineGenerators\(gens ...InputGenerator\) InputGenerator](<#CombineGenerators>)
   - [func NewBFGenerator\(source string\) \(InputGenerator, error\)](<#NewBFGenerator>)
   - [func NewListGenerator\(tests \[\]\[\]string\) InputGenerator](<#NewListGenerator>)
   - [func NewLuaGenerator\(source string\) InputGenerator](<#NewLuaGenerator>)
@@ -31,6 +32,7 @@ import "github.com/TrueHopolok/braincode-/judge"
   - [func UnmarshalChecker\(b \[\]byte\) \(OutputChecker, error\)](<#UnmarshalChecker>)
 - [type Pair](<#Pair>)
 - [type Problem](<#Problem>)
+  - [func NewProblem\(doc ml.Document\) \(Problem, error\)](<#NewProblem>)
   - [func \(p \*Problem\) AppendBinary\(buf \[\]byte\) \(\[\]byte, error\)](<#Problem.AppendBinary>)
   - [func \(p \*Problem\) MarshalBinary\(\) \(\[\]byte, error\)](<#Problem.MarshalBinary>)
   - [func \(p \*Problem\) UnmarshalBinary\(buf \[\]byte\) error](<#Problem.UnmarshalBinary>)
@@ -97,6 +99,15 @@ type InputGenerator interface {
     GenerateInput() ([][]string, error)
 }
 ```
+
+<a name="CombineGenerators"></a>
+### func [CombineGenerators](<https://github.com/TrueHopolok/braincode-/blob/main/judge/listgen.go#L28>)
+
+```go
+func CombineGenerators(gens ...InputGenerator) InputGenerator
+```
+
+
 
 <a name="NewBFGenerator"></a>
 ### func [NewBFGenerator](<https://github.com/TrueHopolok/braincode-/blob/main/judge/bfgen.go#L24>)
@@ -288,6 +299,15 @@ type Problem struct {
     Memory       int // Maximum number of allocated bytes during the execution.
 }
 ```
+
+<a name="NewProblem"></a>
+### func [NewProblem](<https://github.com/TrueHopolok/braincode-/blob/main/judge/ml.go#L13>)
+
+```go
+func NewProblem(doc ml.Document) (Problem, error)
+```
+
+
 
 <a name="Problem.AppendBinary"></a>
 ### func \(\*Problem\) [AppendBinary](<https://github.com/TrueHopolok/braincode-/blob/main/judge/serialization.go#L154>)

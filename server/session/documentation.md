@@ -162,6 +162,7 @@ Updates keys:
 <a name="Session"></a>
 ## type [Session](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/session.go#L27-L30>)
 
+
 Stores all info about session.
 
 All fields can be accessed outside of a package. The methods only here as helpers implementation.
