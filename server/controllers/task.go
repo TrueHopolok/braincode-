@@ -17,7 +17,7 @@ func taskDelete(w http.ResponseWriter, r *http.Request) {
 	staskid := r.URL.Query().Get("id")
 	taskid, err := strconv.Atoi(staskid)
 	if err != nil {
-		http.Error(w, fmt.Sprintf("Invalid provided task-id=%s\nWant an integer", staskid), 406)
+		http.Error(w, fmt.Sprintf("Invalid provided task-id=%s\nWant an integer", staskid), http.StatusInternalServerError)
 		logger.Log.Debug("res=%p task-id=%s is not a valid integer", r, staskid)
 		return
 	}
@@ -122,7 +122,7 @@ func getTask(w http.ResponseWriter, r *http.Request) {
 	// TODO(VADIM): add markleft handler to info and then pass it to view
 	if err = views.TaskFindOne(w, r, username, isauth, isenglish, task); err != nil {
 		errResp_Fatal(w, r, err)
-		// TODO(anpir): should probably return here!
+		return
 	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 }

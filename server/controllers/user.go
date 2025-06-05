@@ -65,7 +65,7 @@ func getStats(w http.ResponseWriter, r *http.Request) {
 		ssubid := r.URL.Query().Get("id")
 		subid, err := strconv.Atoi(ssubid)
 		if err != nil {
-			http.Error(w, fmt.Sprintf("Invalid provided submission-id=%s\nWant an integer", ssubid), 406)
+			http.Error(w, fmt.Sprintf("Invalid provided submission-id=%s\nWant an integer", ssubid), http.StatusNotAcceptable)
 			logger.Log.Debug("res=%p submission-id=%s is not a valid integer", r, ssubid)
 			return
 		}
@@ -74,7 +74,7 @@ func getStats(w http.ResponseWriter, r *http.Request) {
 			errResp_Fatal(w, r, err)
 			return
 		} else if !found {
-			http.Error(w, fmt.Sprintf("Invalid provided task-id=%d\nSuch task does not exists", subid), 406)
+			http.Error(w, fmt.Sprintf("Invalid provided task-id=%d\nSuch task does not exists", subid), http.StatusNotAcceptable)
 			logger.Log.Debug("res=%p task-id=%d not found", r, subid)
 			return
 		}
@@ -124,18 +124,18 @@ func getRegistration(w http.ResponseWriter, r *http.Request) {
 
 func userRegister(w http.ResponseWriter, r *http.Request) {
 	if err := r.ParseForm(); err != nil {
-		http.Error(w, "Invalid login form provided", 406)
+		http.Error(w, "Invalid login form provided", http.StatusNotAcceptable)
 		logger.Log.Debug("res=%p invalid login form", r)
 		return
 	}
 	username := r.PostFormValue("username")
 	password := r.PostFormValue("password")
 	if len(username) < 3 {
-		http.Error(w, "Invalid login form provided\nUsername is too short", 406)
+		http.Error(w, "Invalid login form provided\nUsername is too short", http.StatusNotAcceptable)
 		logger.Log.Debug("res=%p invalid login form", r)
 		return
 	} else if len(password) < 8 {
-		http.Error(w, "Invalid login form provided\nPassword is too short", 406)
+		http.Error(w, "Invalid login form provided\nPassword is too short", http.StatusNotAcceptable)
 		logger.Log.Debug("res=%p invalid login form", r)
 		return
 	}
@@ -144,7 +144,7 @@ func userRegister(w http.ResponseWriter, r *http.Request) {
 		errResp_Fatal(w, r, err)
 		return
 	} else if !found {
-		http.Error(w, "User with such username exists", 406)
+		http.Error(w, "User with such username exists", http.StatusNotAcceptable)
 		logger.Log.Debug("res=%p trying to create same user", r)
 		return
 	}
@@ -193,18 +193,18 @@ func getLogin(w http.ResponseWriter, r *http.Request) {
 
 func userAuth(w http.ResponseWriter, r *http.Request) {
 	if err := r.ParseForm(); err != nil {
-		http.Error(w, "Invalid login form provided", 406)
+		http.Error(w, "Invalid login form provided", http.StatusNotAcceptable)
 		logger.Log.Debug("res=%p invalid login form", r)
 		return
 	}
 	username := r.PostFormValue("username")
 	password := r.PostFormValue("password")
 	if len(username) < 3 {
-		http.Error(w, "Invalid login form provided\nUsername is too short", 406)
+		http.Error(w, "Invalid login form provided\nUsername is too short", http.StatusNotAcceptable)
 		logger.Log.Debug("res=%p invalid login form", r)
 		return
 	} else if len(password) < 8 {
-		http.Error(w, "Invalid login form provided\nPassword is too short", 406)
+		http.Error(w, "Invalid login form provided\nPassword is too short", http.StatusNotAcceptable)
 		logger.Log.Debug("res=%p invalid login form", r)
 		return
 	}
@@ -213,7 +213,7 @@ func userAuth(w http.ResponseWriter, r *http.Request) {
 		errResp_Fatal(w, r, err)
 		return
 	} else if !found {
-		http.Error(w, "Incorrect username or password", 406)
+		http.Error(w, "Incorrect username or password", http.StatusNotAcceptable)
 		logger.Log.Debug("res=%p incorrect username or password", r)
 		return
 	}
@@ -222,7 +222,7 @@ func userAuth(w http.ResponseWriter, r *http.Request) {
 		errResp_Fatal(w, r, err)
 		return
 	} else if !found {
-		http.Error(w, "Incorrect username or password", 406)
+		http.Error(w, "Incorrect username or password", http.StatusNotAcceptable)
 		logger.Log.Debug("res=%p incorrect username or password", r)
 		return
 	}
@@ -234,7 +234,7 @@ func userAuth(w http.ResponseWriter, r *http.Request) {
 
 func userLogout(w http.ResponseWriter, r *http.Request) {
 	session.Logout(w)
-	redirect2main(w, r, "userLogin") // TODO(anpir): this should redirect to login page
+	redirect2main(w, r, "userLogin")
 }
 
 func LoginPage(w http.ResponseWriter, r *http.Request) {
@@ -249,6 +249,6 @@ func LoginPage(w http.ResponseWriter, r *http.Request) {
 	case "DELETE":
 		userLogout(w, r)
 	default:
-		denyResp_MethodNotAllowed(w, r, "GET", "POST")
+		denyResp_MethodNotAllowed(w, r, "GET", "POST", "DELETE")
 	}
 }

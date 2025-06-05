@@ -127,6 +127,9 @@ func TaskFindAll(username, search string, filter, isauth bool, page int) ([]byte
 		}
 	}
 	jsondata, err := json.Marshal(rawdata)
+	if err != nil {
+		return nil, err
+	}
 
 	return jsondata, tx.Commit()
 }
