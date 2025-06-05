@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="static/styles/indexpage.css">
+    <link rel="stylesheet" href="../static/styles/indexpage.css">
     <title>Upload - Braincode</title>
 </head>
 <body>
@@ -19,11 +19,11 @@
                 
                 <div class="header-user">
                     <div class="language">
-                        <a href="#">EN</a>
-                        <a href="ru/problemset_ru.html">RU</a>
+                        <a href="../problemupload.html">EN</a>
+                        <a href="#">RU</a>
                     </div>
                     <div class="login">
-                        <a href="userpage.html">Username</a>
+                        <a href="userpage_ru.html">Username</a>
                     </div>
                 </div>
             </div>
@@ -34,19 +34,19 @@
     <nav class="navigation">
         <div class="container">
             <ul class="nav-ul">
-                <li id="problem-upload" class="nav-ul-element"><a href="problemset.html">PROBLEMSET</a></li>
-                <li class="nav-ul-element"><a href="index.html">LOG OUT</a></li>
+                <li id="problem-upload" class="nav-ul-element"><a href="problemset_ru.html">СПИСОК ЗАДАЧ</a></li>
+                <li class="nav-ul-element"><a href="index_ru.html">ВЫХОД</a></li>
             </ul>
         </div>
     </nav>
 
     <div class="container">
         <form action="">
-            <label for="tname"><b>Task Name</b></label>
+            <label for="tname"><b>Название задачи</b></label>
             <input type="text" placeholder="Enter Name" name="tname" required>
-            <label for="tname"><b>Description</b></label>
+            <label for="tname"><b>Описание</b></label>
             <textarea type="text" placeholder="Enter Task" name="des" required></textarea>
-            <button type="submit">Submit</button>
+            <button type="submit">Отправить</button>
         </form>
     </div>
 </body>

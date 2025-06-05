@@ -17,10 +17,10 @@ The responses gurantee:
 
 
 // Session-token
-let loginField = document.getElementById("login_form");
+/*let loginField = document.getElementById("login_form");
 
-loginField.addEventListener('submit', function(event){
-    const username = this.uname.value; // или this.elements['uname'].value
+loginField.addEventListener('submit', function(event) {
+    const username = this.uname.value; 
     const password = this.psw.value;
     const remember = this.remember.checked;
 
@@ -41,10 +41,29 @@ loginField.addEventListener('submit', function(event){
             localStorage.setItem('sessionToken', sessionToken);
         }
     })
-})
-
-
-
-
+})*/
 
 // Page
+
+const tasks = [];
+
+fetch("https://jsonplaceholder.typicode.com/todos/1", {
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json',
+        'Session': localStorage.getItem('sessionToken'),
+        'lang': 'ru' 
+    }
+})
+.then(response => response.json())
+.then(data => tasks.push(data));
+console.log(tasks)
+const pageSize = 5;
+
+function showPage(page) {
+    const start = (page - 1) * pageSize;
+    const end = start + pageSize;
+    
+    const currentTasks = tasks.slice(start, end);
+}
+

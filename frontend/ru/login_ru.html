@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="static/styles/indexpage.css">
-    <link rel="stylesheet" href="static/styles/loginregpage.css">
+    <link rel="stylesheet" href="../static/styles/indexpage.css">
+    <link rel="stylesheet" href="../static/styles/loginregpage.css">
     <title>Login - Braincode</title>
 </head>
 <body>
@@ -21,11 +21,11 @@
                 
                 <div class="header-user">
                     <div class="language">
-                        <a href="#">EN</a>
-                        <a href="ru/login_ru.html">RU</a>
+                        <a href="../login.html">EN</a>
+                        <a href="#">RU</a>
                     </div>
                     <div class="login">
-                        <a href="registration.html">Registration</a>
+                        <a href="registration_ru.html">Регистрация</a>
                     </div>
                 </div>
             </div>
@@ -36,23 +36,23 @@
     <nav class="navigation">
         <div class="container">
             <ul class="nav-ul">
-                <li class="nav-ul-element"><a href="index.html">BACK</a></li>
+                <li class="nav-ul-element"><a href="index_ru.html">НАЗАД</a></li>
               </ul>
         </div>
     </nav>
 
     <div class="auth_form">
-        <div class="form_text">Login</div>
+        <div class="form_text">Авторизация</div>
         <form id="login_form">
-            <label for="uname"><b>Username</b></label>
+            <label for="uname"><b>Никнейм</b></label>
             <input type="text" placeholder="Enter Username" name="uname" required>
 
-            <label for="psw"><b>Password</b></label>
+            <label for="psw"><b>Пароль</b></label>
             <input type="password" placeholder="Enter Password" name="psw" required>
 
-            <button type="submit">Login</button>
+            <button type="submit">Авторизация</button>
             <label>
-            <input type="checkbox" checked="checked" name="remember"> Remember me
+            <input type="checkbox" checked="checked" name="remember"> Запомнить
             </label>
         </form>
     </div>

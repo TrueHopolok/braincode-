@@ -3,29 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="static/styles/indexpage.css">
-    <link rel="stylesheet" href="static/styles/loginregpage.css">
+    <link rel="stylesheet" href="../static/styles/indexpage.css">
+    <link rel="stylesheet" href="../static/styles/loginregpage.css">
     <title>Login - Braincode</title>
 </head>
 <body>
-    
     <header>
         <div class="container">
             
             <div class="header">
                 
                 <div class="header-logo">
-                    <img src="https://placehold.co/50" alt="!"> 
+                    <img src="https://placehold.co/50" alt="!">
                     <div class="logo-text">Braincode</div>
                 </div>
                 
                 <div class="header-user">
                     <div class="language">
-                        <a href="#">EN</a>
-                        <a href="ru/login_ru.html">RU</a>
+                        <a href="../registration.html">EN</a>
+                        <a href="#">RU</a>
                     </div>
                     <div class="login">
-                        <a href="registration.html">Registration</a>
+                        <a href="login_ru.html">Логин</a>
                     </div>
                 </div>
             </div>
@@ -36,24 +35,23 @@
     <nav class="navigation">
         <div class="container">
             <ul class="nav-ul">
-                <li class="nav-ul-element"><a href="index.html">BACK</a></li>
+                <li class="nav-ul-element"><a href="index_ru.html">НАЗАД</a></li>
               </ul>
         </div>
     </nav>
 
+
+
     <div class="auth_form">
-        <div class="form_text">Login</div>
-        <form id="login_form">
-            <label for="uname"><b>Username</b></label>
+        <div class="form_text">Регистрация</div>
+        <form action="" method="">
+            <label for="uname"><b>Никнейм</b></label>
             <input type="text" placeholder="Enter Username" name="uname" required>
 
-            <label for="psw"><b>Password</b></label>
+            <label for="psw"><b>Пароль</b></label>
             <input type="password" placeholder="Enter Password" name="psw" required>
 
-            <button type="submit">Login</button>
-            <label>
-            <input type="checkbox" checked="checked" name="remember"> Remember me
-            </label>
+            <button type="submit">Регистрация</button>
         </form>
     </div>
 </body>
