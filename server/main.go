@@ -42,7 +42,6 @@ func main() {
 	//* HTTP init
 	logger.Log.Info("HTTP server: starting...")
 	EnableFileHandlers()
-	http.HandleFunc("/favicon.ico", func(w http.ResponseWriter, r *http.Request) {})
 	EnableControllerHandlers()
 	go http.ListenAndServe(":8080", nil)
 	logger.Log.Info("HTTP server: start succeeded")

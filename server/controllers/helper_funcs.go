@@ -6,7 +6,6 @@ import (
 	"net/http"
 
 	"github.com/TrueHopolok/braincode-/server/logger"
-	"github.com/TrueHopolok/braincode-/server/session"
 	"golang.org/x/crypto/argon2"
 )
 
@@ -32,24 +31,6 @@ func SaltGen() []byte {
 		logger.Log.Fatal("crypto rand raised error=%s", err)
 	}
 	return salt
-}
-
-// Function is used for most cases except: registration, login and logout requests.
-// Get session token from the request header.
-// Validates it.
-// If valid: updates the token and writes it into a header.
-// If invalid or expired: return empty string as a name and false in aiauth field.
-func sessionHandler(w http.ResponseWriter, r *http.Request) (string, bool) {
-	token := r.Header.Get("Session")
-	var ses session.Session
-	isauth := ses.ValidateJWT(token) && !ses.IsExpired()
-	if isauth {
-		ses.UpdateExpiration()
-		w.Header().Add("Session", ses.CreateJWT())
-	} else {
-		ses.Name = ""
-	}
-	return ses.Name, isauth
 }
 
 // Return 2 booleans that tell what language does user want.
