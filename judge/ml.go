@@ -11,6 +11,16 @@ import (
 var errManyCheckers = errors.New("checker / solution defined multiple times")
 
 func NewProblem(doc ml.Document) (Problem, error) {
+	if doc.Instructions < 1 || doc.Instructions > 100_000 {
+		return Problem{}, errors.New("invalid step constraint")
+	}
+	if doc.Memory < 1 || doc.Memory > 64*1024*1024 {
+		return Problem{}, errors.New("invalid memory constraint")
+	}
+	if doc.Steps < 1 || doc.Steps > 1_000_000 {
+		return Problem{}, errors.New("invalid step constraint")
+	}
+
 	var gens []InputGenerator
 
 	if doc.Lua != "" {

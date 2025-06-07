@@ -10,6 +10,8 @@ import (
 )
 
 func TestHelloWorld(t *testing.T) {
+	t.Parallel()
+
 	// thanks wikipedia! (https://en.wikipedia.org/wiki/Brainfuck)
 	const source = "++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++."
 
@@ -38,6 +40,8 @@ func TestHelloWorld(t *testing.T) {
 }
 
 func TestInput(t *testing.T) {
+	t.Parallel()
+
 	const source = `
 	[bsort.b -- bubble sort
 	(c) 2016 Daniel B. Cristofani
@@ -77,6 +81,8 @@ func TestInput(t *testing.T) {
 }
 
 func TestStepLimit(t *testing.T) {
+	t.Parallel()
+
 	const source = `
 	[e.b -- compute e
 	(c) 2016 Daniel B. Cristofani
@@ -140,6 +146,8 @@ func TestStepLimit(t *testing.T) {
 }
 
 func TestMarshal(t *testing.T) {
+	t.Parallel()
+
 	// thanks wikipedia! (https://en.wikipedia.org/wiki/Brainfuck)
 	const source = "++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++."
 

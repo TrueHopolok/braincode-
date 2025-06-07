@@ -47,10 +47,11 @@ styles.
 .item = italic - ~C[~I[text~]]
 .item = strike-through - ~C[~S[text~]]
 .item = underline - ~C[~U[text~]]
-.item = code - ~C[~C[text~]] (any value except ~] is copied verbatim)
+.item = code - ~C[~C[text~]] 
+.item = math - ~C[~M[text~]] (LaTex)
 .item = link - ~C[~<URL>[text~]]
-.item = escaped ~~ - ~C[~~]]
-.item = escaped ~] - ~C[~~~]]
+.item = escaped ~C[~~] - ~C[~~~~]
+.item = escaped ~C[~]] - ~C[~~~]]
 ..
 
 .section = Document blocks
@@ -67,6 +68,7 @@ styles.
 contain ~C[.input] and ~C[.output] blocks which act like ~C[.code] blocks.
 ..
 .paragraph = ~C[.image] - embedded image. Must contain a valid URL.
+.paragraph = ~C[.math] - embedded LaTex block.
 
 .section = Meta blocks
 .paragraph
@@ -86,4 +88,9 @@ of a localization block belong to a -I[default locale~]. Only ~I[Document blocks
 blocks may appear inside localization blocks. Each localization block may be specified multiple 
 times and will be equivalent to concatenation of all localization blocks of the same locale.
 ..
+.paragraph 
+How about some math?? ~M[\int \frac{1}{x} dx = \ln \left| x \right| + C]
+..
+.math
+\int \frac{1}{x} dx = \ln \left| x \right| + C
 ..

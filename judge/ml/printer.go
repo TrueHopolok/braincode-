@@ -57,7 +57,6 @@ func renderRichRaw(
 	closer func(style SpanStyle),
 	stringer func(style SpanStyle, data string),
 ) {
-	//bits.TrailingZeros8(t)
 	// each span corresponds to index bits.TrailingZeroes8(style)
 	// each element denotes length of prefix of this style starting from this index
 	lengths := make([][SpanBits]int, len(t)+1)
@@ -139,8 +138,7 @@ func renderRichRaw(
 
 func renderRich(t RichText) string {
 	b := new(strings.Builder)
-	normalEscapes := strings.NewReplacer("~", "~~", "]", "~]")
-	codeEscapes := strings.NewReplacer("]", "~]")
+	escapes := strings.NewReplacer("~", "~~", "]", "~]")
 	renderRichRaw(t,
 		func(style SpanStyle, url string) {
 			switch style {
@@ -154,6 +152,8 @@ func renderRich(t RichText) string {
 				b.WriteString("~S[")
 			case SpanUnderline:
 				b.WriteString("~U[")
+			case SpanMath:
+				b.WriteString("~M[")
 			case SpanLink:
 				b.WriteString("~<")
 				b.WriteString(url)
@@ -166,14 +166,7 @@ func renderRich(t RichText) string {
 			b.WriteString("]")
 		},
 		func(style SpanStyle, text string) {
-			if style&SpanLink != 0 {
-				// no escapes
-				b.WriteString(text)
-			} else if style&SpanCode != 0 {
-				_, _ = codeEscapes.WriteString(b, text)
-			} else {
-				_, _ = normalEscapes.WriteString(b, text)
-			}
+			_, _ = escapes.WriteString(b, text)
 		},
 	)
 	return b.String()
@@ -294,6 +287,12 @@ func (d Document) WriteSyntax(w io.Writer) (err error) {
 				printf("\n")
 			}
 			printf(".section = %s\n", inline(renderRich(RichText(b))))
+
+		case Math:
+			printBlock(printf, "math", string(b))
+
+		default:
+			printf(".error = block of type %T", b)
 		}
 	}
 

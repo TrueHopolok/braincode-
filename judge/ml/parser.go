@@ -42,6 +42,7 @@ const (
 	blockOrdered
 	blockUnordered
 	blockItem
+	blockMath
 	blockError
 )
 
@@ -63,6 +64,7 @@ var blockToString = map[blockType]string{
 	blockOrdered:      "ordered",
 	blockUnordered:    "unordered",
 	blockItem:         "item",
+	blockMath:         "math",
 	blockError:        "error",
 }
 
@@ -86,6 +88,7 @@ var stringToBlock = map[string]blockType{
 	"ordered":      blockOrdered,
 	"unordered":    blockUnordered,
 	"item":         blockItem,
+	"math":         blockMath,
 	"error":        blockError,
 }
 
@@ -310,6 +313,15 @@ func init() {
 				Input:  input,
 				Output: output,
 			}
+
+		},
+		blockMath: func(pctx *parserContext, b *rawBlock) Block {
+			data, err := textOnly(pctx.Buf(), b)
+			if err != nil {
+				pctx.PushErr(err)
+				return nil
+			}
+			return Math(data)
 		},
 	}
 }
@@ -383,7 +395,11 @@ func parseRichText(buf *strings.Builder, s string) RichText {
 
 	var res []Span
 
-	buf.Reset()
+	if buf == nil {
+		buf = new(strings.Builder)
+	} else {
+		buf.Reset()
+	}
 	r := []rune(s)
 
 	var state SpanStyle
@@ -419,7 +435,20 @@ func parseRichText(buf *strings.Builder, s string) RichText {
 		}
 
 		if c != '~' || i+1 >= len(r) {
-			// not enough characters / no tilde
+			// no tilde / not enough characters
+			buf.WriteRune(c)
+			continue
+		}
+
+		next := r[i+1]
+		if r[i+1] == '~' || r[i+1] == ']' {
+			// there is some escape
+			buf.WriteRune(r[i+1])
+			i++
+			continue
+		}
+
+		if state&(SpanCode|SpanMath|SpanLink) != 0 {
 			buf.WriteRune(c)
 			continue
 		}
@@ -432,19 +461,6 @@ func parseRichText(buf *strings.Builder, s string) RichText {
 			buf.Reset()
 		}
 
-		next := r[i+1]
-		if (r[i+1] == '~' && state&SpanCode == 0) || r[i+1] == ']' {
-			// there is some escape
-			buf.WriteRune(r[i+1])
-			i++
-			continue
-		}
-
-		if state&(SpanLink|SpanCode) != 0 {
-			buf.WriteRune(c)
-			continue
-		}
-
 		var newStyle SpanStyle
 		switch next {
 		case 'B':
@@ -453,10 +469,12 @@ func parseRichText(buf *strings.Builder, s string) RichText {
 			newStyle = SpanItalic
 		case 'S':
 			newStyle = SpanStrike
-		case 'C':
-			newStyle = SpanCode
 		case 'U':
 			newStyle = SpanUnderline
+		case 'C':
+			newStyle = SpanCode
+		case 'M':
+			newStyle = SpanMath
 		case '<': // URL
 			j := slices.Index(r[i+2:], '>')
 			if j == -1 {
@@ -472,13 +490,13 @@ func parseRichText(buf *strings.Builder, s string) RichText {
 				continue
 			}
 
-			if j+1 > len(r) || r[j+1] != '[' {
+			if j+1 > len(r[i+2:]) || r[i+2:][j+1] != '[' {
 				// malformed link text
 				buf.WriteRune(c)
 				continue
 			}
 			lastLink = data
-			i = j
+			i += j + 3
 
 			state |= SpanLink
 			effectStack = append(effectStack, SpanLink)
@@ -489,6 +507,7 @@ func parseRichText(buf *strings.Builder, s string) RichText {
 			buf.WriteRune(c)
 			continue
 		}
+
 		if i+1 >= len(r) || r[i+2] != '[' {
 			// malformed tag
 			buf.WriteRune(c)

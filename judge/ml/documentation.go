@@ -35,7 +35,8 @@
 //   - italic - ~I[text]
 //   - strike-through - ~S[text]
 //   - underline - ~U[text]
-//   - code - ~C[text] (any value except ] is copied verbatim)
+//   - code - ~C[text]
+//   - math - ~M[text] (LaTex)
 //   - link - ~<URL>[text]
 //   - escaped ~ - '~~'
 //   - escaped ] - '~]'
@@ -63,6 +64,8 @@
 //
 // '.image' - embedded image. Must contain a valid URL.
 //
+// '.math' - embedded LaTex block.
+//
 // # Meta blocks
 //
 // These blocks will not be shown to problem solver directly. Instead they are used to change some
@@ -84,6 +87,8 @@
 // may appear inside localization blocks. Each localization block may be specified multiple times and
 // will be equivalent to concatenation of all localization blocks of the same locale.
 package ml
+
+//go:generate go tool github.com/princjef/gomarkdoc/cmd/gomarkdoc -o documentation.md
 
 import (
 	_ "embed"
