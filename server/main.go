@@ -4,6 +4,7 @@ import (
 	"flag"
 	"net/http"
 
+	"github.com/TrueHopolok/braincode-/server/config"
 	db "github.com/TrueHopolok/braincode-/server/db"
 	logger "github.com/TrueHopolok/braincode-/server/logger"
 	"github.com/TrueHopolok/braincode-/server/prepared"
@@ -37,11 +38,44 @@ func main() {
 	}
 	logger.Log.Info("Templates: initilization succeeded")
 
+	// Error channel for all concurent threads
+	httpChan := make(chan error)
+
 	//* HTTP init
 	logger.Log.Info("HTTP server: starting...")
-	go http.ListenAndServe(":8080", MuxHTTP())
-	logger.Log.Info("HTTP server: start succeeded")
+	go func() {
+		httpChan <- http.ListenAndServe(":8080", MuxHTTP())
+	}()
+	select {
+	case err := <-httpChan:
+		logger.Log.Fatal("HTTP server: start failed; error=%s", err)
+	default:
+		logger.Log.Info("HTTP server: start succeeded")
+	}
 
 	//* Console init
-	ConsoleHandler()
+	consoleChan := make(chan error)
+	quitChan := make(chan bool)
+	if config.Get().EnableConsole {
+		go func() {
+			consoleChan <- ConsoleHandler(quitChan)
+		}()
+		select {
+		case err := <-consoleChan:
+			logger.Log.Fatal("Console: setup failed; error=%s", err)
+		default:
+			logger.Log.Info("Console: setup succeeded")
+		}
+	} else {
+		logger.Log.Info("Console: setup skipped; config.EnableConsole=false")
+	}
+
+	select {
+	case err := <-httpChan:
+		logger.Log.Fatal("HTTP server: execution failed; err=%s", err)
+	case err := <-consoleChan:
+		logger.Log.Fatal("Console: execution failed; err=%s", err)
+	case <-quitChan:
+		logger.Log.Warn("Console: quitChan returned a value, server closing")
+	}
 }
