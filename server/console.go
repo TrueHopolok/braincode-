@@ -2,8 +2,12 @@ package main
 
 import (
 	"bufio"
+	"bytes"
+	"cmp"
 	"fmt"
 	"os"
+	"slices"
+	"text/tabwriter"
 
 	"github.com/TrueHopolok/braincode-/server/logger"
 )
@@ -11,6 +15,7 @@ import (
 // On command encounter in the os.Stdin, the function will be executed
 type Instruction struct {
 	command  string
+	helptext string
 	function func()
 }
 
@@ -18,11 +23,24 @@ type Instruction struct {
 var Instructions = []Instruction{
 	{
 		"stop",
+		"kill the process (may cause data loss)",
 		func() {
 			logger.Log.Info("Console: server stopped")
 			os.Exit(0)
 		},
 	},
+}
+
+func init() {
+	Instructions = append(Instructions, Instruction{
+		command:  "help",
+		helptext: "print description of all available commands",
+		function: func() { fmt.Println(commandHelpText()) },
+	})
+
+	slices.SortFunc(Instructions, func(l, r Instruction) int {
+		return cmp.Compare(l.command, r.command)
+	})
 }
 
 // Wait for the input in os.Stdin.
@@ -50,4 +68,18 @@ func ConsoleHandler() {
 			fmt.Println("Invalid command, try again...")
 		}
 	}
+}
+
+func commandHelpText() string {
+	b := new(bytes.Buffer)
+	w := tabwriter.NewWriter(b, 0, 4, 1, ' ', 0)
+
+	fmt.Fprintln(w, "Available commands:")
+	for _, cmd := range Instructions {
+		fmt.Fprintf(w, "    %s\t- %s\n", cmd.command, cmd.helptext)
+	}
+
+	_ = w.Flush() // error ignored: write to bytes.Buffer never fails
+
+	return b.String()
 }
