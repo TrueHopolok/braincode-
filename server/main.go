@@ -60,13 +60,21 @@ func main() {
 		go func() {
 			consoleChan <- ConsoleHandler(quitChan)
 		}()
+		select {
+		case err := <-consoleChan:
+			logger.Log.Fatal("Console: setup failed; error=%s", err)
+		default:
+			logger.Log.Info("Console: setup succeeded")
+		}
+	} else {
+		logger.Log.Info("Console: setup skipped; config.EnableConsole=false")
 	}
 
 	select {
 	case err := <-httpChan:
-		logger.Log.Fatal("HTTP server: execution stopped; err=%s", err)
+		logger.Log.Fatal("HTTP server: execution failed; err=%s", err)
 	case err := <-consoleChan:
-		logger.Log.Fatal("Console: stopped execution; err=%s", err)
+		logger.Log.Fatal("Console: execution failed; err=%s", err)
 	case <-quitChan:
 		logger.Log.Warn("Console: quitChan returned a value, server closing")
 	}

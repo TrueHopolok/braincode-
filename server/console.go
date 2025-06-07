@@ -6,7 +6,6 @@ import (
 	"os"
 
 	"github.com/TrueHopolok/braincode-/server/config"
-	"github.com/TrueHopolok/braincode-/server/logger"
 )
 
 // On command encounter in the os.Stdin, the function will be executed
@@ -34,7 +33,6 @@ func ConsoleHandler(quitChan chan bool) error {
 	}
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Split(bufio.ScanLines)
-	logger.Log.Info("Console: initialized")
 	fmt.Println("Waiting for user input:")
 	for scanner.Scan() && scanner.Err() == nil {
 		// if multiarguments will be needed: use strings.Fields or flag package
