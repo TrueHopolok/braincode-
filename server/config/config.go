@@ -11,6 +11,7 @@ import (
 
 type Config struct {
 	Verbose       bool   `default:"true"`
+	EnableConsole bool   `default:"true"`
 	LogFilepath   string `default:"server/server.log"`
 	TemplatesPath string `default:"frontend/"`
 	DBuser        string `default:"root"`
