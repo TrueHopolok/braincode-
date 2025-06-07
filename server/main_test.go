@@ -10,11 +10,17 @@ import (
 	"github.com/TrueHopolok/braincode-/server/prepared"
 )
 
-var DefaultCFG = "./server/config/default.cfg"
-
 func TestPing(t *testing.T) {
-	//* Get config path
-	config.CfgPath = &DefaultCFG
+	// TODO(anpir): fill with proper values for test
+	config.OverrideConfig(t, config.Config{
+		Verbose:       true,
+		LogFilepath:   "",
+		TemplatesPath: "",
+		DBuser:        "",
+		DBpass:        "",
+		DBname:        "",
+		DBqueriesPath: "",
+	})
 
 	//* Database init
 	if err := db.Init(); err != nil {

@@ -9,11 +9,9 @@ import (
 	"github.com/TrueHopolok/braincode-/server/prepared"
 )
 
-func init() {
-	flag.Parse()
-}
-
 func main() {
+	flag.Parse()
+
 	//* Logger init
 	logger.Start()
 
