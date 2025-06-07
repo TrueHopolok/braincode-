@@ -11,9 +11,7 @@ import (
 	"github.com/TrueHopolok/braincode-/server/views"
 )
 
-func taskDelete(w http.ResponseWriter, r *http.Request) {
-	username := session.Get(r.Context()).Name
-
+func TaskDelete(w http.ResponseWriter, r *http.Request) {
 	staskid := r.URL.Query().Get("id")
 	taskid, err := strconv.Atoi(staskid)
 	if err != nil {
@@ -22,14 +20,14 @@ func taskDelete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := models.TaskDelete(username, taskid); err != nil {
+	if err := models.TaskDelete(session.Get(r.Context()).Name, taskid); err != nil {
 		errResp_Fatal(w, r, err)
 		return
 	}
 	redirect2main(w, r, "taskDelete")
 }
 
-func getProblemset(w http.ResponseWriter, r *http.Request) {
+func ProblemsPage(w http.ResponseWriter, r *http.Request) {
 	ses := session.Get(r.Context())
 	username := ses.Name
 	isauth := !ses.IsZero()
@@ -40,7 +38,6 @@ func getProblemset(w http.ResponseWriter, r *http.Request) {
 		if !ok {
 			return
 		} else if !isenglish {
-			errResp_NotImplemented(w, r, "translation")
 			return
 		}
 
@@ -71,21 +68,7 @@ func getProblemset(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func ProblemsetPage(w http.ResponseWriter, r *http.Request) {
-	logger.Log.Debug("req=%p arrived", r)
-	defer logger.Log.Debug("req=%p served", r)
-
-	switch r.Method {
-	case "GET":
-		getProblemset(w, r)
-	case "DELETE":
-		taskDelete(w, r)
-	default:
-		denyResp_MethodNotAllowed(w, r, "GET", "DELETE")
-	}
-}
-
-func getTask(w http.ResponseWriter, r *http.Request) {
+func TaskPage(w http.ResponseWriter, r *http.Request) {
 	if contenttype := r.Header.Get("Content-Type"); contenttype != "" && contenttype != "text/html" {
 		denyResp_ContentTypeNotAllowed(w, r, "text/html")
 		return
@@ -95,7 +78,6 @@ func getTask(w http.ResponseWriter, r *http.Request) {
 	if !ok {
 		return
 	} else if !isenglish {
-		errResp_NotImplemented(w, r, "translation")
 		return
 	}
 
@@ -119,15 +101,14 @@ func getTask(w http.ResponseWriter, r *http.Request) {
 		logger.Log.Debug("res=%p task-id=%d not found", r, taskid)
 		return
 	}
-	// TODO(VADIM): add markleft handler to info and then pass it to view
-	if err = views.TaskFindOne(w, r, username, isauth, isenglish, task); err != nil {
+	if err = views.TaskFindOne(w, username, isauth, isenglish, task); err != nil {
 		errResp_Fatal(w, r, err)
 		return
 	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 }
 
-func submitSolution(w http.ResponseWriter, r *http.Request) {
+func TaskSolve(w http.ResponseWriter, r *http.Request) {
 	staskid := r.URL.Query().Get("id")
 	taskid, err := strconv.Atoi(staskid)
 	if err != nil {
@@ -143,8 +124,7 @@ func submitSolution(w http.ResponseWriter, r *http.Request) {
 	}
 	solution := r.PostFormValue("solution")
 
-	username := session.Get(r.Context()).Name
-	found, isvalid, err := models.SubmissionCreate(username, taskid, solution)
+	found, isvalid, err := models.SubmissionCreate(session.Get(r.Context()).Name, taskid, solution)
 	if err != nil {
 		errResp_Fatal(w, r, err)
 		return
@@ -161,21 +141,7 @@ func submitSolution(w http.ResponseWriter, r *http.Request) {
 	redirect2stats(w, r, "submitSolution")
 }
 
-func TaskPage(w http.ResponseWriter, r *http.Request) {
-	logger.Log.Debug("req=%p arrived", r)
-	defer logger.Log.Debug("req=%p served", r)
-
-	switch r.Method {
-	case "GET":
-		getTask(w, r)
-	case "POST":
-		submitSolution(w, r)
-	default:
-		denyResp_MethodNotAllowed(w, r, "GET", "POST")
-	}
-}
-
-func getUpload(w http.ResponseWriter, r *http.Request) {
+func UploadPage(w http.ResponseWriter, r *http.Request) {
 	if contenttype := r.Header.Get("Content-Type"); contenttype != "" && contenttype != "text/html" {
 		denyResp_ContentTypeNotAllowed(w, r, "text/html")
 		return
@@ -185,27 +151,20 @@ func getUpload(w http.ResponseWriter, r *http.Request) {
 	if !ok {
 		return
 	} else if !isenglish {
-		errResp_NotImplemented(w, r, "translation")
 		return
 	}
 
-	errResp_NotImplemented(w, r, "getUpload")
-}
-
-func uploadTask(w http.ResponseWriter, r *http.Request) {
-	errResp_NotImplemented(w, r, "uploadTask")
-}
-
-func UploadPage(w http.ResponseWriter, r *http.Request) {
-	logger.Log.Debug("req=%p arrived", r)
-	defer logger.Log.Debug("req=%p served", r)
-
-	switch r.Method {
-	case "GET":
-		getUpload(w, r)
-	case "POST":
-		uploadTask(w, r)
-	default:
-		denyResp_MethodNotAllowed(w, r, "GET", "POST")
+	if err := views.TaskCreate(w, session.Get(r.Context()).Name, isenglish); err != nil {
+		errResp_Fatal(w, r, err)
 	}
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+}
+
+func TaskCreate(w http.ResponseWriter, r *http.Request) {
+	if err := models.TaskCreate(r.Body, session.Get(r.Context()).Name); err != nil {
+		http.Error(w, fmt.Sprintf("Something went wrong while uploading the task:\n%s", err), http.StatusNotAcceptable)
+		logger.Log.Debug("res=%p upload-err=%s ", r, err)
+		return
+	}
+	redirect2main(w, r, "uploadTask")
 }

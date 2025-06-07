@@ -1,18 +1,22 @@
 package models
 
 import (
+	"cmp"
 	"database/sql"
 	"encoding/json"
 	"errors"
+	"io"
 	"os"
 
+	"github.com/TrueHopolok/braincode-/judge"
+	"github.com/TrueHopolok/braincode-/judge/ml"
 	"github.com/TrueHopolok/braincode-/server/config"
 	"github.com/TrueHopolok/braincode-/server/db"
 )
 
 type Task struct {
 	General TaskInfo
-	Info    []byte
+	Doc     ml.Document
 }
 
 type TaskInfo struct {
@@ -75,15 +79,19 @@ func TaskFindOne(username string, taskid int) (Task, bool, error) {
 
 	row := tx.QueryRow(string(query), username, taskid)
 	var res Task
+	var rawInfo []byte
 	if err := row.Scan(
 		&res.General.Id, &res.General.OwnerName,
 		&res.General.TitleEn, &res.General.TitleRu,
-		&res.Info, &res.General.Score); err != nil {
+		&rawInfo, &res.General.Score); err != nil {
 		if err == sql.ErrNoRows {
 			return Task{}, false, nil
 		} else {
 			return Task{}, false, err
 		}
+	}
+	if err = res.Doc.UnmarshalBinary(rawInfo); err != nil {
+		return Task{}, true, err
 	}
 
 	return res, true, tx.Commit()
@@ -132,4 +140,72 @@ func TaskFindAll(username, search string, filter, isauth bool, page int) ([]byte
 	}
 
 	return jsondata, tx.Commit()
+}
+
+func TaskCreate(ioDoc io.ReadCloser, username string) error {
+	doc, err := ml.Parse(ioDoc)
+	if err != nil {
+		return err
+	}
+	if doc.Localizations == nil {
+		return errors.New("No valid task titles were provided - Empty map")
+	}
+	localeEN, existsEN := doc.Localizations["en"]
+	localeRU, existsRU := doc.Localizations["ru"]
+	localeDEFAULT, existsDEFAULT := doc.Localizations[""]
+	if !existsEN && !existsRU && !existsDEFAULT {
+		return errors.New("No valid task titles were provided - No entries")
+	} else if localeEN == nil && localeRU == nil && localeDEFAULT == nil {
+		return errors.New("No valid task titles were provided - Nil entries")
+	}
+
+	titleDEFAULT := cmp.Or(localeDEFAULT.Name, localeEN.Name, localeRU.Name)
+	if titleDEFAULT == "" {
+		return errors.New("No valid task titles were provided - Zero entries")
+	}
+
+	var titleEN, titleRU string
+	titleRU = cmp.Or(localeRU.Name, titleDEFAULT)
+	titleEN = cmp.Or(localeEN.Name, titleDEFAULT)
+
+	prb, err := judge.NewProblem(doc)
+	if err != nil {
+		return err
+	}
+
+	rawDoc, err := doc.MarshalBinary()
+	if err != nil {
+		return err
+	}
+
+	rawPrb, err := prb.MarshalBinary()
+	if err != nil {
+		return err
+	}
+
+	queryfile := "create_task.sql"
+	query, err := os.ReadFile(config.Get().DBqueriesPath + queryfile)
+	if err != nil {
+		return err
+	}
+
+	tx, err := db.Conn.Begin()
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+
+	res, err := tx.Exec(string(query), username, titleEN, titleRU, rawDoc, rawPrb)
+	if err != nil {
+		return err
+	}
+	n, err := res.RowsAffected()
+	if err != nil {
+		return err
+	}
+	if n != 1 {
+		return errors.New("invalid amount of inserted rows")
+	}
+
+	return tx.Commit()
 }

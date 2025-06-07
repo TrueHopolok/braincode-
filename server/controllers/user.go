@@ -11,7 +11,7 @@ import (
 	"github.com/TrueHopolok/braincode-/server/views"
 )
 
-func userDelete(w http.ResponseWriter, r *http.Request) {
+func UserDelete(w http.ResponseWriter, r *http.Request) {
 	username := session.Get(r.Context()).Name
 	if err := models.UserDelete(username); err != nil {
 		errResp_Fatal(w, r, err)
@@ -21,7 +21,7 @@ func userDelete(w http.ResponseWriter, r *http.Request) {
 	redirect2main(w, r, "userDelete")
 }
 
-func getStats(w http.ResponseWriter, r *http.Request) {
+func StatsPage(w http.ResponseWriter, r *http.Request) {
 	username := session.Get(r.Context()).Name
 
 	switch r.Header.Get("Content-Type") {
@@ -30,7 +30,6 @@ func getStats(w http.ResponseWriter, r *http.Request) {
 		if !ok {
 			return
 		} else if !isenglish {
-			errResp_NotImplemented(w, r, "translation")
 			return
 		}
 
@@ -40,7 +39,7 @@ func getStats(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		if err = views.UserFindInfo(w, r, username, isenglish, acceptance_rate, solved_rate); err != nil {
+		if err = views.UserFindInfo(w, username, isenglish, acceptance_rate, solved_rate); err != nil {
 			errResp_Fatal(w, r, err)
 			return
 		}
@@ -88,21 +87,7 @@ func getStats(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func StatsPage(w http.ResponseWriter, r *http.Request) {
-	logger.Log.Debug("req=%p arrived", r)
-	defer logger.Log.Debug("req=%p served", r)
-
-	switch r.Method {
-	case "GET":
-		getStats(w, r)
-	case "DELETE":
-		userDelete(w, r)
-	default:
-		denyResp_MethodNotAllowed(w, r, "GET", "DELETE")
-	}
-}
-
-func getRegistration(w http.ResponseWriter, r *http.Request) {
+func RegistrationPage(w http.ResponseWriter, r *http.Request) {
 	if contenttype := r.Header.Get("Content-Type"); contenttype != "" && contenttype != "text/html" {
 		denyResp_ContentTypeNotAllowed(w, r, "text/html")
 		return
@@ -112,17 +97,16 @@ func getRegistration(w http.ResponseWriter, r *http.Request) {
 	if !ok {
 		return
 	} else if !isenglish {
-		errResp_NotImplemented(w, r, "translation")
 		return
 	}
 
-	if err := views.UserCreate(w, r, isenglish); err != nil {
+	if err := views.UserCreate(w, isenglish); err != nil {
 		errResp_Fatal(w, r, err)
 	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 }
 
-func userRegister(w http.ResponseWriter, r *http.Request) {
+func UserRegister(w http.ResponseWriter, r *http.Request) {
 	if err := r.ParseForm(); err != nil {
 		http.Error(w, "Invalid login form provided", http.StatusNotAcceptable)
 		logger.Log.Debug("res=%p invalid login form", r)
@@ -157,21 +141,7 @@ func userRegister(w http.ResponseWriter, r *http.Request) {
 	redirect2main(w, r, "userRegister")
 }
 
-func RegistrationPage(w http.ResponseWriter, r *http.Request) {
-	logger.Log.Debug("req=%p arrived", r)
-	defer logger.Log.Debug("req=%p served", r)
-
-	switch r.Method {
-	case "GET":
-		getRegistration(w, r)
-	case "POST":
-		userRegister(w, r)
-	default:
-		denyResp_MethodNotAllowed(w, r, "GET", "POST")
-	}
-}
-
-func getLogin(w http.ResponseWriter, r *http.Request) {
+func LoginPage(w http.ResponseWriter, r *http.Request) {
 	if contenttype := r.Header.Get("Content-Type"); contenttype != "" && contenttype != "text/html" {
 		denyResp_ContentTypeNotAllowed(w, r, "text/html")
 		return
@@ -181,17 +151,16 @@ func getLogin(w http.ResponseWriter, r *http.Request) {
 	if !ok {
 		return
 	} else if !isenglish {
-		errResp_NotImplemented(w, r, "translation")
 		return
 	}
 
-	if err := views.UserFindLogin(w, r, isenglish); err != nil {
+	if err := views.UserFindLogin(w, isenglish); err != nil {
 		errResp_Fatal(w, r, err)
 	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 }
 
-func userAuth(w http.ResponseWriter, r *http.Request) {
+func UserLogin(w http.ResponseWriter, r *http.Request) {
 	if err := r.ParseForm(); err != nil {
 		http.Error(w, "Invalid login form provided", http.StatusNotAcceptable)
 		logger.Log.Debug("res=%p invalid login form", r)
@@ -232,23 +201,7 @@ func userAuth(w http.ResponseWriter, r *http.Request) {
 	redirect2main(w, r, "userLogin")
 }
 
-func userLogout(w http.ResponseWriter, r *http.Request) {
+func UserLogout(w http.ResponseWriter, r *http.Request) {
 	session.Logout(w)
 	redirect2main(w, r, "userLogin")
-}
-
-func LoginPage(w http.ResponseWriter, r *http.Request) {
-	logger.Log.Debug("req=%p arrived", r)
-	defer logger.Log.Debug("req=%p served", r)
-
-	switch r.Method {
-	case "GET":
-		getLogin(w, r)
-	case "POST":
-		userAuth(w, r)
-	case "DELETE":
-		userLogout(w, r)
-	default:
-		denyResp_MethodNotAllowed(w, r, "GET", "POST", "DELETE")
-	}
 }

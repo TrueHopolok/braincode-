@@ -88,20 +88,6 @@ func errResp_Fatal(w http.ResponseWriter, r *http.Request, err error) {
 
 // This should be the last write into the response!
 //
-// Used to display not allowed method error.
-// Will add all provided methods into the both response and logger.
-func denyResp_MethodNotAllowed(w http.ResponseWriter, r *http.Request, allowedMethods ...string) {
-	result := fmt.Sprintf("Method=%s is not allowed\nAllowed=", r.Method)
-	for _, method := range allowedMethods {
-		result += method
-		w.Header().Add("Allow", method)
-	}
-	http.Error(w, result, http.StatusMethodNotAllowed)
-	logger.Log.Debug("req=%p method=%s is not allowed", r, r.Method)
-}
-
-// This should be the last write into the response!
-//
 // Write into response that given content-type is not allowed.
 // Also writes into the logger for debbuging purposes.
 func denyResp_ContentTypeNotAllowed(w http.ResponseWriter, r *http.Request, allowedTypes ...string) {

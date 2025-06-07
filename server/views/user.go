@@ -9,7 +9,7 @@ import (
 )
 
 // Show user's stats via template with prepared section to handle fetch request of submitions. Expects all information to be valid.
-func UserFindInfo(w http.ResponseWriter, r *http.Request, username string, isenglish bool, acceptance_rate, solved_rate sql.NullFloat64) error {
+func UserFindInfo(w http.ResponseWriter, username string, isenglish bool, acceptance_rate, solved_rate sql.NullFloat64) error {
 	var templ string // ? TODO(misha): lang dependency
 	if isenglish {
 		templ = "TODO.html"
@@ -26,7 +26,7 @@ func UserFindInfo(w http.ResponseWriter, r *http.Request, username string, iseng
 }
 
 // Show login page. Expects all information to be valid.
-func UserFindLogin(w http.ResponseWriter, r *http.Request, isenglish bool) error {
+func UserFindLogin(w http.ResponseWriter, isenglish bool) error {
 	var templ string // ? TODO(misha): lang dependency
 	if isenglish {
 		templ = "login.html"
@@ -43,7 +43,7 @@ func UserFindLogin(w http.ResponseWriter, r *http.Request, isenglish bool) error
 }
 
 // Show registration page. Expects all information to be valid.
-func UserCreate(w http.ResponseWriter, r *http.Request, isenglish bool) error {
+func UserCreate(w http.ResponseWriter, isenglish bool) error {
 	var templ string // ? TODO(misha): lang dependency
 	if isenglish {
 		templ = "registration.html"

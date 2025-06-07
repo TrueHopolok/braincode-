@@ -43,7 +43,7 @@ func main() {
 	logger.Log.Info("HTTP server: starting...")
 	EnableFileHandlers()
 	EnableControllerHandlers()
-	go http.ListenAndServe(":8080", nil)
+	go http.ListenAndServe(":8080", LoggerMiddleware(http.DefaultServeMux))
 	logger.Log.Info("HTTP server: start succeeded")
 
 	//* Console init

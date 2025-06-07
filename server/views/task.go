@@ -11,7 +11,7 @@ import (
 // Show 1 task page. Expects all information to be valid.
 //
 // ! TODO(vadim): wait for markleft finish
-func TaskFindOne(w http.ResponseWriter, r *http.Request, username string, isauth, isenglish bool, task models.Task) error {
+func TaskFindOne(w http.ResponseWriter, username string, isauth, isenglish bool, task models.Task) error {
 	var templ string
 	if isauth { // ? TODO(misha): lang and auth dependency
 		if isenglish {
@@ -63,7 +63,7 @@ func TaskFindAll(w http.ResponseWriter, username string, isauth, isenglish bool)
 // Show the upload task page. Expects all information to be valid.
 //
 // ! TODO(anpir): finish markleft
-func TaskCreate(w http.ResponseWriter, r *http.Request, username string, isenglish bool) error {
+func TaskCreate(w http.ResponseWriter, username string, isenglish bool) error {
 	var templ string
 	if isenglish { // ? TODO(misha): lang dependency
 		templ = "TODO.html"
