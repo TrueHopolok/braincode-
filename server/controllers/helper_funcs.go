@@ -112,21 +112,3 @@ func denyResp_ContentTypeNotAllowed(w http.ResponseWriter, r *http.Request, allo
 	http.Error(w, result, http.StatusNotAcceptable)
 	logger.Log.Debug("req=%p Content-Type=%s is not allowed", r, r.Header.Get("Content-Type"))
 }
-
-// This should be the last write into the response!
-//
-// Output that user is not authorized to use this page.
-// Writes in both logger and response.
-func denyResp_NotAuthorized(w http.ResponseWriter, r *http.Request) {
-	http.Error(w, "Login into account to use this page", http.StatusUnauthorized)
-	logger.Log.Debug("req=%p user trying to access page while unauthorized", r)
-}
-
-// This should be the last write into the response!
-//
-// Output that user is authorized be should not be to use this page.
-// Writes in both logger and response.
-func denyResp_DenyAuthorized(w http.ResponseWriter, r *http.Request) {
-	http.Error(w, "Logout to access this page", http.StatusForbidden)
-	logger.Log.Debug("req=%p user required to logout to access that page", r)
-}
