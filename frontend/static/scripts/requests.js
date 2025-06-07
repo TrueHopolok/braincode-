@@ -45,7 +45,12 @@ loginField.addEventListener('submit', function(event) {
 
 // Page
 
-const tasks = [];
+const tasks = [
+    "1.Hello",
+    "2.Test",
+    "3.1234",
+    "4.iiii",
+];
 
 fetch("https://jsonplaceholder.typicode.com/todos/1", {
     method: 'GET',
@@ -56,14 +61,7 @@ fetch("https://jsonplaceholder.typicode.com/todos/1", {
     }
 })
 .then(response => response.json())
-.then(data => tasks.push(data));
-console.log(tasks)
-const pageSize = 5;
+//.then(data => tasks.push(data));
+console.log(tasks);
 
-function showPage(page) {
-    const start = (page - 1) * pageSize;
-    const end = start + pageSize;
-    
-    const currentTasks = tasks.slice(start, end);
-}
 
