@@ -19,17 +19,17 @@ type Config struct {
 	DBqueriesPath string `default:"server/db/queries/"`
 }
 
-var path = flag.String("config", "", "path to the config file")
+var CfgPath = flag.String("config", "", "path to the config file")
 
 func parseConfig() Config {
-	if *path == "" {
+	if *CfgPath == "" {
 		c := Config{}
 		defaults.SetDefaults(&c)
 		return c
 	}
 
 	var c Config
-	if _, err := toml.DecodeFile(*path, &c); err != nil {
+	if _, err := toml.DecodeFile(*CfgPath, &c); err != nil {
 		panic(fmt.Errorf("cannot read config file: %w", err))
 	}
 

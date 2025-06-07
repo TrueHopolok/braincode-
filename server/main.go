@@ -41,9 +41,7 @@ func main() {
 
 	//* HTTP init
 	logger.Log.Info("HTTP server: starting...")
-	EnableFileHandlers()
-	EnableControllerHandlers()
-	go http.ListenAndServe(":8080", LoggerMiddleware(http.DefaultServeMux))
+	go http.ListenAndServe(":8080", MuxHTTP())
 	logger.Log.Info("HTTP server: start succeeded")
 
 	//* Console init

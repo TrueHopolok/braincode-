@@ -8,37 +8,44 @@ import (
 	"github.com/TrueHopolok/braincode-/server/session"
 )
 
-func EnableFileHandlers() {
-	http.Handle("GET /static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./frontend/static"))))
-	http.Handle("GET /task/static/", http.StripPrefix("/task/static/", http.FileServer(http.Dir("./frontend/static"))))
-	http.Handle("GET /login/static/", http.StripPrefix("/login/static/", http.FileServer(http.Dir("./frontend/static"))))
-	http.Handle("GET /register/static/", http.StripPrefix("/register/static/", http.FileServer(http.Dir("./frontend/static"))))
-	http.Handle("GET /stats/static/", http.StripPrefix("/stats/static/", http.FileServer(http.Dir("./frontend/static"))))
-	http.Handle("GET /upload/static/", http.StripPrefix("/upload/static/", http.FileServer(http.Dir("./frontend/static"))))
-	http.HandleFunc("GET /favicon.ico", func(w http.ResponseWriter, r *http.Request) {
+func MuxHTTP() http.Handler {
+	mux := http.NewServeMux()
+	EnableFileHandlers(mux)
+	EnableControllerHandlers(mux)
+	return LoggerMiddleware(mux)
+}
+
+func EnableFileHandlers(mux *http.ServeMux) {
+	mux.Handle("GET /static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./frontend/static"))))
+	mux.Handle("GET /task/static/", http.StripPrefix("/task/static/", http.FileServer(http.Dir("./frontend/static"))))
+	mux.Handle("GET /login/static/", http.StripPrefix("/login/static/", http.FileServer(http.Dir("./frontend/static"))))
+	mux.Handle("GET /register/static/", http.StripPrefix("/register/static/", http.FileServer(http.Dir("./frontend/static"))))
+	mux.Handle("GET /stats/static/", http.StripPrefix("/stats/static/", http.FileServer(http.Dir("./frontend/static"))))
+	mux.Handle("GET /upload/static/", http.StripPrefix("/upload/static/", http.FileServer(http.Dir("./frontend/static"))))
+	mux.HandleFunc("GET /favicon.ico", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./frontend/static.favicon")
 	})
 }
 
-func EnableControllerHandlers() {
-	http.Handle("GET /", session.MiddlewareFunc(controllers.ProblemsPage))
-	http.Handle("DELETE /", session.AuthMiddlewareFunc(controllers.TaskDelete))
+func EnableControllerHandlers(mux *http.ServeMux) {
+	mux.Handle("GET /", session.MiddlewareFunc(controllers.ProblemsPage))
+	mux.Handle("DELETE /", session.AuthMiddlewareFunc(controllers.TaskDelete))
 
-	http.Handle("GET /task/", session.MiddlewareFunc(controllers.TaskPage))
-	http.Handle("POST /task/", session.AuthMiddlewareFunc(controllers.TaskSolve))
+	mux.Handle("GET /task/", session.MiddlewareFunc(controllers.TaskPage))
+	mux.Handle("POST /task/", session.AuthMiddlewareFunc(controllers.TaskSolve))
 
-	http.Handle("GET /login/", session.NoAuthMiddlewareFunc(controllers.LoginPage))
-	http.Handle("POST /login/", session.NoAuthMiddlewareFunc(controllers.UserLogin))
-	http.Handle("DELETE /login/", session.AuthMiddlewareFunc(controllers.UserLogout))
+	mux.Handle("GET /login/", session.NoAuthMiddlewareFunc(controllers.LoginPage))
+	mux.Handle("POST /login/", session.NoAuthMiddlewareFunc(controllers.UserLogin))
+	mux.Handle("DELETE /login/", session.AuthMiddlewareFunc(controllers.UserLogout))
 
-	http.Handle("GET /register/", session.NoAuthMiddlewareFunc(controllers.RegistrationPage))
-	http.Handle("POST /register/", session.NoAuthMiddlewareFunc(controllers.UserRegister))
+	mux.Handle("GET /register/", session.NoAuthMiddlewareFunc(controllers.RegistrationPage))
+	mux.Handle("POST /register/", session.NoAuthMiddlewareFunc(controllers.UserRegister))
 
-	http.Handle("GET /stats/", session.AuthMiddlewareFunc(controllers.StatsPage))
-	http.Handle("DELETE /stats/", session.AuthMiddlewareFunc(controllers.UserDelete))
+	mux.Handle("GET /stats/", session.AuthMiddlewareFunc(controllers.StatsPage))
+	mux.Handle("DELETE /stats/", session.AuthMiddlewareFunc(controllers.UserDelete))
 
-	http.Handle("GET /upload/", session.AuthMiddlewareFunc(controllers.UploadPage))
-	http.Handle("POST /upload/", session.AuthMiddlewareFunc(controllers.TaskCreate))
+	mux.Handle("GET /upload/", session.AuthMiddlewareFunc(controllers.UploadPage))
+	mux.Handle("POST /upload/", session.AuthMiddlewareFunc(controllers.TaskCreate))
 }
 
 func LoggerMiddleware(mux *http.ServeMux) http.Handler {
