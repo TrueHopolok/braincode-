@@ -43,13 +43,13 @@ loginField.addEventListener('submit', function(event) {
     })
 })*/
 
-// Page
+// Page of problems
 
 const tasks = [
-    "1.Hello",
-    "2.Test",
-    "3.1234",
-    "4.iiii",
+  { id: 1, title: "Hello" },
+  { id: 2, title: "Test" },
+  { id: 3, title: "1234" },
+  { id: 4, title: "iiii" }
 ];
 
 fetch("https://jsonplaceholder.typicode.com/todos/1", {
@@ -61,7 +61,23 @@ fetch("https://jsonplaceholder.typicode.com/todos/1", {
     }
 })
 .then(response => response.json())
+.then(data => {
+    problems_render();
+});
 //.then(data => tasks.push(data));
 console.log(tasks);
 
+// Task
 
+fetch("https://jsonplaceholder.typicode.com/todos/1", {
+        method: 'GET',
+    headers: {
+        'Content-Type': 'application/json',
+        'Session': localStorage.getItem('sessionToken'),
+        'lang': 'ru' 
+    }
+})
+.then(response => response.json())
+.then(data => {
+    render_task(data);
+});

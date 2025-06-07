@@ -30,16 +30,13 @@ function showPage(page) {
 
     for(let i = 0; i < currentTasks.length; i++) {
         const task = document.createElement("a");
-        task.textContent += currentTasks[i];
-        task.href = "#";
+        task.textContent += currentTasks[i].id + '.' + currentTasks[i].title;
+        task.href = `taskpage.html?id=${currentTasks[i].id}`;
         task.className = "task";
         problems.appendChild(task);
         problems.appendChild(document.createElement("br"));
     }
 }
-
-showPage(1);
-arrowRender();
 
 problemset_content.addEventListener('click', e => {
     if (e.target.classList.contains("page")) {
@@ -48,3 +45,8 @@ problemset_content.addEventListener('click', e => {
         showPage(currentPage);
     }
 });
+
+function problems_render() {
+    showPage(1);
+    arrowRender();
+}
