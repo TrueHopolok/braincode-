@@ -19,7 +19,6 @@ func TestPing(t *testing.T) {
 		DBuser:        "",
 		DBpass:        "",
 		DBname:        "",
-		DBqueriesPath: "",
 	})
 
 	//* Database init

@@ -16,7 +16,6 @@ type Config struct {
 	DBuser        string `default:"root"`
 	DBpass        string `default:"root"`
 	DBname        string `default:"braincode"`
-	DBqueriesPath string `default:"server/db/queries/"`
 }
 
 var CfgPath = flag.String("config", "", "path to the config file")

@@ -4,11 +4,9 @@ import (
 	"database/sql"
 	"encoding/json"
 	"errors"
-	"os"
 	"time"
 
 	"github.com/TrueHopolok/braincode-/judge"
-	"github.com/TrueHopolok/braincode-/server/config"
 	"github.com/TrueHopolok/braincode-/server/db"
 	"github.com/TrueHopolok/braincode-/server/logger"
 )
@@ -29,8 +27,7 @@ type SubmissionInfo struct {
 
 // Return a solution for selected submission
 func SubmissionFindOne(username string, subid int) (string, bool, error) {
-	queryfile := "find_submission_one.sql"
-	query, err := os.ReadFile(config.Get().DBqueriesPath + queryfile)
+	query, err := db.GetQuery("find_submission_one")
 	if err != nil {
 		return "", false, err
 	}
@@ -57,8 +54,7 @@ func SubmissionFindOne(username string, subid int) (string, bool, error) {
 
 // Get limited amount of submissions as encoded json slice
 func SubmissionFindAll(username string, page int) ([]byte, error) {
-	queryfile := "find_submission_all.sql"
-	query, err := os.ReadFile(config.Get().DBqueriesPath + queryfile)
+	query, err := db.GetQuery("find_submission_all")
 	if err != nil {
 		return nil, err
 	}
@@ -97,20 +93,17 @@ func SubmissionFindAll(username string, page int) ([]byte, error) {
 // Test and get a score for a given solution and given code, then saves it into database
 // Return false if solution is invalid and cannot be tested
 func SubmissionCreate(username string, taskid int, solution string) (found, isvalid bool, err error) {
-	queryfile := "find_task_judge.sql"
-	query1, err := os.ReadFile(config.Get().DBqueriesPath + queryfile)
+	query1, err := db.GetQuery("find_task_judge")
 	if err != nil {
 		return false, false, err
 	}
 
-	queryfile = "create_submission.sql"
-	query2, err := os.ReadFile(config.Get().DBqueriesPath + queryfile)
+	query2, err := db.GetQuery("create_submission")
 	if err != nil {
 		return false, false, err
 	}
 
-	queryfile = "update_status.sql"
-	query3, err := os.ReadFile(config.Get().DBqueriesPath + queryfile)
+	query3, err := db.GetQuery("update_status")
 	if err != nil {
 		return false, false, err
 	}
