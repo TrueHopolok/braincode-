@@ -2,8 +2,12 @@ package main
 
 import (
 	"bufio"
+	"bytes"
+	"cmp"
 	"fmt"
 	"os"
+	"slices"
+	"text/tabwriter"
 
 	"github.com/TrueHopolok/braincode-/server/config"
 )
@@ -11,17 +15,31 @@ import (
 // On command encounter in the os.Stdin, the function will be executed
 type Instruction struct {
 	command  string
-	function func(chan bool)
+	helptext string
+  function func(chan bool)
 }
 
 // Contain all instructions that can be accessed via console
 var Instructions = []Instruction{
 	{
 		"stop",
+    "alert quitChannel, thus stopping the process (should not, fix main function if that happens)",
 		func(quitChan chan bool) {
 			quitChan <- true
 		},
 	},
+}
+
+func init() {
+	Instructions = append(Instructions, Instruction{
+		command:  "help",
+		helptext: "print description of all available commands",
+		function: func(chan bool) { fmt.Println(commandHelpText()) },
+	})
+
+	slices.SortFunc(Instructions, func(l, r Instruction) int {
+		return cmp.Compare(l.command, r.command)
+	})
 }
 
 // Wait for the input in os.Stdin.
@@ -52,4 +70,18 @@ func ConsoleHandler(quitChan chan bool) error {
 		}
 	}
 	return scanner.Err()
+}
+
+func commandHelpText() string {
+	b := new(bytes.Buffer)
+	w := tabwriter.NewWriter(b, 0, 4, 1, ' ', 0)
+
+	fmt.Fprintln(w, "Available commands:")
+	for _, cmd := range Instructions {
+		fmt.Fprintf(w, "    %s\t- %s\n", cmd.command, cmd.helptext)
+	}
+
+	_ = w.Flush() // error ignored: write to bytes.Buffer never fails
+
+	return b.String()
 }
