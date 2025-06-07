@@ -35,7 +35,7 @@ fetch("https://jsonplaceholder.typicode.com/todos/1", {
     problems_render();
 });
 //.then(data => tasks.push(data));
-console.log(tasks);
+
 
 // Task
 function task_information(id) {

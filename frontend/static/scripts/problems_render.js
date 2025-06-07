@@ -41,7 +41,6 @@ function showPage(page) {
 problemset_content.addEventListener('click', e => {
     if (e.target.classList.contains("page")) {
         const currentPage = e.target.textContent;
-        console.log(currentPage);
         showPage(currentPage);
     }
 });
