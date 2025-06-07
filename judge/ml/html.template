@@ -9,32 +9,39 @@
 
 {{- define "richText" -}}
 
-    {{- if .I.IsPlain -}}
-        {{- .I.Data -}}
-    {{- else if .I.IsLink -}}    
-        <a href="{{.URL}}" class="{{$.CM.SpanLink}}">
-    {{- else if .I.IsBold -}}
-        <span class="{{- $.CM.SpanBold -}}">
-    {{- else if .I.IsItalic -}}
-        <span class="{{- $.CM.SpanItalic -}}">
-    {{- else if .I.IsStrike -}}
-        <span class="{{- $.CM.SpanStrike -}}">
-    {{- else if .I.IsCode -}}
-        <span class="{{- $.CM.SpanCode -}}">
-    {{- else if .I.IsUnderline -}}
-        <span class="{{- $.CM.SpanUnderline -}}">
-    {{- else if $.Debug -}}
-        invalid style {{.}}
-    {{- end -}}
-    {{- range .I.Children -}}
-        {{- template "richText" $.W . -}}
-    {{- end -}}
-    {{- if .I.IsLink -}}
-        </a>
-    {{- else -}}
-        </span>
-    {{- end -}}
+    {{- if .I.IsMath -}}
 
+        {{- $.RenderMathInline .I.Data -}}
+
+    {{- else -}}
+
+        {{- if .I.IsPlain -}}
+            {{- .I.Data -}}
+        {{- else if .I.IsLink -}}    
+            <a href="{{.URL}}" class="{{$.CM.SpanLink}}">
+        {{- else if .I.IsBold -}}
+            <span class="{{- $.CM.SpanBold -}}">
+        {{- else if .I.IsItalic -}}
+            <span class="{{- $.CM.SpanItalic -}}">
+        {{- else if .I.IsStrike -}}
+            <span class="{{- $.CM.SpanStrike -}}">
+        {{- else if .I.IsCode -}}
+            <span class="{{- $.CM.SpanCode -}}">
+        {{- else if .I.IsUnderline -}}
+            <span class="{{- $.CM.SpanUnderline -}}">
+        {{- else if $.Debug -}}
+            invalid style {{.}}
+        {{- end -}}
+        {{- range .I.Children -}}
+            {{- template "richText" $.W . -}}
+        {{- end -}}
+        {{- if .I.IsLink -}}
+            </a>
+        {{- else if not .I.IsPlain -}}
+            </span>
+        {{- end -}}
+
+    {{- end -}}
 {{- end -}}
 
 
@@ -92,6 +99,8 @@ No title
                     {{- template "node" $.W . -}}
                 {{- end -}}
             </div>
+        {{- else with .Math -}}
+            {{- $.RenderMathBlock . -}}
         {{- else with $.Debug -}}
             {{- template "invalidBlock" $.I -}}
         {{- end -}} 

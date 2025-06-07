@@ -1,6 +1,6 @@
 // This is a support web assembly module.
 
-//go:build js
+//go:build js && wasm
 
 package main
 

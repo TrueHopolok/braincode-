@@ -9,6 +9,7 @@ const (
 	SpanStrike
 	SpanUnderline
 	SpanLink
+	SpanMath
 
 	// Number of bits that span [SpanStyle] flags occupy.
 	SpanBits = iota
@@ -80,6 +81,8 @@ type (
 		Text  string
 		URL   string
 	}
+
+	Math string
 )
 
 func (Title) implementsBlock()     {}
@@ -89,3 +92,4 @@ func (CodeBlock) implementsBlock() {}
 func (Example) implementsBlock()   {}
 func (Quote) implementsBlock()     {}
 func (Image) implementsBlock()     {}
+func (Math) implementsBlock()      {}

@@ -10,9 +10,19 @@ import (
 func DiffValues(t *testing.T, lhs, rhs any) {
 	t.Helper()
 
+	values := make(map[any]struct{})
+
 	var buf []string
 	diffValues(func(s string) {
 		buf = append(buf, s)
+	}, func(v reflect.Value) bool {
+		if !v.CanInterface() || !v.CanAddr() {
+			return false
+		}
+		vv := v.Addr().Interface()
+		_, found := values[vv]
+		values[vv] = struct{}{}
+		return found
 	}, "root", reflect.ValueOf(lhs), reflect.ValueOf(rhs))
 
 	if buf != nil {
@@ -20,7 +30,8 @@ func DiffValues(t *testing.T, lhs, rhs any) {
 	}
 }
 
-func diffValues(pushError func(string), path string, lhs, rhs reflect.Value) {
+func diffValues(pushError func(string), wasHandled func(reflect.Value) bool, path string, lhs, rhs reflect.Value) {
+	recursiveType := wasHandled(lhs) && wasHandled(rhs)
 	if lhs.Type() != rhs.Type() {
 		var l, r string
 		if lhs.Type().String() == rhs.Type().String() {
@@ -46,13 +57,15 @@ func diffValues(pushError func(string), path string, lhs, rhs reflect.Value) {
 			return
 		}
 
-		var newPath string
-		if lhs.Kind() == reflect.Pointer {
-			newPath = "(*" + path + ")"
-		} else {
-			newPath = path + ".(" + lhs.Elem().Type().String() + ")"
+		if !recursiveType {
+			var newPath string
+			if lhs.Kind() == reflect.Pointer {
+				newPath = "(*" + path + ")"
+			} else {
+				newPath = path + ".(" + lhs.Elem().Type().String() + ")"
+			}
+			diffValues(pushError, wasHandled, newPath, lhs.Elem(), rhs.Elem())
 		}
-		diffValues(pushError, newPath, lhs.Elem(), rhs.Elem())
 
 	case reflect.Array, reflect.Slice:
 		if lhs.Len() != rhs.Len() {
@@ -65,9 +78,10 @@ func diffValues(pushError func(string), path string, lhs, rhs reflect.Value) {
 			pushError(fmt.Sprintf("%s: nilness mismatch:\nlhs: %#v\nrhs: %#v", path, lhs, rhs))
 			return
 		}
-
-		for i := range lhs.Len() {
-			diffValues(pushError, fmt.Sprintf("%s[%d]", path, i), lhs.Index(i), rhs.Index(i))
+		if !recursiveType {
+			for i := range lhs.Len() {
+				diffValues(pushError, wasHandled, fmt.Sprintf("%s[%d]", path, i), lhs.Index(i), rhs.Index(i))
+			}
 		}
 
 	case reflect.Map:
@@ -76,36 +90,41 @@ func diffValues(pushError func(string), path string, lhs, rhs reflect.Value) {
 			return
 		}
 
-		if lUnique := uniqueKeys(lhs, rhs); len(lUnique) > 0 {
-			var acc []string
-			for _, v := range lUnique {
-				acc = append(acc, fmt.Sprintf("%#v", v))
+		if !recursiveType {
+			if lUnique := uniqueKeys(lhs, rhs); len(lUnique) > 0 {
+				var acc []string
+				for _, v := range lUnique {
+					acc = append(acc, fmt.Sprintf("%#v", v))
+				}
+				pushError(fmt.Sprintf("%s: lhs has extra keys:\n%v", path, strings.Join(acc, ", ")))
 			}
-			pushError(fmt.Sprintf("%s: lhs has extra keys:\n%v", path, strings.Join(acc, ", ")))
-		}
-		if rUnique := uniqueKeys(rhs, lhs); len(rUnique) > 0 {
-			var acc []string
-			for _, v := range rUnique {
-				acc = append(acc, fmt.Sprintf("%#v", v))
+			if rUnique := uniqueKeys(rhs, lhs); len(rUnique) > 0 {
+				var acc []string
+				for _, v := range rUnique {
+					acc = append(acc, fmt.Sprintf("%#v", v))
+				}
+				pushError(fmt.Sprintf("%s: rhs has extra keys:\n%v", path, strings.Join(acc, ", ")))
 			}
-			pushError(fmt.Sprintf("%s: rhs has extra keys:\n%v", path, strings.Join(acc, ", ")))
-		}
 
-		for iter := lhs.MapRange(); iter.Next(); {
-			lv := iter.Value()
-			rv := rhs.MapIndex(iter.Key())
-			if !rv.IsValid() {
-				continue
+			for iter := lhs.MapRange(); iter.Next(); {
+				lv := iter.Value()
+				rv := rhs.MapIndex(iter.Key())
+				if !rv.IsValid() {
+					continue
+				}
+				diffValues(pushError, wasHandled, fmt.Sprintf("%s[%#v]", path, iter.Key()), lv, rv)
 			}
-			diffValues(pushError, fmt.Sprintf("%s[%#v]", path, iter.Key()), lv, rv)
 		}
 
 	case reflect.Struct:
-		for i := range lhs.NumField() {
-			lv := lhs.Field(i)
-			rv := rhs.Field(i)
+		if !recursiveType {
 
-			diffValues(pushError, fmt.Sprintf("%s.%s", path, lhs.Type().Field(i).Name), lv, rv)
+			for i := range lhs.NumField() {
+				lv := lhs.Field(i)
+				rv := rhs.Field(i)
+
+				diffValues(pushError, wasHandled, fmt.Sprintf("%s.%s", path, lhs.Type().Field(i).Name), lv, rv)
+			}
 		}
 
 	default:

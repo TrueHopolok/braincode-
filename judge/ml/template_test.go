@@ -2,6 +2,7 @@ package ml
 
 import (
 	"bytes"
+	_ "embed"
 	"fmt"
 	"os"
 	"strings"
