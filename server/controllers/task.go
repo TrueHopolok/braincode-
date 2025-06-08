@@ -16,7 +16,7 @@ func TaskDelete(w http.ResponseWriter, r *http.Request) {
 	taskid, err := strconv.Atoi(staskid)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Invalid provided task-id=%s\nWant an integer", staskid), http.StatusInternalServerError)
-		logger.Log.Debug("res=%p task-id=%s is not a valid integer", r, staskid)
+		logger.Log.Debug("req=%p task-id=%s is not a valid integer", r, staskid)
 		return
 	}
 
@@ -89,7 +89,7 @@ func TaskPage(w http.ResponseWriter, r *http.Request) {
 	taskid, err := strconv.Atoi(staskid)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Invalid provided task-id=%s\nWant an integer", staskid), http.StatusNotAcceptable)
-		logger.Log.Debug("res=%p task-id=%s is not a valid integer", r, staskid)
+		logger.Log.Debug("req=%p task-id=%s is not a valid integer", r, staskid)
 		return
 	}
 	task, found, err := models.TaskFindOne(username, taskid)
@@ -98,7 +98,7 @@ func TaskPage(w http.ResponseWriter, r *http.Request) {
 		return
 	} else if !found {
 		http.Error(w, fmt.Sprintf("Invalid provided task-id=%d\nSuch task does not exists", taskid), http.StatusNotAcceptable)
-		logger.Log.Debug("res=%p task-id=%d not found", r, taskid)
+		logger.Log.Debug("req=%p task-id=%d not found", r, taskid)
 		return
 	}
 	if err = views.TaskFindOne(w, username, isauth, isenglish, task); err != nil {
@@ -113,13 +113,13 @@ func TaskSolve(w http.ResponseWriter, r *http.Request) {
 	taskid, err := strconv.Atoi(staskid)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Invalid provided task-id=%s\nWant an integer", staskid), http.StatusNotAcceptable)
-		logger.Log.Debug("res=%p task-id=%s is not a valid integer", r, staskid)
+		logger.Log.Debug("req=%p task-id=%s is not a valid integer", r, staskid)
 		return
 	}
 
 	if err := r.ParseForm(); err != nil {
 		http.Error(w, "Invalid login form provided", http.StatusNotAcceptable)
-		logger.Log.Debug("res=%p invalid login form", r)
+		logger.Log.Debug("req=%p invalid login form", r)
 		return
 	}
 	solution := r.PostFormValue("solution")
@@ -130,7 +130,7 @@ func TaskSolve(w http.ResponseWriter, r *http.Request) {
 		return
 	} else if !found {
 		http.Error(w, fmt.Sprintf("Invalid provided task-id=%d\nSuch task does not exists", taskid), http.StatusNotAcceptable)
-		logger.Log.Debug("res=%p task-id=%d not found", r, taskid)
+		logger.Log.Debug("req=%p task-id=%d not found", r, taskid)
 		return
 	} else if !isvalid {
 		http.Error(w, "Given solution is invalid brainfunk code", http.StatusNotAcceptable)
@@ -163,7 +163,7 @@ func UploadPage(w http.ResponseWriter, r *http.Request) {
 func TaskCreate(w http.ResponseWriter, r *http.Request) {
 	if err := models.TaskCreate(r.Body, session.Get(r.Context()).Name); err != nil {
 		http.Error(w, fmt.Sprintf("Something went wrong while uploading the task:\n%s", err), http.StatusNotAcceptable)
-		logger.Log.Debug("res=%p upload-err=%s ", r, err)
+		logger.Log.Debug("req=%p upload-err=%s ", r, err)
 		return
 	}
 	redirect2main(w, r, "uploadTask")

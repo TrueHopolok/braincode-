@@ -65,7 +65,7 @@ func StatsPage(w http.ResponseWriter, r *http.Request) {
 		subid, err := strconv.Atoi(ssubid)
 		if err != nil {
 			http.Error(w, fmt.Sprintf("Invalid provided submission-id=%s\nWant an integer", ssubid), http.StatusNotAcceptable)
-			logger.Log.Debug("res=%p submission-id=%s is not a valid integer", r, ssubid)
+			logger.Log.Debug("req=%p submission-id=%s is not a valid integer", r, ssubid)
 			return
 		}
 		solution, found, err := models.SubmissionFindOne(username, subid)
@@ -74,7 +74,7 @@ func StatsPage(w http.ResponseWriter, r *http.Request) {
 			return
 		} else if !found {
 			http.Error(w, fmt.Sprintf("Invalid provided task-id=%d\nSuch task does not exists", subid), http.StatusNotAcceptable)
-			logger.Log.Debug("res=%p task-id=%d not found", r, subid)
+			logger.Log.Debug("req=%p task-id=%d not found", r, subid)
 			return
 		}
 
@@ -109,27 +109,27 @@ func RegistrationPage(w http.ResponseWriter, r *http.Request) {
 func UserRegister(w http.ResponseWriter, r *http.Request) {
 	if err := r.ParseForm(); err != nil {
 		http.Error(w, "Invalid login form provided", http.StatusNotAcceptable)
-		logger.Log.Debug("res=%p invalid login form", r)
+		logger.Log.Debug("req=%p invalid login form", r)
 		return
 	}
 	username := r.PostFormValue("username")
 	password := r.PostFormValue("password")
 	if len(username) < 3 {
 		http.Error(w, "Invalid login form provided\nUsername is too short", http.StatusNotAcceptable)
-		logger.Log.Debug("res=%p invalid login form", r)
+		logger.Log.Debug("req=%p invalid login form", r)
 		return
 	} else if len(password) < 8 {
 		http.Error(w, "Invalid login form provided\nPassword is too short", http.StatusNotAcceptable)
-		logger.Log.Debug("res=%p invalid login form", r)
+		logger.Log.Debug("req=%p invalid login form", r)
 		return
 	}
 	_, found, err := models.UserFindSalt(username)
 	if err != nil {
 		errResp_Fatal(w, r, err)
 		return
-	} else if !found {
+	} else if found {
 		http.Error(w, "User with such username exists", http.StatusNotAcceptable)
-		logger.Log.Debug("res=%p trying to create same user", r)
+		logger.Log.Debug("req=%p trying to create same user", r)
 		return
 	}
 	salt := SaltGen()
@@ -137,7 +137,7 @@ func UserRegister(w http.ResponseWriter, r *http.Request) {
 		errResp_Fatal(w, r, err)
 		return
 	}
-	w.Header().Set("Session", session.New(username).CreateJWT())
+	session.Login(session.New(username), w)
 	redirect2main(w, r, "userRegister")
 }
 
@@ -163,18 +163,18 @@ func LoginPage(w http.ResponseWriter, r *http.Request) {
 func UserLogin(w http.ResponseWriter, r *http.Request) {
 	if err := r.ParseForm(); err != nil {
 		http.Error(w, "Invalid login form provided", http.StatusNotAcceptable)
-		logger.Log.Debug("res=%p invalid login form", r)
+		logger.Log.Debug("req=%p invalid login form", r)
 		return
 	}
 	username := r.PostFormValue("username")
 	password := r.PostFormValue("password")
 	if len(username) < 3 {
 		http.Error(w, "Invalid login form provided\nUsername is too short", http.StatusNotAcceptable)
-		logger.Log.Debug("res=%p invalid login form", r)
+		logger.Log.Debug("req=%p invalid login form", r)
 		return
 	} else if len(password) < 8 {
 		http.Error(w, "Invalid login form provided\nPassword is too short", http.StatusNotAcceptable)
-		logger.Log.Debug("res=%p invalid login form", r)
+		logger.Log.Debug("req=%p invalid login form", r)
 		return
 	}
 	salt, found, err := models.UserFindSalt(username)
@@ -183,7 +183,7 @@ func UserLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	} else if !found {
 		http.Error(w, "Incorrect username or password", http.StatusNotAcceptable)
-		logger.Log.Debug("res=%p incorrect username or password", r)
+		logger.Log.Debug("req=%p incorrect username or password", r)
 		return
 	}
 	found, err = models.UserFindLogin(username, PSH(password, salt))
@@ -192,7 +192,7 @@ func UserLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	} else if !found {
 		http.Error(w, "Incorrect username or password", http.StatusNotAcceptable)
-		logger.Log.Debug("res=%p incorrect username or password", r)
+		logger.Log.Debug("req=%p incorrect username or password", r)
 		return
 	}
 

@@ -103,7 +103,8 @@ func UserFindLogin(username string, password []byte) (bool, error) {
 	defer tx.Rollback()
 
 	row := tx.QueryRow(string(query), username, password)
-	if err := row.Scan(); err != nil {
+	var ignoredUsername string
+	if err := row.Scan(&ignoredUsername); err != nil {
 		if err == sql.ErrNoRows {
 			return false, nil
 		} else {
