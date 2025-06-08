@@ -22,29 +22,32 @@ const tasks = [
   { id: 4, title: "iiii" }
 ];
 
-fetch("https://jsonplaceholder.typicode.com/todos/1", {
-    method: 'GET',
-    headers: {
-        'Content-Type': 'application/json',
-        'Session': localStorage.getItem('sessionToken'),
-        'lang': 'ru' 
+function task_req() {
+    fetch("https://jsonplaceholder.typicode.com/todos/1", {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Session': localStorage.getItem('sessionToken'),
+        //        'lang': lang 
     }
-})
-.then(response => response.json())
-.then(data => {
+    })
+    .then(response => response.json())
+    .then(data => {
     problems_render();
-});
+    });
+}
 //.then(data => tasks.push(data));
 
+let session = localStorage.getItem('sessionToken');
 
 // Task
 function task_information(id) {
     fetch("https://jsonplaceholder.typicode.com/todos/1", {
-            method: 'GET',
+        method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'Session': localStorage.getItem('sessionToken'),
-            'lang': 'ru',
+            'Session': session,
+            'lang': lang,
             'id': id
         }
     })
@@ -54,24 +57,104 @@ function task_information(id) {
     });
 }
 
-// Submit and test
+// Upload Task
 
-function submit_req(data) {
-    fetch('', {
+function task_upload(name, des) {
+        fetch("https://jsonplaceholder.typicode.com/todos/1", {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Session': session,
+            'lang': lang,
+            'id': id
         },
-        body: JSON.stringify(data)
-    }).then(response => response.json())
+        body: JSON.stringify({
+            tname: name,
+            tdes: des,
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        render_task(data);
+    });
 }
 
-function test_req(data) {
-    fetch('', {
+
+
+// Submit and test
+function submit_req(data, id) {
+    fetch('/task/', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Session': session,
+            'lang': lang,
+            'id': id
         },
         body: JSON.stringify(data)
     }).then(response => response.json())
+    .then(data => {
+        const answer = document.getElementById("task_answer");
+        answer.innerHTML = data;
+    })
+}
+
+/*function test_req(data) {
+    fetch('', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Session': session,
+            'lang': lang,
+            'id': id
+        },
+        body: JSON.stringify(data)
+    }).then(response => response.json())
+}*/
+
+// Login ang registration
+function login_req(login, psw, remember) {
+    fetch('', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'lang': lang
+        },
+        body: JSON.stringify({
+            username: login,
+            password: psw,
+            remember: remember
+        })
+    });
+}
+
+function registration_req(login, psw) {
+    fetch('', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'lang': lang
+        },
+        body: JSON.stringify({
+            username: login,
+            password: psw,
+        })
+    });
+}
+
+// Profile
+
+function profile_req() {
+    fetch('', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Session': session,
+            'lang': lang,
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        render_profile(data);
+    });
 }

@@ -1,3 +1,5 @@
+task_req();
+
 const pageSize = 2;
 
 const problemset_content = document.getElementById("problemset-content");

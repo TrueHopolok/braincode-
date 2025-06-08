@@ -6,7 +6,6 @@ const id = urlParams.get('id');
 task_information(id);
 
 function render_task(task) {
-    console.log(task)
     task_name.innerHTML = task.id;
     task_des.innerHTML = task.title; 
 }
@@ -23,7 +22,7 @@ sub_btn.addEventListener('click', e => {
         console.log(text_value);
         const text_object = { text: text_value };
         console.log(text_object);
-        submit_req(text_object);
+        submit_req(text_object, id);
     }
 });
 

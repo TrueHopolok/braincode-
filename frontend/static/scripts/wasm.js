@@ -1,8 +1,13 @@
+let task_object;
+function getObject(object) {
+    task_object = object;
+}
+
 const go = new Go()
 
 WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject).then(result => {
     go.run(result.instance);
-    const parseResult = parseMarkleft(".task = ASDDS");
+    const parseResult = parseMarkleft(`.task = ${task_object}`);
 
     // schema:
     // {

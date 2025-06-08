@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../static/styles/userpage.css">
     <link rel="stylesheet" href="../static/styles/indexpage.css">
-    <link rel="icon" href="static/favicon.png" type="image/png">
+    <link rel="icon" href="../static/favicon.png" type="image/png">
     <title>Document</title>
 </head>
 <body>
@@ -16,7 +16,7 @@
             <div class="header">
                 
                 <div class="header-logo">
-                    <img src="static/headericon.png" alt="!"> 
+                    <img src="../static/headericon.png" alt="!"> 
                     <div class="logo-text">Braincode</div>
                 </div>
                 
@@ -55,28 +55,32 @@
             <div class="stats_block">
                 <div class="solutions_date">
                     <div class="solution_month">
-                        <div>x проблем</div>
+                        <div class="sub_month">x проблем</div>
                         <div>решенно за месяц</div>
                     </div>
                     <div class="solution_year">
-                        <div>x problems</div>
+                        <div class="sub_year">x problems</div>
                         <div>решенно за год</div>
                     </div>
                     <div class="solution_all">
-                        <div>x problems</div>
+                        <div class="sub_all">x problems</div>
                         <div>решенно за год</div>
                     </div>     
                 </div>
             </div>
             <div class="stats_block">
+                <div class="sub_list"></div>
                 <div>Решенные задачи</div>
             </div>
 
             <div class="stats_block">
+                <div class="sub_rate"></div>
                 <div>Правильность решений</div>
             </div>
         </div>
      </div>
-     <script src="static/scripts/lang.js"></script>
+     <script src="../static/scripts/requests.js"></script>
+     <script src="../static/scripts/profile.js"></script>
+     <script src="../static/scripts/lang.js"></script>
 </body>
 </html>
