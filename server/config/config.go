@@ -30,11 +30,11 @@ func parseConfig() Config {
 	}
 
 	var c Config
+
+	defaults.SetDefaults(&c)
 	if _, err := toml.DecodeFile(*CfgPath, &c); err != nil {
 		panic(fmt.Errorf("cannot read config file: %w", err))
 	}
-
-	defaults.SetDefaults(&c)
 
 	return c
 }
