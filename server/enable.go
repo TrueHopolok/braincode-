@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 
+	"github.com/TrueHopolok/braincode-/server/config"
 	controllers "github.com/TrueHopolok/braincode-/server/controllers"
 	"github.com/TrueHopolok/braincode-/server/logger"
 	"github.com/TrueHopolok/braincode-/server/session"
@@ -16,12 +17,14 @@ func MuxHTTP() http.Handler {
 }
 
 func EnableFileHandlers(mux *http.ServeMux) {
-	mux.Handle("GET /static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./frontend/static"))))
-	mux.Handle("GET /task/static/", http.StripPrefix("/task/static/", http.FileServer(http.Dir("./frontend/static"))))
-	mux.Handle("GET /login/static/", http.StripPrefix("/login/static/", http.FileServer(http.Dir("./frontend/static"))))
-	mux.Handle("GET /register/static/", http.StripPrefix("/register/static/", http.FileServer(http.Dir("./frontend/static"))))
-	mux.Handle("GET /stats/static/", http.StripPrefix("/stats/static/", http.FileServer(http.Dir("./frontend/static"))))
-	mux.Handle("GET /upload/static/", http.StripPrefix("/upload/static/", http.FileServer(http.Dir("./frontend/static"))))
+	h := http.FileServer(http.Dir(config.Get().StaticPath))
+	mux.Handle("GET /static/", http.StripPrefix("/static/", h))
+	mux.Handle("GET /task/static/", http.StripPrefix("/task/static/", h))
+	mux.Handle("GET /login/static/", http.StripPrefix("/login/static/", h))
+	mux.Handle("GET /register/static/", http.StripPrefix("/register/static/", h))
+	mux.Handle("GET /stats/static/", http.StripPrefix("/stats/static/", h))
+	mux.Handle("GET /upload/static/", http.StripPrefix("/upload/static/", h))
+
 	mux.HandleFunc("GET /favicon.ico", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./frontend/static.favicon")
 	})

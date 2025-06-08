@@ -14,6 +14,7 @@ type Config struct {
 	EnableConsole bool   `default:"true"`
 	LogFilepath   string `default:"server/server.log"`
 	TemplatesPath string `default:"frontend/"`
+	StaticPath    string `default:"./frontend/static"`
 	DBuser        string `default:"root"`
 	DBpass        string `default:"root"`
 	DBname        string `default:"braincode"`
