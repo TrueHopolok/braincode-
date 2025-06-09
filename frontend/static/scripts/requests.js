@@ -16,10 +16,10 @@ The responses gurantee:
 */
 
 const tasks = [
-  { id: 1, title: "Hello" },
-  { id: 2, title: "Test" },
-  { id: 3, title: "1234" },
-  { id: 4, title: "iiii" }
+  { id: 1, title: "Hello", author: "1" },
+  { id: 2, title: "Test", author: "2" },
+  { id: 3, title: "1234", author: "3" },
+  { id: 4, title: "iiii", author: "4" }
 ];
 
 function task_req() {
@@ -27,13 +27,13 @@ function task_req() {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'Session': localStorage.getItem('sessionToken'),
+            'Session': session,
         //        'lang': lang 
     }
     })
     .then(response => response.json())
     .then(data => {
-    problems_render();
+        // tasks = data;
     });
 }
 //.then(data => tasks.push(data));

@@ -9,4 +9,13 @@ if (lang) {
   });
 }
 
+const logout_btn = document.getElementById("log_out")
 
+logout_btn.addEventListener('click', e => {
+  fetch('', { 
+    method: "POST",
+    headers: {
+      'Session': sessionToken
+    }
+  }) 
+})

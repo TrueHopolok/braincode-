@@ -1,9 +1,9 @@
-task_req();
-
 const pageSize = 2;
 
 const problemset_content = document.getElementById("problemset-content");
 const problems = document.getElementById("problems");
+const checkbox = document.getElementById("user_problem");
+
 function arrowRender() {
     const left_arrow = document.createElement("a")
     left_arrow.textContent = "<- ";
@@ -32,7 +32,7 @@ function showPage(page) {
 
     for(let i = 0; i < currentTasks.length; i++) {
         const task = document.createElement("a");
-        task.textContent += currentTasks[i].id + '.' + currentTasks[i].title;
+        task.innerHTML += currentTasks[i].id + '.' + currentTasks[i].title + '<br>' + 'by:' + currentTasks[i].author;
         task.href = `taskpage.html?id=${currentTasks[i].id}`;
         task.className = "task";
         problems.appendChild(task);
@@ -51,3 +51,6 @@ function problems_render() {
     showPage(1);
     arrowRender();
 }
+
+task_req();
+problems_render();
