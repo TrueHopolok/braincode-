@@ -11,6 +11,8 @@ package session
 import (
 	"net/http"
 	"time"
+
+	"github.com/TrueHopolok/braincode-/server/config"
 )
 
 //go:generate go tool github.com/princjef/gomarkdoc/cmd/gomarkdoc -o documentation.md
@@ -50,8 +52,9 @@ func Login(s Session, w http.ResponseWriter) {
 		Name:     AuthCookieName,
 		Value:    s.CreateJWT(),
 		MaxAge:   int(time.Until(s.Expire).Seconds()),
-		Secure:   true,
+		Secure:   config.Get().Secure,
 		HttpOnly: true,
+		Path:     "/",
 		SameSite: http.SameSiteDefaultMode,
 	})
 }
@@ -60,8 +63,8 @@ func Login(s Session, w http.ResponseWriter) {
 func Logout(w http.ResponseWriter) {
 	http.SetCookie(w, &http.Cookie{
 		Name:     AuthCookieName,
-		MaxAge:   -1,
-		Secure:   true,
+		MaxAge:   0,
+		Secure:   config.Get().Secure,
 		HttpOnly: true,
 	})
 }

@@ -12,7 +12,11 @@ const header = "{'alg':'HS256','typ':'JWT'}" // Standard JWT header
 var b64Header = base64.URLEncoding.EncodeToString([]byte(header))
 
 func tokenize(header, body string) string {
-	hash := hmac.New(sha256.New, keys.cur)
+	keys.mut.RLock()
+	k := keys.cur
+	keys.mut.RUnlock()
+
+	hash := hmac.New(sha256.New, k)
 	_, err := hash.Write([]byte(header + body))
 	if err != nil {
 		panic(err)
@@ -44,13 +48,20 @@ func (ses *Session) ValidateJWT(token string) bool {
 	if len(fields) != 3 {
 		return false
 	}
-	if fields[0]+fields[1]+tokenize(fields[0], fields[1]) != token {
+	reconstructed := fields[0] + "." + fields[1] + "." + tokenize(fields[0], fields[1])
+	if reconstructed != token {
 		return false
 	}
-	if err := json.Unmarshal([]byte(fields[1]), ses); err != nil {
+	data, err := base64.URLEncoding.DecodeString(fields[1])
+	if err != nil {
 		// TODO(anpir): this may panic if structure of token changes;
 		// probably should return false instead.
-		panic(err)
+		panic("infallible base64 decode failed: " + err.Error())
+	}
+	if err := json.Unmarshal(data, ses); err != nil {
+		// TODO(anpir): this may panic if structure of token changes;
+		// probably should return false instead.
+		panic("infallible JSON unmarshal failed: " + err.Error())
 	}
 	return true
 }

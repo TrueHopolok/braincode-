@@ -11,6 +11,7 @@ Implements basic realization of database connection and queries. As well as prep
 ## Index
 
 - [func Init\(\) error](<#Init>)
+- [func InitTesting\(t \*testing.T\)](<#InitTesting>)
 - [func Migrate\(\) error](<#Migrate>)
 - [type DB](<#DB>)
 
@@ -23,6 +24,15 @@ func Init() error
 ```
 
 Open database and checks if database is reachable
+
+<a name="InitTesting"></a>
+## func [InitTesting](<https://github.com/TrueHopolok/braincode-/blob/main/server/db/testing.go#L12>)
+
+```go
+func InitTesting(t *testing.T)
+```
+
+
 
 <a name="Migrate"></a>
 ## func [Migrate](<https://github.com/TrueHopolok/braincode-/blob/main/server/db/migrate.go#L24>)

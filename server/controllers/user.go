@@ -128,6 +128,7 @@ func UserRegister(w http.ResponseWriter, r *http.Request) {
 		errResp_Fatal(w, r, err)
 		return
 	} else if found {
+		// StatusNotAcceptable is not acceptable in this case (lol)
 		http.Error(w, "User with such username exists", http.StatusNotAcceptable)
 		logger.Log.Debug("req=%p trying to create same user", r)
 		return

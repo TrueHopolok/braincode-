@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"net/http/cookiejar"
 	"net/http/httptest"
 	"net/url"
 	"testing"
@@ -43,6 +44,10 @@ func TestAuth(t *testing.T) {
 		return http.ErrUseLastResponse
 	}
 	var err error
+	tc.Jar, err = cookiejar.New(nil)
+	if err != nil {
+		t.Fatalf("cookie jar init failed: err = %v", err)
+	}
 	var req *http.Request
 	var ses session.Session
 	var resp *http.Response
@@ -82,15 +87,15 @@ func TestAuth(t *testing.T) {
 	subTestName = "Logout (ok)"
 	expectedStatusCode = http.StatusSeeOther
 	req = MustRequest(t, "DELETE", ts.URL+"/login/", nil)
-	ses = session.New("Tester")
-	req.AddCookie(&http.Cookie{
-		Name:     "auth",
-		Value:    ses.CreateJWT(),
-		MaxAge:   int(time.Until(ses.Expire).Seconds()),
-		Secure:   true,
-		HttpOnly: true,
-		SameSite: http.SameSiteDefaultMode,
-	})
+	// ses = session.New("Tester")
+	// req.AddCookie(&http.Cookie{
+	// 	Name:     "auth",
+	// 	Value:    ses.CreateJWT(),
+	// 	MaxAge:   int(time.Until(ses.Expire).Seconds()),
+	// 	Secure:   true,
+	// 	HttpOnly: true,
+	// 	SameSite: http.SameSiteDefaultMode,
+	// })
 	resp, err = tc.Do(req)
 	ResponseCheck(t, ts, tc, subTestName, expectedStatusCode, resp, err)
 

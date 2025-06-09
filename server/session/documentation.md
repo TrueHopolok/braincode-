@@ -72,7 +72,7 @@ func AuthMiddlewareFunc(f http.HandlerFunc) http.Handler
 See [AuthMiddleware](<#AuthMiddleware>)
 
 <a name="Login"></a>
-## func [Login](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/session.go#L48>)
+## func [Login](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/session.go#L50>)
 
 ```go
 func Login(s Session, w http.ResponseWriter)
@@ -81,7 +81,7 @@ func Login(s Session, w http.ResponseWriter)
 
 
 <a name="Logout"></a>
-## func [Logout](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/session.go#L60>)
+## func [Logout](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/session.go#L63>)
 
 ```go
 func Logout(w http.ResponseWriter)
@@ -160,7 +160,7 @@ Updates keys:
 - current key randomly generates
 
 <a name="Session"></a>
-## type [Session](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/session.go#L27-L30>)
+## type [Session](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/session.go#L29-L32>)
 
 Stores all info about session.
 
@@ -185,7 +185,7 @@ Get retrieves value of session from ctx.
 If no such value exists, returns a zero value [Session](<#Session>), which will satisfy [Session.IsZero](<#Session.IsZero>)
 
 <a name="New"></a>
-### func [New](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/session.go#L32>)
+### func [New](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/session.go#L34>)
 
 ```go
 func New(name string) Session
@@ -194,7 +194,7 @@ func New(name string) Session
 
 
 <a name="Session.CreateJWT"></a>
-### func \(Session\) [CreateJWT](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/jwt.go#L26>)
+### func \(Session\) [CreateJWT](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/jwt.go#L30>)
 
 ```go
 func (ses Session) CreateJWT() string
@@ -205,7 +205,7 @@ Create jwt with information from provided session.
 May panic if somehow JSON serialization or HMAC hash fail.
 
 <a name="Session.IsExpired"></a>
-### func \(Session\) [IsExpired](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/session.go#L40>)
+### func \(Session\) [IsExpired](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/session.go#L42>)
 
 ```go
 func (ses Session) IsExpired() bool
@@ -214,7 +214,7 @@ func (ses Session) IsExpired() bool
 
 
 <a name="Session.IsZero"></a>
-### func \(Session\) [IsZero](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/session.go#L44>)
+### func \(Session\) [IsZero](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/session.go#L46>)
 
 ```go
 func (ses Session) IsZero() bool
@@ -223,7 +223,7 @@ func (ses Session) IsZero() bool
 
 
 <a name="Session.UpdateExpiration"></a>
-### func \(\*Session\) [UpdateExpiration](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/session.go#L36>)
+### func \(\*Session\) [UpdateExpiration](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/session.go#L38>)
 
 ```go
 func (ses *Session) UpdateExpiration()
@@ -232,7 +232,7 @@ func (ses *Session) UpdateExpiration()
 
 
 <a name="Session.ValidateJWT"></a>
-### func \(\*Session\) [ValidateJWT](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/jwt.go#L42>)
+### func \(\*Session\) [ValidateJWT](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/jwt.go#L46>)
 
 ```go
 func (ses *Session) ValidateJWT(token string) bool
