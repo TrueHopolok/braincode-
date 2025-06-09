@@ -9,7 +9,7 @@ import (
 const key_size = 32
 
 type keyChain struct {
-	mut sync.Mutex
+	mut sync.RWMutex
 	prv []byte
 	cur []byte
 }

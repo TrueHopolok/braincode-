@@ -41,6 +41,19 @@ func langHandler(w http.ResponseWriter, r *http.Request) (isenglish bool, isvali
 	if lang == "ru" {
 		return false, true
 	} else if lang != "" && lang != "en" {
+		// FIXME(anpir): this should be 404 / 400, not 406
+		// Quoting MDN: https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/406
+		//
+		//    The HTTP 406 Not Acceptable client error response status code indicates that the server could not
+		//    produce a response matching the list of acceptable values defined in the request's proactive content
+		//    negotiation headers and that the server was unwilling to supply a default representation.
+		//
+		//    ...
+		//
+		//    If a server returns a 406, the body of the message should contain the list of available representations
+		//    for the resource, allowing the user to choose, although no standard way for this is defined.
+		//
+		// There is no proactive content negotiation. No available representations are returned.
 		http.Error(w, "Such language selection is not allowed", 406)
 		logger.Log.Debug("req=%p lang=%s is not allowed", r, lang)
 		return false, false
