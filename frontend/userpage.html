@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="static/styles/userpage.css">
     <link rel="stylesheet" href="static/styles/indexpage.css">
     <link rel="icon" href="static/favicon.png" type="image/png">
-    <title>Document</title>
+    <title>Stats - Braincode</title>
 </head>
 <body>
     
@@ -48,39 +48,24 @@
     
     <div class="container">
         <div class="user_info">
-            <div class="name">user1234</div>
+            <div class="name">Username: {{.Username}}</div>
         </div>
-
         <div class="user_stats">
             <div class="stats_block">
-                <div class="solutions_date">
-                    <div class="solution_month">
-                        <div id="sub_month">problems</div>
-                        <div>solved for the last month</div>
-                    </div>
-                    <div class="solution_year">
-                        <div id="sub_year">problems</div>
-                        <div>solved for the last year</div>
-                    </div>
-                    <div class="solution_all">
-                        <div id="sub_all">problems</div>
-                        <div>solved for all time</div>
-                    </div>     
-                </div>
+                <div>Acceptance Rate</div>
+                <div id="sub_rate">{{.AcceptanceRate}}%</div>
             </div>
             <div class="stats_block">
-                <div>Submission list</div>
-                <div id="sub_list"></div>
+                <div>Solved Rate</div>
+                <div id="sub_rate">{{.SolvedRate}}%</div>
             </div>
 
             <div class="stats_block">
-                <div>Acceptance Rate</div>
-                <div id="sub_rate"></div>
+                <div>Submission list</div>
+                <div id="sub_list"><!-- FETCHED --></div>
             </div>
         </div>
      </div>
      <script src="static/scripts/logout.js"></script>
-     <script src="static/scripts/requests.js"></script>
-     <script src="static/scripts/profile.js"></script>
 </body>
 </html>

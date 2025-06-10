@@ -5,7 +5,7 @@ Solved rate 		= (COUNT(status WHERE score = 1) / COUNT(task))
 SELECT
 	(
 		SUM(
-			CASE WHEN s.score = 1 
+			CASE WHEN s.score = 1
 				THEN 1 
 				ELSE 0 
 			END
@@ -16,6 +16,7 @@ SELECT
 			SELECT COUNT(*) 
 			FROM status AS st 
 			WHERE st.score = 1
+			AND st.owner_name = ?
 		) * 1.0 / (
 			SELECT COUNT(*) 
 			FROM task

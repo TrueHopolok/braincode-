@@ -52,7 +52,7 @@ func UserFindInfo(username string) (acceptance_rate sql.NullFloat64, solved_rate
 	}
 	defer tx.Rollback()
 
-	row := tx.QueryRow(string(query), username)
+	row := tx.QueryRow(string(query), username, username)
 	if err = row.Scan(&acceptance_rate, &solved_rate); err != nil {
 		return
 	}

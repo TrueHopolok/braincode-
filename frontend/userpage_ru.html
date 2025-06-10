@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="static/styles/userpage.css">
     <link rel="stylesheet" href="static/styles/indexpage.css">
     <link rel="icon" href="static/favicon.png" type="image/png">
-    <title>Document</title>
+    <title>Stats - Braincode</title>
 </head>
 <body>
     
@@ -48,39 +48,24 @@
     
     <div class="container">
         <div class="user_info">
-            <div class="name">user1234</div>
+            <div class="name">Имя пользователя: {{.Username}}</div>
         </div>
-
         <div class="user_stats">
             <div class="stats_block">
-                <div class="solutions_date">
-                    <div class="solution_month">
-                        <div class="sub_month">x проблем</div>
-                        <div>решенно за месяц</div>
-                    </div>
-                    <div class="solution_year">
-                        <div class="sub_year">x problems</div>
-                        <div>решенно за год</div>
-                    </div>
-                    <div class="solution_all">
-                        <div class="sub_all">x problems</div>
-                        <div>решенно за год</div>
-                    </div>     
-                </div>
+                <div>Процент принятых решений</div>
+                <div id="sub_rate">{{.AcceptanceRate}}%</div>
             </div>
             <div class="stats_block">
-                <div class="sub_list"></div>
-                <div>Решенные задачи</div>
+                <div>Процент решённый задач</div>
+                <div id="sub_rate">{{.SolvedRate}}%</div>
             </div>
 
             <div class="stats_block">
-                <div class="sub_rate"></div>
-                <div>Правильность решений</div>
+                <div>Лист решений</div>
+                <div id="sub_list"><!-- FETCHED --></div>
             </div>
         </div>
      </div>
      <script src="static/scripts/logout.js"></script>
-     <script src="static/scripts/requests.js"></script>
-     <script src="static/scripts/profile.js"></script>
 </body>
 </html>

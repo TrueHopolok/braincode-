@@ -3,6 +3,7 @@ package views
 import (
 	"bufio"
 	"database/sql"
+	"math"
 	"net/http"
 
 	"github.com/TrueHopolok/braincode-/server/prepared"
@@ -31,8 +32,8 @@ func UserFindInfo(w http.ResponseWriter, username string, isenglish bool, accept
 		SolvedRate     float64
 	}{
 		Username:       username,
-		AcceptanceRate: acceptance_rate.Float64,
-		SolvedRate:     solved_rate.Float64,
+		AcceptanceRate: math.Round(acceptance_rate.Float64*1000) / 10,
+		SolvedRate:     math.Round(solved_rate.Float64*1000) / 10,
 	})
 	if err != nil {
 		return err
