@@ -105,8 +105,8 @@ func ResponseCheck(t *testing.T, ts *httptest.Server, tc *http.Client, subTestNa
 		t.Fatalf("request failed err = %v", err)
 	}
 	if resp.StatusCode != expectedStatusCode {
-		logger.Log.Error("(%s) failed; expected=%d; statuscode=%d", subTestName, expectedStatusCode, resp.StatusCode)
-		t.Fatalf("bad status: status = %d, want %d", resp.StatusCode, expectedStatusCode)
+		logger.Log.Error("(%s) failed; expected=%d; status=%s", subTestName, expectedStatusCode, resp.Status)
+		t.Fatalf("bad status: status = %s; want %d", resp.Status, expectedStatusCode)
 	}
 
 	var cc []*http.Cookie
