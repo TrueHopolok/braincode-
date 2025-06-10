@@ -21,8 +21,8 @@
                 
                 <div class="header-user">
                     <div class="language">
-                        <a href="?lang=en">EN</a> <!--TODO(misha): save it with js -->
-                        <a href="?lang=ru">RU</a> <!--TODO(misha): save it with js -->
+                        <a href="/?lang=EN">EN</a>
+                        <a href="/?lang=RU">RU</a>
                     </div>
                     <div class="login">
                         <a href="/login/">Login</a>
@@ -37,10 +37,28 @@
     <nav class="navigation">
         <div class="container">
             <ul class="nav-ul">
-                <li id="problem-set" class="nav-ul-element"><a href="login.html">PROBLEMSET</a></li>
+                <li id="problem-set" class="nav-ul-element"><a href="/">PROBLEMSET</a></li>
               </ul>
         </div>
     </nav>
-    <script src="static/scripts/lang.js"></script>
+
+    <section class="section">
+        <div class="container">
+            <div id="section-upper" class="section-upper">
+                <input class="section-search" type="text">
+                <div class="section-user">
+                    <input type="checkbox">
+                    <div>USER PROBLEMS</div>
+                </div>
+            </div>
+
+            <div id="section-content">
+                
+            </div>
+        </div>
+    </section>
+
+    <script src="static/scripts/requests.js"></script>
+    <script src="static/scripts/problems_render.js"></script>
 </body>
 </html>

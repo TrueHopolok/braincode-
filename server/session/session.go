@@ -63,7 +63,8 @@ func Login(s Session, w http.ResponseWriter) {
 func Logout(w http.ResponseWriter) {
 	http.SetCookie(w, &http.Cookie{
 		Name:     AuthCookieName,
-		MaxAge:   0,
+		Value:    "expired",
+		MaxAge:   -1,
 		Secure:   config.Get().Secure,
 		HttpOnly: true,
 	})

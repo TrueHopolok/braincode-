@@ -4,6 +4,7 @@ import (
 	"crypto/rand"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/TrueHopolok/braincode-/server/logger"
 	"golang.org/x/crypto/argon2"
@@ -36,10 +37,11 @@ func SaltGen() []byte {
 // Return 2 booleans that tell what language does user want.
 // In case of invalid parameter, function will return false in isvalid field.
 // On invalid parameter will output an error, thus this must be last write into response.
-func langHandler(w http.ResponseWriter, r *http.Request) (isenglish bool, isvalid bool) {
-	lang := r.URL.Query().Get("lang")
+func langHandler(w http.ResponseWriter, r *http.Request) (isvalid bool, isenglish bool) {
+	lang := strings.ToLower(r.URL.Query().Get("lang"))
 	if lang == "ru" {
-		return false, true
+		logger.Log.Debug("req=%p lang=%s(RU) was selected", r, lang)
+		return true, false
 	} else if lang != "" && lang != "en" {
 		// FIXME(anpir): this should be 404 / 400, not 406
 		// Quoting MDN: https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/406
@@ -58,6 +60,7 @@ func langHandler(w http.ResponseWriter, r *http.Request) (isenglish bool, isvali
 		logger.Log.Debug("req=%p lang=%s is not allowed", r, lang)
 		return false, false
 	}
+	logger.Log.Debug("req=%p lang=%s(EN) was selected", r, lang)
 	return true, true
 }
 

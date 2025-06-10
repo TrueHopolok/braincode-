@@ -22,11 +22,11 @@
                 
                 <div class="header-user">
                     <div class="language">
-                        <a href="#">EN</a>
-                        <a href="ru/userpage_ru.html">RU</a>
+                        <a href="/stats/?lang=EN">EN</a>
+                        <a href="/stats/?lang=RU">RU</a>
                     </div>
                     <div class="login">
-                        <a href="#">Username</a>
+                        <a href="/stats/">Username</a>
                     </div>
                 </div>
             </div>
@@ -37,10 +37,10 @@
     <nav class="navigation">
         <div class="container">
             <ul class="nav-ul">
-                <li id="problem-set" class="nav-ul-element"><a href="problemset.html">PROBLEMSET</a></li>
-                <li id="problem-upload" class="nav-ul-element"><a href="problemupload.html">PROBLEMUPLOAD</a></li>
+                <li id="problem-set" class="nav-ul-element"><a href="/">PROBLEMSET</a></li>
+                <li id="problem-upload" class="nav-ul-element"><a href="/upload/">PROBLEMUPLOAD</a></li>
                 <li class="nav-ul-element">
-                    <a id="log_out" href="index.html">LOG OUT</a>
+                    <a onclick="logout()" href="/">LOG OUT</a>
                 </li>
               </ul>
         </div>
@@ -79,8 +79,8 @@
             </div>
         </div>
      </div>
+     <script src="static/scripts/logout.js"></script>
      <script src="static/scripts/requests.js"></script>
      <script src="static/scripts/profile.js"></script>
-     <script src="static/scripts/lang.js"></script>
 </body>
 </html>

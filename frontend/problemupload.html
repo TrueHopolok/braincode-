@@ -21,11 +21,11 @@
                 
                 <div class="header-user">
                     <div class="language">
-                        <a href="#">EN</a>
-                        <a href="ru/problemset_ru.html">RU</a>
+                        <a href="/upload/?lang=EN">EN</a>
+                        <a href="/upload/?lang=RU">RU</a>
                     </div>
                     <div class="login">
-                        <a href="userpage.html">Username</a>
+                        <a href="/stats/">Username</a>
                     </div>
                 </div>
             </div>
@@ -36,8 +36,8 @@
     <nav class="navigation">
         <div class="container">
             <ul class="nav-ul">
-                <li id="problem-upload" class="nav-ul-element"><a href="problemset.html">PROBLEMSET</a></li>
-                <li id="log_out" class="nav-ul-element"><a href="index.html">LOG OUT</a></li>
+                <li id="problem-upload" class="nav-ul-element"><a href="/">PROBLEMSET</a></li>
+                <li id="log_out" class="nav-ul-element"><a onclick="logout()" href="/">LOG OUT</a></li>
             </ul>
         </div>
     </nav>
@@ -51,8 +51,8 @@
             <button type="submit">Submit</button>
         </form>
     </div>
+    <script src="static/scripts/logout.js"></script>
     <script src="static/scripts/requests.js"></script>
     <script src="static/scripts/problems_upload.js"></script>
-    <script src="static/scripts/lang.js"></script>
 </body>
 </html>

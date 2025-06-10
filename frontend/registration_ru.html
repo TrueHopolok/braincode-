@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/styles/indexpage.css">
-    <link rel="stylesheet" href="../static/styles/loginregpage.css">
-    <link rel="icon" href="../static/favicon.png" type="image/png">
+    <link rel="stylesheet" href="static/styles/indexpage.css">
+    <link rel="stylesheet" href="static/styles/loginregpage.css">
+    <link rel="icon" href="static/favicon.png" type="image/png">
     <title>Login - Braincode</title>
 </head>
 <body>
@@ -15,17 +15,17 @@
             <div class="header">
                 
                 <div class="header-logo">
-                    <img src="../static/headericon.png" alt="!">
+                    <img src="static/headericon.png" alt="!">
                     <div class="logo-text">Braincode</div>
                 </div>
                 
                 <div class="header-user">
                     <div class="language">
-                        <a href="../registration.html">EN</a>
-                        <a href="#">RU</a>
+                        <a href="/register/?lang=EN">EN</a>
+                        <a href="/register/?lang=RU">RU</a>
                     </div>
                     <div class="login">
-                        <a href="login_ru.html">Логин</a>
+                        <a href="/login/?lang=RU">Логин</a>
                     </div>
                 </div>
             </div>
@@ -36,7 +36,7 @@
     <nav class="navigation">
         <div class="container">
             <ul class="nav-ul">
-                <li class="nav-ul-element"><a href="index_ru.html">НАЗАД</a></li>
+                <li class="nav-ul-element"><a href="/?lang=RU">НАЗАД</a></li>
               </ul>
         </div>
     </nav>
@@ -45,17 +45,15 @@
 
     <div class="auth_form">
         <div class="form_text">Регистрация</div>
-        <form action="" method="">
-            <label for="uname"><b>Никнейм</b></label>
-            <input type="text" placeholder="Enter Username" name="uname" required>
+        <form id="reg_form" method="POST">
+            <label for="username"><b>Никнейм</b></label>,
+            <input type="text" placeholder="Enter Username" name="username" required>
 
-            <label for="psw"><b>Пароль</b></label>
-            <input type="password" placeholder="Enter Password" name="psw" required>
+            <label for="password"><b>Пароль</b></label>
+            <input type="password" placeholder="Enter Password" name="password" required>
 
             <button type="submit">Регистрация</button>
         </form>
     </div>
-    <script src="../static/scripts/log_reg.js"></script>
-    <script src="../static/scripts/lang.js"></script>
 </body>
 </html>

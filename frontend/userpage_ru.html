@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/styles/userpage.css">
-    <link rel="stylesheet" href="../static/styles/indexpage.css">
-    <link rel="icon" href="../static/favicon.png" type="image/png">
+    <link rel="stylesheet" href="static/styles/userpage.css">
+    <link rel="stylesheet" href="static/styles/indexpage.css">
+    <link rel="icon" href="static/favicon.png" type="image/png">
     <title>Document</title>
 </head>
 <body>
@@ -16,17 +16,17 @@
             <div class="header">
                 
                 <div class="header-logo">
-                    <img src="../static/headericon.png" alt="!"> 
+                    <img src="static/headericon.png" alt="!"> 
                     <div class="logo-text">Braincode</div>
                 </div>
                 
                 <div class="header-user">
                     <div class="language">
-                        <a href="../userpage.html">EN</a>
-                        <a href="#">RU</a>
+                        <a href="/stats/?lang=EN">EN</a>
+                        <a href="/stats/?lang=RU">RU</a>
                     </div>
                     <div class="login">
-                        <a href="#">Username</a>
+                        <a href="/stats/?lang=RU">Username</a>
                     </div>
                 </div>
             </div>
@@ -37,10 +37,10 @@
     <nav class="navigation">
         <div class="container">
             <ul class="nav-ul">
-                <li id="problem-set" class="nav-ul-element"><a href="problemset_ru.html">НАБОР ЗАДАЧ</a></li>
-                <li id="problem-upload" class="nav-ul-element"><a href="problemupload_ru.html">ВЫЛОЖИТЬ ЗАДАЧУ</a></li>
+                <li id="problem-set" class="nav-ul-element"><a href="/?lang=RU">НАБОР ЗАДАЧ</a></li>
+                <li id="problem-upload" class="nav-ul-element"><a href="/upload/?lang=RU">ВЫЛОЖИТЬ ЗАДАЧУ</a></li>
                 <li class="nav-ul-element">
-                    <a href="index_ru.html">ВЫХОД</a>
+                    <a onclick="logout()" href="/?lang=RU">ВЫХОД</a>
                 </li>
               </ul>
         </div>
@@ -79,8 +79,8 @@
             </div>
         </div>
      </div>
-     <script src="../static/scripts/requests.js"></script>
-     <script src="../static/scripts/profile.js"></script>
-     <script src="../static/scripts/lang.js"></script>
+     <script src="static/scripts/logout.js"></script>
+     <script src="static/scripts/requests.js"></script>
+     <script src="static/scripts/profile.js"></script>
 </body>
 </html>

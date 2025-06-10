@@ -37,12 +37,11 @@ func ProblemsPage(w http.ResponseWriter, r *http.Request) {
 		ok, isenglish := langHandler(w, r)
 		if !ok {
 			return
-		} else if !isenglish {
-			return
 		}
 
 		if err := views.TaskFindAll(w, username, isauth, isenglish); err != nil {
 			errResp_Fatal(w, r, err)
+			return
 		}
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	case "application/json":
@@ -76,8 +75,6 @@ func TaskPage(w http.ResponseWriter, r *http.Request) {
 
 	ok, isenglish := langHandler(w, r)
 	if !ok {
-		return
-	} else if !isenglish {
 		return
 	}
 
@@ -149,8 +146,6 @@ func UploadPage(w http.ResponseWriter, r *http.Request) {
 
 	ok, isenglish := langHandler(w, r)
 	if !ok {
-		return
-	} else if !isenglish {
 		return
 	}
 

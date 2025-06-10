@@ -9,24 +9,13 @@ import (
 )
 
 // Show 1 task page. Expects all information to be valid.
-//
-// ! TODO(vadim): wait for markleft finish
 func TaskFindOne(w http.ResponseWriter, username string, isauth, isenglish bool, task models.Task) error {
 	var templ string
-	if isauth { // ? TODO(misha): lang and auth dependency
-		if isenglish {
-			templ = "TODO.html"
-		} else {
-			templ = "TODO.html"
-		}
+	if isenglish {
+		templ = "taskpage.html"
 	} else {
-		if isenglish {
-			templ = "TODO.html"
-		} else {
-			templ = "TODO.html"
-		}
+		templ = "taskpage_ru.html"
 	}
-	templ = "taskpage.html" // TODO(vadim): delete it when other implementations will be available
 
 	buf := bufio.NewWriter(w)
 	err := prepared.Templates.ExecuteTemplate(buf, templ, nil) // TODO(vadim): add struct info into the page
@@ -39,21 +28,25 @@ func TaskFindOne(w http.ResponseWriter, username string, isauth, isenglish bool,
 // Show problemset page. Expects all information to be valid.
 func TaskFindAll(w http.ResponseWriter, username string, isauth, isenglish bool) error {
 	var templ string
-	if isauth { // ? TODO(misha): lang and auth dependency
+	if isauth {
 		if isenglish {
 			templ = "index_auth.html"
 		} else {
-			templ = "TODO.html"
+			templ = "index_auth_ru.html"
 		}
 	} else {
 		if isenglish {
 			templ = "index.html"
 		} else {
-			templ = "TODO.html"
+			templ = "index_ru.html"
 		}
 	}
 	buf := bufio.NewWriter(w)
-	err := prepared.Templates.ExecuteTemplate(buf, templ, nil) // TODO(vadim): add struct info into the page
+	err := prepared.Templates.ExecuteTemplate(buf, templ, struct {
+		Username string
+	}{
+		Username: username,
+	})
 	if err != nil {
 		return err
 	}
@@ -61,18 +54,20 @@ func TaskFindAll(w http.ResponseWriter, username string, isauth, isenglish bool)
 }
 
 // Show the upload task page. Expects all information to be valid.
-//
-// ! TODO(anpir): finish markleft
 func TaskCreate(w http.ResponseWriter, username string, isenglish bool) error {
 	var templ string
-	if isenglish { // ? TODO(misha): lang dependency
-		templ = "TODO.html"
+	if isenglish {
+		templ = "problemupload.html"
 	} else {
-		templ = "TODO.html"
+		templ = "problemupload_ru.html"
 	}
 
 	buf := bufio.NewWriter(w)
-	err := prepared.Templates.ExecuteTemplate(buf, templ, nil) // TODO(vadim): add struct info into the page
+	err := prepared.Templates.ExecuteTemplate(buf, templ, struct {
+		Username string
+	}{
+		Username: username,
+	})
 	if err != nil {
 		return err
 	}

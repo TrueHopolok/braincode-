@@ -29,8 +29,6 @@ func StatsPage(w http.ResponseWriter, r *http.Request) {
 		ok, isenglish := langHandler(w, r)
 		if !ok {
 			return
-		} else if !isenglish {
-			return
 		}
 
 		acceptance_rate, solved_rate, err := models.UserFindInfo(username)
@@ -96,8 +94,6 @@ func RegistrationPage(w http.ResponseWriter, r *http.Request) {
 	ok, isenglish := langHandler(w, r)
 	if !ok {
 		return
-	} else if !isenglish {
-		return
 	}
 
 	if err := views.UserCreate(w, isenglish); err != nil {
@@ -151,8 +147,6 @@ func LoginPage(w http.ResponseWriter, r *http.Request) {
 	ok, isenglish := langHandler(w, r)
 	if !ok {
 		return
-	} else if !isenglish {
-		return
 	}
 
 	if err := views.UserFindLogin(w, isenglish); err != nil {
@@ -169,6 +163,7 @@ func UserLogin(w http.ResponseWriter, r *http.Request) {
 	}
 	username := r.PostFormValue("username")
 	password := r.PostFormValue("password")
+	logger.Log.Debug("req=%p username=%s password=%s", r, username, password)
 	if len(username) < 3 {
 		http.Error(w, "Invalid login form provided\nUsername is too short", http.StatusNotAcceptable)
 		logger.Log.Debug("req=%p invalid login form", r)
@@ -203,6 +198,7 @@ func UserLogin(w http.ResponseWriter, r *http.Request) {
 }
 
 func UserLogout(w http.ResponseWriter, r *http.Request) {
+	logger.Log.Debug("USER TRYING TO LOGOUT")
 	session.Logout(w)
 	redirect2main(w, r, "userLogin")
 }

@@ -42,7 +42,7 @@ let session = localStorage.getItem('sessionToken');
 
 // Task
 function task_information(id) {
-    fetch("https://jsonplaceholder.typicode.com/todos/1", {
+    fetch('/task/', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -60,7 +60,7 @@ function task_information(id) {
 // Upload Task
 
 function task_upload(name, des) {
-        fetch("https://jsonplaceholder.typicode.com/todos/1", {
+        fetch('/upload/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -88,7 +88,6 @@ function submit_req(data, id) {
         headers: {
             'Content-Type': 'application/json',
             'Session': session,
-            'lang': lang,
             'id': id
         },
         body: JSON.stringify(data)
@@ -112,45 +111,13 @@ function submit_req(data, id) {
     }).then(response => response.json())
 }*/
 
-// Login ang registration
-function login_req(login, psw, remember) {
-    fetch('', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'lang': lang
-        },
-        body: JSON.stringify({
-            username: login,
-            password: psw,
-            remember: remember
-        })
-    });
-}
-
-function registration_req(login, psw) {
-    fetch('', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'lang': lang
-        },
-        body: JSON.stringify({
-            username: login,
-            password: psw,
-        })
-    });
-}
-
 // Profile
 
 function profile_req() {
-    fetch('', {
+    fetch('/stats/', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'Session': session,
-            'lang': lang,
+            'Content-Type': 'application/json'
         },
     })
     .then(response => response.json())

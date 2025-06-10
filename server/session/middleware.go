@@ -2,10 +2,9 @@ package session
 
 import (
 	"context"
-	"fmt"
 	"net/http"
-	"slices"
-	"time"
+
+	"github.com/TrueHopolok/braincode-/server/logger"
 )
 
 const AuthCookieName = "auth"
@@ -32,45 +31,27 @@ func Get(ctx context.Context) Session {
 // [Middleware] should only be used when handler has different behavior depending on authentication status.
 func Middleware(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if raw := r.Header.Get("Cookie"); raw != "" {
-			cookies, err := http.ParseCookie(raw)
-			if err != nil {
-				http.Error(w, fmt.Sprintf("Invalid cookie header: %v", err), http.StatusBadRequest)
-				return
-			}
-
-			cookies = slices.DeleteFunc(cookies, func(c *http.Cookie) bool {
-				return c.Name != AuthCookieName
-			})
-
+		if cookies := r.CookiesNamed(AuthCookieName); len(cookies) > 0 {
 			if len(cookies) > 1 {
-				http.Error(w, "Multiple authentication cookies", http.StatusUnauthorized)
+				http.Redirect(w, r, "/", http.StatusSeeOther)
+				logger.Log.Debug("req=%p M-ware FAIL; err= %s", r, "too many auth cookies")
 				return
-			} else if len(cookies) == 1 {
-				rawToken := cookies[0].Value
-				var s Session
-				if !s.ValidateJWT(rawToken) {
-					http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
-					return
-				}
-				if s.IsExpired() {
-					http.Error(w, "Expired session", http.StatusUnauthorized)
-					return
-				}
-
-				s.UpdateExpiration()
-				http.SetCookie(w, &http.Cookie{
-					Name:     AuthCookieName,
-					Value:    s.CreateJWT(),
-					MaxAge:   int(time.Until(s.Expire).Seconds()),
-					Secure:   true,
-					HttpOnly: true,
-					SameSite: http.SameSiteDefaultMode,
-				})
-
-				ctx := context.WithValue(r.Context(), sessionContextKey{}, s)
-				r = r.WithContext(ctx)
 			}
+			rawToken := cookies[0].Value
+			var ses Session
+			if !ses.ValidateJWT(rawToken) {
+				Logout(w)
+				logger.Log.Debug("req=%p M-ware LOGOUT; reason= %s", r, "session is invalid JWT")
+			} else if ses.IsExpired() {
+				Logout(w)
+				logger.Log.Debug("req=%p M-ware LOGOUT; reason= %s", r, "session is expired")
+			} else {
+				logger.Log.Debug("req=%p M-ware OK; updated session", r)
+			}
+			ctx := context.WithValue(r.Context(), sessionContextKey{}, ses)
+			r = r.WithContext(ctx)
+		} else {
+			logger.Log.Debug("req=%p N-ware OK; no cookie", r)
 		}
 		h.ServeHTTP(w, r)
 	})
@@ -86,54 +67,34 @@ func MiddlewareFunc(f http.HandlerFunc) http.Handler {
 // AuthMiddleware modifies the context of request, [Session] can be retrieved with [Get].
 func AuthMiddleware(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		raw := r.Header.Get("Cookie")
-		if raw == "" {
-			http.Error(w, "Unauthorized, no cookie found", http.StatusUnauthorized)
+		if cookies := r.CookiesNamed(AuthCookieName); len(cookies) > 0 {
+			if len(cookies) > 1 {
+				http.Redirect(w, r, "/", http.StatusSeeOther)
+				logger.Log.Debug("req=%p A-ware FAIL; err= %s", r, "too many auth cookies")
+				return
+			}
+			rawToken := cookies[0].Value
+			var ses Session
+			if !ses.ValidateJWT(rawToken) {
+				Logout(w)
+				http.Redirect(w, r, "/", http.StatusSeeOther)
+				logger.Log.Debug("req=%p A-ware LOGOUT; reason= %s", r, "session is invalid JWT")
+				return
+			} else if ses.IsExpired() {
+				Logout(w)
+				http.Redirect(w, r, "/", http.StatusSeeOther)
+				logger.Log.Debug("req=%p A-ware LOGOUT; reason= %s", r, "session is expired")
+				return
+			} else {
+				logger.Log.Debug("req=%p A-ware OK; updated session", r)
+			}
+			ctx := context.WithValue(r.Context(), sessionContextKey{}, ses)
+			r = r.WithContext(ctx)
+		} else {
+			http.Redirect(w, r, "/", http.StatusSeeOther)
+			logger.Log.Debug("req=%p A-ware FAIL; err= %s", r, "user is not authorized")
 			return
 		}
-
-		cookies, err := http.ParseCookie(raw)
-		if err != nil {
-			http.Error(w, fmt.Sprintf("Invalid cookie header: %v", err), http.StatusUnauthorized)
-			return
-		}
-
-		cookies = slices.DeleteFunc(cookies, func(c *http.Cookie) bool {
-			return c.Name != AuthCookieName
-		})
-
-		if len(cookies) == 0 {
-			http.Error(w, "No authentication cookie set", http.StatusUnauthorized)
-			return
-		} else if len(cookies) > 1 {
-			http.Error(w, "Multiple authentication cookies", http.StatusUnauthorized)
-			return
-		}
-
-		rawToken := cookies[0].Value
-		var s Session
-		if !s.ValidateJWT(rawToken) {
-			http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
-			return
-		}
-		if s.IsExpired() {
-			http.Error(w, "Expired session", http.StatusUnauthorized)
-			return
-		}
-
-		s.UpdateExpiration()
-		http.SetCookie(w, &http.Cookie{
-			Name:     AuthCookieName,
-			Value:    s.CreateJWT(),
-			MaxAge:   int(time.Until(s.Expire).Seconds()),
-			Secure:   true,
-			HttpOnly: true,
-			SameSite: http.SameSiteDefaultMode,
-		})
-
-		ctx := context.WithValue(r.Context(), sessionContextKey{}, s)
-		r = r.WithContext(ctx)
-
 		h.ServeHTTP(w, r)
 	})
 }
@@ -150,29 +111,30 @@ func AuthMiddlewareFunc(f http.HandlerFunc) http.Handler {
 // Note that requests with invalid Cookie headers will still be rejected.
 func NoAuthMiddleware(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if raw := r.Header.Get("Cookie"); raw != "" {
-			cookies, err := http.ParseCookie(raw)
-			if err != nil {
-				http.Error(w, fmt.Sprintf("Invalid cookie header: %v", err), http.StatusBadRequest)
+		if cookies := r.CookiesNamed(AuthCookieName); len(cookies) > 0 {
+			if len(cookies) > 1 {
+				http.Redirect(w, r, "/", http.StatusSeeOther)
+				logger.Log.Debug("req=%p N-ware FAIL; err= %s", r, "too many auth cookies")
 				return
 			}
-
-			cookies = slices.DeleteFunc(cookies, func(c *http.Cookie) bool {
-				return c.Name != AuthCookieName
-			})
-
-			if len(cookies) == 1 {
-				http.Error(w, "User must not be authorized", http.StatusBadRequest)
-				return
-			} else if len(cookies) > 1 {
-				http.Error(w, "Multiple authentication cookies", http.StatusBadRequest)
+			rawToken := cookies[0].Value
+			var ses Session
+			if !ses.ValidateJWT(rawToken) {
+				Logout(w)
+				logger.Log.Debug("req=%p N-ware LOGOUT; reason= %s", r, "session is invalid JWT")
+			} else if ses.IsExpired() {
+				Logout(w)
+				logger.Log.Debug("req=%p N-ware LOGOUT; reason= %s", r, "session is expired")
+			} else {
+				http.Redirect(w, r, "/", http.StatusSeeOther)
+				logger.Log.Debug("req=%p N-ware FAIL; err= %s", r, "user is authorized")
 				return
 			}
-
-			ctx := context.WithValue(r.Context(), sessionContextKey{}, Session{})
+			ctx := context.WithValue(r.Context(), sessionContextKey{}, ses)
 			r = r.WithContext(ctx)
+		} else {
+			logger.Log.Debug("req=%p N-ware OK; no cookie", r)
 		}
-
 		h.ServeHTTP(w, r)
 	})
 }

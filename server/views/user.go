@@ -10,15 +10,30 @@ import (
 
 // Show user's stats via template with prepared section to handle fetch request of submitions. Expects all information to be valid.
 func UserFindInfo(w http.ResponseWriter, username string, isenglish bool, acceptance_rate, solved_rate sql.NullFloat64) error {
-	var templ string // ? TODO(misha): lang dependency
+	var templ string
 	if isenglish {
-		templ = "TODO.html"
+		templ = "userpage.html"
 	} else {
-		templ = "TODO.html"
+		templ = "userpage_ru.html"
+	}
+
+	if !acceptance_rate.Valid {
+		acceptance_rate.Float64 = 0
+	}
+	if !solved_rate.Valid {
+		solved_rate.Float64 = 0
 	}
 
 	buf := bufio.NewWriter(w)
-	err := prepared.Templates.ExecuteTemplate(buf, templ, nil) // TODO(vadim): add struct info into the page
+	err := prepared.Templates.ExecuteTemplate(buf, templ, struct {
+		Username       string
+		AcceptanceRate float64
+		SolvedRate     float64
+	}{
+		Username:       username,
+		AcceptanceRate: acceptance_rate.Float64,
+		SolvedRate:     solved_rate.Float64,
+	})
 	if err != nil {
 		return err
 	}
@@ -27,11 +42,11 @@ func UserFindInfo(w http.ResponseWriter, username string, isenglish bool, accept
 
 // Show login page. Expects all information to be valid.
 func UserFindLogin(w http.ResponseWriter, isenglish bool) error {
-	var templ string // ? TODO(misha): lang dependency
+	var templ string
 	if isenglish {
 		templ = "login.html"
 	} else {
-		templ = "TODO.html"
+		templ = "login_ru.html"
 	}
 
 	buf := bufio.NewWriter(w)
@@ -44,11 +59,11 @@ func UserFindLogin(w http.ResponseWriter, isenglish bool) error {
 
 // Show registration page. Expects all information to be valid.
 func UserCreate(w http.ResponseWriter, isenglish bool) error {
-	var templ string // ? TODO(misha): lang dependency
+	var templ string
 	if isenglish {
 		templ = "registration.html"
 	} else {
-		templ = "TODO.html"
+		templ = "registration_ru.html"
 	}
 
 	buf := bufio.NewWriter(w)

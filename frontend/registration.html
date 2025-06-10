@@ -21,8 +21,8 @@
                 
                 <div class="header-user">
                     <div class="language">
-                        <a href="?lang=en">EN</a> <!--TODO(misha): save it with js -->
-                        <a href="?lang=ru">RU</a> <!--TODO(misha): save it with js -->
+                        <a href="/register/?lang=EN">EN</a>
+                        <a href="/register/?lang=ru">RU</a>
                     </div>
                     <div class="login">
                         <a href="/login/">Login</a>
@@ -36,7 +36,7 @@
     <nav class="navigation">
         <div class="container">
             <ul class="nav-ul">
-                <li id="log_out" class="nav-ul-element"><a href="index.html">BACK</a></li>
+                <li id="log_out" class="nav-ul-element"><a href="/">BACK</a></li>
               </ul>
         </div>
     </nav>
@@ -45,17 +45,15 @@
 
     <div class="auth_form">
         <div class="form_text">Registration</div>
-        <form id="reg_form">
-            <label for="uname"><b>Username</b></label>
-            <input type="text" placeholder="Enter Username" name="uname" required>
+        <form id="reg_form" method="POST">
+            <label for="username"><b>Username</b></label>
+            <input type="text" placeholder="Enter Username" name="username" required>
 
-            <label for="psw"><b>Password</b></label>
-            <input type="password" placeholder="Enter Password" name="psw" required>
+            <label for="password"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" name="password" required>
 
             <button type="submit">Registration</button>
         </form>
     </div>
-    <script src="static/scripts/log_reg.js"></script>
-    <script src="static/scripts/lang.js"></script>
 </body>
 </html>

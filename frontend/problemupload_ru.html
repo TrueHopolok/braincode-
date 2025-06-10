@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/styles/indexpage.css">
-    <link rel="stylesheet" href="../static/styles/problemupload.css">
-    <link rel="icon" href="../static/favicon.png" type="image/png">
+    <link rel="stylesheet" href="static/styles/indexpage.css">
+    <link rel="stylesheet" href="static/styles/problemupload.css">
+    <link rel="icon" href="static/favicon.png" type="image/png">
     <title>Upload - Braincode</title>
 </head>
 <body>
@@ -15,17 +15,17 @@
             <div class="header">
                 
                 <div class="header-logo">
-                    <img src="../static/headericon.png" alt="!"> 
+                    <img src="static/headericon.png" alt="!"> 
                     <div class="logo-text">Braincode</div>
                 </div>
                 
                 <div class="header-user">
                     <div class="language">
-                        <a href="../problemupload.html">EN</a>
-                        <a href="#">RU</a>
+                        <a href="/upload/?lang=EN">EN</a>
+                        <a href="/upload/?lang=RU">RU</a>
                     </div>
                     <div class="login">
-                        <a href="userpage_ru.html">Username</a>
+                        <a href="/stats/?lang=RU">Username</a>
                     </div>
                 </div>
             </div>
@@ -36,8 +36,8 @@
     <nav class="navigation">
         <div class="container">
             <ul class="nav-ul">
-                <li id="problem-upload" class="nav-ul-element"><a href="problemset_ru.html">СПИСОК ЗАДАЧ</a></li>
-                <li class="nav-ul-element"><a href="index_ru.html">ВЫХОД</a></li>
+                <li id="problem-upload" class="nav-ul-element"><a href="/?lang=RU">СПИСОК ЗАДАЧ</a></li>
+                <li class="nav-ul-element"><a onclick="logout()" href="/?lang=RU">ВЫХОД</a></li>
             </ul>
         </div>
     </nav>
@@ -51,8 +51,8 @@
             <button type="submit">Отправить</button>
         </form>
     </div>
-    <script src="../static/scripts/requests.js"></script>
-    <script src="../static/scripts/problems_upload.js"></script>
-    <script src="../static/scripts/lang.js"></script>
+    <script src="static/scripts/logout.js"></script>
+    <script src="static/scripts/requests.js"></script>
+    <script src="static/scripts/problems_upload.js"></script>
 </body>
 </html>
