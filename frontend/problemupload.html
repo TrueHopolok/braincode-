@@ -4,12 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="static/styles/indexpage.css">
-    <link rel="stylesheet" href="static/styles/loginregpage.css">
+    <link rel="stylesheet" href="static/styles/problemupload.css">
     <link rel="icon" href="static/favicon.png" type="image/png">
-    <title>Login - Braincode</title>
+    <title>Upload - Braincode</title>
 </head>
 <body>
-    
     <header>
         <div class="container">
             
@@ -22,11 +21,11 @@
                 
                 <div class="header-user">
                     <div class="language">
-                        <a href="?lang=en">EN</a> <!--TODO(misha): save it with js -->
-                        <a href="?lang=ru">RU</a> <!--TODO(misha): save it with js -->
+                        <a href="#">EN</a>
+                        <a href="ru/problemset_ru.html">RU</a>
                     </div>
                     <div class="login">
-                        <a href="/register/">Registration</a>
+                        <a href="userpage.html">Username</a>
                     </div>
                 </div>
             </div>
@@ -37,27 +36,23 @@
     <nav class="navigation">
         <div class="container">
             <ul class="nav-ul">
-                <li class="nav-ul-element"><a href="index.html">BACK</a></li>
-              </ul>
+                <li id="problem-upload" class="nav-ul-element"><a href="problemset.html">PROBLEMSET</a></li>
+                <li id="log_out" class="nav-ul-element"><a href="index.html">LOG OUT</a></li>
+            </ul>
         </div>
     </nav>
 
-    <div class="auth_form">
-        <div class="form_text">Login</div>
-        <form id="login_form">
-            <label for="uname"><b>Username</b></label>
-            <input type="text" placeholder="Enter Username" name="uname" required>
-
-            <label for="psw"><b>Password</b></label>
-            <input type="password" placeholder="Enter Password" name="psw" required>
-
-            <button type="submit">Login</button>
-            <label>
-            <input type="checkbox" checked="checked" name="remember"> Remember me
-            </label>
+    <div class="container">
+        <form class="task_upload" id="task_upload">
+            <label for="tname"><b>Task Name</b></label>
+            <input type="text" placeholder="Enter Name" name="tname" required>
+            <label for="des"><b>Description</b></label>
+            <textarea type="text" placeholder="Enter Task" name="des" required></textarea>
+            <button type="submit">Submit</button>
         </form>
     </div>
-    <script src="static/scripts/log_reg.js"></script>
+    <script src="static/scripts/requests.js"></script>
+    <script src="static/scripts/problems_upload.js"></script>
     <script src="static/scripts/lang.js"></script>
 </body>
 </html>

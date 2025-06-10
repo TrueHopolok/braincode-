@@ -1,0 +1,13 @@
+.task_upload input,
+.task_upload textarea,
+.task_upload label,
+.task_upload button {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.task_upload textarea {
+    resize: none;
+    width: 1200px;
+    height: 400px;
+}
