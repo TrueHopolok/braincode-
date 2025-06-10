@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,18 +9,19 @@
     <link rel="icon" href="static/favicon.png" type="image/png">
     <title>Stats - Braincode</title>
 </head>
+
 <body>
-    
+
     <header>
         <div class="container">
-            
+
             <div class="header">
-                
+
                 <div class="header-logo">
-                    <img src="static/headericon.png" alt="!"> 
+                    <img src="static/headericon.png" alt="!">
                     <div class="logo-text">Braincode</div>
                 </div>
-                
+
                 <div class="header-user">
                     <div class="language">
                         <a href="/stats/?lang=EN">EN</a>
@@ -30,7 +32,7 @@
                     </div>
                 </div>
             </div>
-    
+
         </div>
     </header>
 
@@ -40,12 +42,12 @@
                 <li id="problem-set" class="nav-ul-element"><a href="/?lang=RU">НАБОР ЗАДАЧ</a></li>
                 <li id="problem-upload" class="nav-ul-element"><a href="/upload/?lang=RU">ВЫЛОЖИТЬ ЗАДАЧУ</a></li>
                 <li class="nav-ul-element">
-                    <a onclick="logout()" href="/?lang=RU">ВЫХОД</a>
+                    <a onclick="logout(event)" href="/?lang=RU">ВЫХОД</a>
                 </li>
-              </ul>
+            </ul>
         </div>
     </nav>
-    
+
     <div class="container">
         <div class="user_info">
             <div class="name">Имя пользователя: {{.Username}}</div>
@@ -65,7 +67,8 @@
                 <div id="sub_list"><!-- FETCHED --></div>
             </div>
         </div>
-     </div>
-     <script src="static/scripts/logout.js"></script>
+    </div>
+    <script src="static/scripts/logout.js"></script>
 </body>
+
 </html>

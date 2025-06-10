@@ -39,7 +39,7 @@ func EnableControllerHandlers(mux *http.ServeMux) {
 
 	mux.Handle("GET /login/", session.NoAuthMiddlewareFunc(controllers.LoginPage))
 	mux.Handle("POST /login/", session.NoAuthMiddlewareFunc(controllers.UserLogin))
-	mux.Handle("DELETE /login/", session.AuthMiddlewareFunc(controllers.UserLogout))
+	mux.Handle("POST /logout/", session.AuthMiddlewareFunc(controllers.UserLogout))
 
 	mux.Handle("GET /register/", session.NoAuthMiddlewareFunc(controllers.RegistrationPage))
 	mux.Handle("POST /register/", session.NoAuthMiddlewareFunc(controllers.UserRegister))
