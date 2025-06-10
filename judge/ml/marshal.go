@@ -21,14 +21,18 @@ func (d *Document) MarshalBinary() ([]byte, error) {
 	return d.AppendBinary(nil)
 }
 
+// This type is here to prevent infinite recursion:
+// it does not implement encoding.BinaryMarshaler / binary.Unmarshaler.
+type serializableDocument Document
+
 func (d *Document) AppendBinary(dst []byte) ([]byte, error) {
 	buf := bytes.NewBuffer(dst)
-	if err := gob.NewEncoder(buf).Encode(d); err != nil {
+	if err := gob.NewEncoder(buf).Encode((*serializableDocument)(d)); err != nil {
 		return nil, err
 	}
 	return buf.Bytes(), nil
 }
 
 func (d *Document) UnmarshalBinary(src []byte) error {
-	return gob.NewDecoder(bytes.NewReader(src)).Decode(d)
+	return gob.NewDecoder(bytes.NewReader(src)).Decode((*serializableDocument)(d))
 }

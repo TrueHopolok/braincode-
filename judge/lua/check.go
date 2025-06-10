@@ -40,6 +40,7 @@ import (
 //
 // Zero value checker is invalid, use [NewChecker] to construct one. It is safe to copy and use concurrently, because it is immutable.
 type Checker struct {
+	source      string // used for serialization only
 	parsed      []ast.Stmt
 	compiled    *lua.FunctionProto
 	useSolution bool
@@ -53,10 +54,10 @@ func NewChecker(source string) (Checker, error) {
 	if err != nil {
 		return Checker{}, fmt.Errorf("parse failed: %w", err)
 	}
-	return newChecker(chunks)
+	return newChecker(source, chunks)
 }
 
-func newChecker(chunks []ast.Stmt) (Checker, error) {
+func newChecker(source string, chunks []ast.Stmt) (Checker, error) {
 	f, err := lua.Compile(chunks, "checker.lua")
 	if err != nil {
 		return Checker{}, fmt.Errorf("compilation failed: %w", err)
@@ -83,6 +84,7 @@ func newChecker(chunks []ast.Stmt) (Checker, error) {
 	}
 
 	return Checker{
+		source:      source,
 		parsed:      chunks,
 		compiled:    f,
 		useSolution: !che,
@@ -155,10 +157,12 @@ func (c Checker) runChecker(l luaState, input, output string) (string, error) {
 	return "", nil
 }
 
+type checkerSource string
+
 func (c Checker) AppendBinary(b []byte) ([]byte, error) {
 	// only ast is serialized
 	buf := bytes.NewBuffer(b)
-	err := gob.NewEncoder(buf).Encode(c.parsed)
+	err := gob.NewEncoder(buf).Encode(checkerSource(c.source))
 	return buf.Bytes(), err
 }
 
@@ -167,13 +171,13 @@ func (c *Checker) MarshalBinary() (data []byte, err error) {
 }
 
 func (c *Checker) UnmarshalBinary(data []byte) error {
-	var p []ast.Stmt
+	var p checkerSource
 
 	if err := gob.NewDecoder(bytes.NewReader(data)).Decode(&p); err != nil {
 		return err
 	}
 
-	cc, err := newChecker(p)
+	cc, err := NewChecker(string(p))
 	if err != nil {
 		return err
 	}

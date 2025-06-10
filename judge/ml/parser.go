@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"maps"
 	"net/url"
 	"slices"
 	"strconv"
@@ -738,6 +739,32 @@ func (p *parser) finish() (Document, error) {
 		})
 
 		pctx.CurrentLocale.Blocks = append(pctx.CurrentLocale.Blocks, blocks...)
+	}
+
+	locales := slices.Sorted(maps.Keys(pctx.Doc.Localizations))
+	defaultLocale := pctx.Doc.Localizations[""]
+	if defaultLocale == nil {
+		defaultLocale = new(Localizable)
+		pctx.Doc.Localizations[""] = defaultLocale
+	}
+	if defaultLocale.Name == "" {
+		for _, l := range locales {
+			ll := pctx.Doc.Localizations[l]
+			if ll.Name != "" {
+				defaultLocale.Name = ll.Name
+				break
+			}
+		}
+	}
+	if len(defaultLocale.Blocks) == 0 {
+		for _, l := range locales {
+			ll := pctx.Doc.Localizations[l]
+			if len(ll.Blocks) > 0 {
+				// VERY shallow copy, should be fine, blocks are R/O
+				defaultLocale.Blocks = ll.Blocks
+				break
+			}
+		}
 	}
 
 	var badLocales []string

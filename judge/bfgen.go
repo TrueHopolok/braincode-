@@ -39,6 +39,21 @@ func (b bfGenerator) GenerateInput() ([][]string, error) {
 	return w.groups, nil
 }
 
+func (b bfGenerator) MarshalBinary() ([]byte, error) { return bf.ByteCode(b).MarshalBinary() }
+func (b bfGenerator) AppendBinary(buf []byte) ([]byte, error) {
+	return bf.ByteCode(b).AppendBinary(buf)
+}
+func (b *bfGenerator) UnmarshalBinary(buf []byte) error {
+	return (*bf.ByteCode)(b).UnmarshalBinary(buf)
+}
+func (b bfGenerator) MarshalText() ([]byte, error) { return bf.ByteCode(b).MarshalText() }
+func (b bfGenerator) AppendText(buf []byte) ([]byte, error) {
+	return bf.ByteCode(b).AppendText(buf)
+}
+func (b *bfGenerator) UnmarshalText(buf []byte) error {
+	return (*bf.ByteCode)(b).UnmarshalText(buf)
+}
+
 type bfGenWriter struct {
 	off        uint
 	groupDelim byte

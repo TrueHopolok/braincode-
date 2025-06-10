@@ -48,7 +48,7 @@ func unmarshalGenerator(dec *gob.Decoder) (InputGenerator, error) {
 		return *val.List, nil
 	}
 	if val.BF != nil {
-		return &smartGenerator{*val.BF}, nil
+		return &smartGenerator{val.BF}, nil
 	}
 	return nil, errors.New("value did not contain any known generator")
 }

@@ -47,13 +47,27 @@
 
     <div class="container">
         <form class="task_upload" id="task_upload">
-            <label for="tname"><b>Task Name</b></label>
-            <input type="text" placeholder="Enter Name" name="tname" required>
-            <label for="des"><b>Description</b></label>
-            <textarea type="text" placeholder="Enter Task" name="des" required></textarea>
+            <label for="des"><b>Task statement</b></label>
+            <textarea id="problem_statement" type="text" placeholder="Enter Task" name="des" required></textarea>
             <button type="submit">Submit</button>
         </form>
     </div>
+
+    <script>
+        document.getElementById("task_upload").addEventListener("submit", async e => {
+            e.preventDefault();
+            const source = document.getElementById("problem_statement").value
+
+            fetch("/upload/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/markleft", // yay, custom content type
+                },
+                body: source,
+            });
+
+        })
+    </script>
     <script src="static/scripts/logout.js"></script>
 </body>
 

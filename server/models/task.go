@@ -154,6 +154,14 @@ func TaskCreate(ioDoc io.ReadCloser, username string) error {
 		return errors.New("No valid task titles were provided - Nil entries")
 	}
 
+	// FIXME(anpir)
+	// Previous logic is broken and this fails if no locale is provided.
+	// (nil pointer dereference)
+	// This is a crotch
+	localeDEFAULT = cmp.Or(localeDEFAULT, new(ml.Localizable))
+	localeEN = cmp.Or(localeEN, new(ml.Localizable))
+	localeRU = cmp.Or(localeRU, new(ml.Localizable))
+
 	titleDEFAULT := cmp.Or(localeDEFAULT.Name, localeEN.Name, localeRU.Name)
 	if titleDEFAULT == "" {
 		return errors.New("No valid task titles were provided - Zero entries")

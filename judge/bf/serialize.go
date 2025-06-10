@@ -93,14 +93,14 @@ func (bc *ByteCode) UnmarshalBinary(data []byte) error {
 // MarshalText emits a valid brainfunk source. It will never error.
 //
 // Implements [encoding.TextMarshaler].
-func (bc *ByteCode) MarshalText() (text []byte, err error) {
+func (bc ByteCode) MarshalText() (text []byte, err error) {
 	return bc.AppendText(nil)
 }
 
 // AppendText appends valid brainfunk source to b. It will never error.
 //
 // Implements [encoding.TextAppender].
-func (bc *ByteCode) AppendText(b []byte) ([]byte, error) {
+func (bc ByteCode) AppendText(b []byte) ([]byte, error) {
 	// ensure additional bc.ops bytes
 	if cap(b)-len(b) < len(bc.ops) {
 		newB := make([]byte, len(b), len(b)+len(bc.ops))

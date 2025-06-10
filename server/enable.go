@@ -53,6 +53,14 @@ func EnableControllerHandlers(mux *http.ServeMux) {
 
 func LoggerMiddleware(mux *http.ServeMux) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		defer func() {
+			if r := recover(); r != nil {
+				logger.Log.Error("Caught panic: %v (%#v of type %T)", r, r, r)
+				http.Error(w, "Go panicked :(", http.StatusInternalServerError)
+				panic(r)
+			}
+		}()
+
 		logger.Log.Debug("req=%p met=%s url=%s | arrived", r, r.Method, r.URL.Path)
 		defer logger.Log.Debug("req=%p met=%s url=%s | served", r, r.Method, r.URL.Path)
 
