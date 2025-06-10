@@ -1,0 +1,108 @@
+{{- /* Sub block definitions */ -}}
+
+{{- define "invalidBlock" -}}
+
+    <p>Invalid block {{printf "%T" .}}</p>
+    
+{{- end -}}
+
+
+{{- define "richText" -}}
+
+    {{- if .I.IsMath -}}
+
+        {{- $.RenderMathInline .I.Data -}}
+
+    {{- else -}}
+
+        {{- if .I.IsPlain -}}
+            {{- .I.Data -}}
+        {{- else if .I.IsLink -}}    
+            <a href="{{.URL}}" class="{{$.CM.SpanLink}}">
+        {{- else if .I.IsBold -}}
+            <span class="{{- $.CM.SpanBold -}}">
+        {{- else if .I.IsItalic -}}
+            <span class="{{- $.CM.SpanItalic -}}">
+        {{- else if .I.IsStrike -}}
+            <span class="{{- $.CM.SpanStrike -}}">
+        {{- else if .I.IsCode -}}
+            <span class="{{- $.CM.SpanCode -}}">
+        {{- else if .I.IsUnderline -}}
+            <span class="{{- $.CM.SpanUnderline -}}">
+        {{- else if $.Debug -}}
+            invalid style {{.}}
+        {{- end -}}
+        {{- range .I.Children -}}
+            {{- template "richText" $.W . -}}
+        {{- end -}}
+        {{- if .I.IsLink -}}
+            </a>
+        {{- else if not .I.IsPlain -}}
+            </span>
+        {{- end -}}
+
+    {{- end -}}
+{{- end -}}
+
+
+{{- /* Document content */ -}}
+
+<div class="{{$.CM.TaskTitle}}">
+{{- with .Name -}}
+{{- . -}}
+{{- else -}}
+No title
+{{- end -}}
+</div> {{- /**/ -}}
+<div class="{{$.CM.InfoBlock}}"> {{- /**/ -}}
+    <div class="{{$.CM.InfoInstructions}}">{{.Instructions}}</div> {{- /**/ -}}
+    <div class="{{$.CM.InfoSteps}}">{{.Steps}}</div> {{- /**/ -}}
+    <div class="{{$.CM.InfoMemory}}">{{.Memory}}</div> {{- /**/ -}}
+</div> {{- /**/ -}}
+
+{{- range .Blocks -}}
+    {{- block "node" $.W . -}}
+        {{- with .Title -}}
+            <div class="{{$.CM.SectionTitle}}">
+                {{- template "richText" $.W . -}}
+            </div>
+        {{- else with .Paragraph -}}
+            <div class="{{$.CM.Paragraph}}">
+                {{- template "richText" $.W . -}}
+            </div>
+        {{- else with .CodeBlock -}}
+            <div class="{{$.CM.CodeBlock}}">
+                {{- . -}}
+            </div>
+        {{- else with .Image -}}
+            <img class="{{$.CM.Image}}" src="{{.}}"/>
+        {{- else with .Example -}}
+            <div class="{{$.CM.Example}}">
+                <div class="{{$.CM.ExampleInput}}">{{.Input}}</div> {{- /**/ -}}
+                <div class="{{$.CM.ExampleOutput}}">{{.Output}}</div> {{- /**/ -}}
+            </div> {{- /**/ -}}
+        {{- else with .List -}}
+            {{- $class := $.CM.UnorderedList -}}
+            {{- if .IsOrdered -}}{{- $class = $.CM.OrderedList -}}{{- end -}}
+            <div class="{{$class}}">
+                {{- range .Items -}}
+                <div class="{{$.CM.ListItem}}">
+                    {{- range . -}}
+                        {{- template "node" $.W . -}}
+                    {{- end -}}
+                </div>
+                {{- end -}}
+            </div>
+        {{- else with .Quote -}}
+            <div class="{{$.CM.Quote}}">
+               {{- range . -}}
+                    {{- template "node" $.W . -}}
+                {{- end -}}
+            </div>
+        {{- else with .Math -}}
+            {{- $.RenderMathBlock . -}}
+        {{- else with $.Debug -}}
+            {{- template "invalidBlock" $.I -}}
+        {{- end -}} 
+    {{- end -}}
+{{- end -}}

@@ -83,6 +83,7 @@ func TestGetTests(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			got, err := lua.GetTests(tt.source)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("GetTests() error = %v, wantErr %v", err, tt.wantErr)
