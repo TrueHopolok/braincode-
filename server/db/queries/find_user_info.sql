@@ -14,12 +14,12 @@ SELECT
 	(
 		(
 			SELECT COUNT(*) 
-			FROM status AS st 
+			FROM Status AS st 
 			WHERE st.score = 1
 			AND st.owner_name = ?
 		) * 1.0 / (
 			SELECT COUNT(*) 
-			FROM task
+			FROM Task
 		)
 	) AS solved_rate
 FROM Submission AS s
