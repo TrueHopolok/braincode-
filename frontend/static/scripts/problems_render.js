@@ -2,7 +2,6 @@ const pageSize = 2;
 
 const problemset_content = document.getElementById("problemset-content");
 const problems = document.getElementById("problems");
-const checkbox = document.getElementById("user_problem");
 
 function arrowRender() {
     const left_arrow = document.createElement("a")

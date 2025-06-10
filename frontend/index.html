@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="static/styles/indexpage.css">
+    <link rel="stylesheet" href="static/styles/problemset.css">
     <link rel="icon" href="static/favicon.png" type="image/png">
     <title>Braincode</title>
 </head>
@@ -37,10 +38,23 @@
     <nav class="navigation">
         <div class="container">
             <ul class="nav-ul">
-                <li id="problem-set" class="nav-ul-element"><a href="login.html">PROBLEMSET</a></li>
+                <li id="problem-set" class="nav-ul-element"><a href="login.html">PROBLEMUPLOAD</a></li>
               </ul>
         </div>
     </nav>
+
+    <section class="section">
+        <div class="container">
+            <div id="problemset-content" class="problemset-content">
+                <div id="problems" class="problems">
+
+                </div>   
+            </div>
+        </div>
+    </section>
+    
+    <script src="static/scripts/requests.js"></script>
+    <script src="static/scripts/problems_render.js"></script>
     <script src="static/scripts/lang.js"></script>
 </body>
 </html>

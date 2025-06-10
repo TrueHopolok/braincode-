@@ -158,3 +158,35 @@ function profile_req() {
         render_profile(data);
     });
 }
+
+function profiletask_req() {
+    fetch('', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Session': session,
+            'lang': lang,
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        render_usertask(data);
+    });
+}
+
+function profilerate_req() {
+    fetch('', {
+        method: 'POST',   
+        headers: {
+            'Content-Type': 'application/json',
+            'Session': session,
+            'lang': lang,
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        rate.innerHTML = data.rate;
+    });
+}
+
+
