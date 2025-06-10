@@ -6,6 +6,7 @@ package db
 
 import (
 	"database/sql"
+	"embed"
 	"fmt"
 
 	"github.com/TrueHopolok/braincode-/server/config"
@@ -33,4 +34,13 @@ func Init() error {
 	}
 	Conn = DB{sqldb}
 	return Conn.Ping()
+}
+
+//go:embed queries/*.sql
+var queriesFS embed.FS
+
+// GetQuery retrieves named query from an embedded filesystem.
+// It is safe to use concurrently.
+func GetQuery(name string) ([]byte, error) {
+	return queriesFS.ReadFile("queries/" + name + ".sql")
 }
