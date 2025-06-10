@@ -6,20 +6,19 @@
     <link rel="stylesheet" href="static/styles/indexpage.css">
     <link rel="stylesheet" href="static/styles/taskpage.css">
     <link rel="icon" href="static/favicon.png" type="image/png">
-    <title>Task - Braincode</title>
-</head
-
-
->
+    <title>{{ .Tr "Task" "Задача" }} - Braincode</title>
+    <!-- TODO: vadim / andrrey- put actual task title here -->
+</head>
 <body>
     <div class="task">
         <div class="task-information">
-            <a href="/" class="back">BACK</a>
-            <!--<div class="task_name" id ="task_name"></div>
-            <div class="task_des" id="task_des"></div>
-            <div>Example input</div>
-            <div>Example output</div>-->
-            <div id="doc"></div>
+            <a href="{{ .TrURL "/" }}" class="back">{{ .Tr "BACK" "НАЗАД" }}</a>
+            <div id="doc">
+                <div class="task_name">Example name (no tr for now)</div>
+                <div class="task_des">Example task</div>
+                <div>Example input</div>
+                <div>Example output</div>
+            </div>
         </div> 
 
         <div class="task-submition">
@@ -35,6 +34,7 @@
 
     </div>
 
+    <!-- TODO: wrong scripts here -->
     <script src="static/scripts/wasm_exec.js"></script>
     <script src="static/scripts/wasm.js"></script>
     <script src="static/scripts/requests.js"></script>

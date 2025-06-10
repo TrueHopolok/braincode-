@@ -1,58 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ .LangNormalized }}">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="static/styles/indexpage.css">
     <link rel="stylesheet" href="static/styles/loginregpage.css">
     <link rel="icon" href="static/favicon.png" type="image/png">
-    <title>Login - Braincode</title>
+    <title>{{ .Tr "Login" "Вход"}} - Braincode</title>
 </head>
+
 <body>
-    
-    <header>
-        <div class="container">
-            
-            <div class="header">
-                
-                <div class="header-logo">
-                    <img src="static/headericon.png" alt="!"> 
-                    <div class="logo-text">Braincode</div>
-                </div>
-                
-                <div class="header-user">
-                    <div class="language">
-                        <a href="/login/?lang=EN">EN</a>
-                        <a href="/login/?lang=RU">RU</a>
-                    </div>
-                    <div class="login">
-                        <a href="/register/">Registration</a>
-                    </div>
-                </div>
-            </div>
-    
-        </div>
-    </header>
+    {{- template "headernav.html" . -}}
 
     <nav class="navigation">
         <div class="container">
             <ul class="nav-ul">
-                <li class="nav-ul-element"><a href="/">BACK</a></li>
-              </ul>
+                <li class="nav-ul-element"><a href="/">{{ .Tr "BACK" "НАЗАД" }}</a></li>
+            </ul>
         </div>
     </nav>
 
     <div class="auth_form">
-        <div class="form_text">Login</div>
+        <div class="form_text">{{ .Tr "Login" "Авторизация" }}</div>
         <form id="login_form" method="POST">
-            <label for="username"><b>Username</b></label>
-            <input type="text" placeholder="Enter Username" name="username" required>
+            <label for="username"><b>{{ .Tr "Username" "Имя Пользователя" }}</b></label>
+            <input type="text" placeholder="{{ .Tr " Enter Username" "Введите Имя Пользователя" }}" name="username"
+                required>
 
-            <label for="password"><b>Password</b></label>
-            <input type="password" placeholder="Enter Password" name="password" required>
+            <label for="password"><b>{{ .Tr "Password" "Пароль" }}</b></label>
+            <input type="password" placeholder="{{ .Tr " Enter Password" "Введите Пароль" }}" name="password" required>
 
-            <button type="submit">Login</button>
+            <button type="submit">{{ .Tr "Login" "Авторизация" }}</button>
         </form>
     </div>
 </body>
+
 </html>
