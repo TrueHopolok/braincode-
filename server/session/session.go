@@ -67,5 +67,7 @@ func Logout(w http.ResponseWriter) {
 		MaxAge:   -1,
 		Secure:   config.Get().Secure,
 		HttpOnly: true,
+		Path:     "/",
+		SameSite: http.SameSiteDefaultMode,
 	})
 }

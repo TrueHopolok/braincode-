@@ -198,7 +198,6 @@ func UserLogin(w http.ResponseWriter, r *http.Request) {
 }
 
 func UserLogout(w http.ResponseWriter, r *http.Request) {
-	logger.Log.Debug("USER TRYING TO LOGOUT")
 	session.Logout(w)
 	redirect2main(w, r, "userLogin")
 }
