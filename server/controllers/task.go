@@ -12,7 +12,7 @@ import (
 )
 
 func TaskDelete(w http.ResponseWriter, r *http.Request) {
-	staskid := r.URL.Query().Get("id")
+	staskid := r.Header.Get("id")
 	taskid, err := strconv.Atoi(staskid)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Invalid provided task-id=%s\nWant an integer", staskid), http.StatusInternalServerError)
@@ -45,13 +45,13 @@ func ProblemsPage(w http.ResponseWriter, r *http.Request) {
 		}
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	case "application/json":
-		page, err := strconv.Atoi(r.URL.Query().Get("id"))
+		page, err := strconv.Atoi(r.Header.Get("id"))
 		if err != nil || page < 0 {
 			page = 0
 		}
 
-		search := r.URL.Query().Get("id")
-		filter := r.URL.Query().Get("id") == "user-only"
+		search := r.Header.Get("search")
+		filter := r.Header.Get("filter") == "user-only"
 		data, err := models.TaskFindAll(username, search, filter, isauth, page)
 		if err != nil {
 			errResp_Fatal(w, r, err)

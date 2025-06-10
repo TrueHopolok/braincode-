@@ -43,7 +43,7 @@ func StatsPage(w http.ResponseWriter, r *http.Request) {
 		}
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	case "application/json":
-		page, err := strconv.Atoi(r.URL.Query().Get("id"))
+		page, err := strconv.Atoi(r.Header.Get("id"))
 		if err != nil || page < 0 {
 			page = 0
 		}
@@ -59,7 +59,7 @@ func StatsPage(w http.ResponseWriter, r *http.Request) {
 		}
 		w.Header().Set("Content-Type", "application/json")
 	case "application/brainfunk":
-		ssubid := r.URL.Query().Get("id")
+		ssubid := r.Header.Get("id")
 		subid, err := strconv.Atoi(ssubid)
 		if err != nil {
 			http.Error(w, fmt.Sprintf("Invalid provided submission-id=%s\nWant an integer", ssubid), http.StatusNotAcceptable)
