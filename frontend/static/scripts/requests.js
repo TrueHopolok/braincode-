@@ -15,6 +15,9 @@ The responses gurantee:
     Session (if authorized)
 */
 
+
+let size;
+
 const tasks = [
   { id: 1, title: "Hello", author: "1" },
   { id: 2, title: "Test", author: "2" },
@@ -22,26 +25,44 @@ const tasks = [
   { id: 4, title: "iiii", author: "4" }
 ];
 
-function task_req() {
-    fetch("https://jsonplaceholder.typicode.com/todos/1", {
+function allTasks() {
+    fetch(`/stats/`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
             'Session': session,
-        //        'lang': lang 
+            'lang': lang 
     }
     })
     .then(response => response.json())
     .then(data => {
-        // tasks = data;
+        size = data;
+    });    
+}
+
+function task_req() {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const page = urlParams.get('page');
+    fetch(`/stats/?page=${page}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Session': session,
+            'lang': lang 
+    }
+    })
+    .then(response => response.json())
+    .then(data => {
+        showPage(data)
     });
 }
-//.then(data => tasks.push(data));
+
 
 let session = localStorage.getItem('sessionToken');
 
 // Task
-function task_information(id) {
+function task_information() {
     fetch("https://jsonplaceholder.typicode.com/todos/1", {
         method: 'GET',
         headers: {
@@ -98,19 +119,6 @@ function submit_req(data, id) {
         answer.innerHTML = data;
     })
 }
-
-/*function test_req(data) {
-    fetch('', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Session': session,
-            'lang': lang,
-            'id': id
-        },
-        body: JSON.stringify(data)
-    }).then(response => response.json())
-}*/
 
 // Login ang registration
 function login_req(login, psw, remember) {
@@ -189,4 +197,21 @@ function profilerate_req() {
     });
 }
 
+// Submissions
+function submissions() {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const id = urlParams.get('id');
 
+    function submissions() {
+        fetch(`stats/?id=${id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Session': session,
+                'lang': lang,
+            }
+        }).then(response => response.json())    
+        .then(data => {des.innerHTML = data;});
+    }
+}

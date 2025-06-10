@@ -1,5 +1,6 @@
 const task_name = document.getElementById("task_name")
 const task_des = document.getElementById("task_des")
+const sub = document.getElementById("des");
 const urlParams = new URLSearchParams(window.location.search);
 const id = urlParams.get('id');
 
@@ -23,14 +24,14 @@ sub_btn.addEventListener('click', e => {
         const text_object = { text: text_value };
         console.log(text_object);
         submit_req(text_object, id);
+
     }
 });
 
-test_btn.addEventListener('click' , e => {
-    const text = document.getElementById("task_text")
-    const text_value = text.value;
-    if(text_value == "") {} 
-    else {
-        console.log(text_value); //TODO: test task
+function sub_render(subs) {
+    sub.innerHTML = '';
+    for(let i = 0; i < subs.length; i++) {
+        sub.innerHTML = subs[i].status;
+        // ...
     }
-})
+}
