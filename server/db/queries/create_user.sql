@@ -1,1 +1,1 @@
-INSERT INTO User (name, password, salt) VALUES (?, ?, ?);
+INSERT INTO User (name, password, salt, is_admin) VALUES (?, ?, ?, false);
