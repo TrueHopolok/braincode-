@@ -6,8 +6,7 @@
     <link rel="stylesheet" href="static/styles/indexpage.css">
     <link rel="stylesheet" href="static/styles/taskpage.css">
     <link rel="icon" href="static/favicon.png" type="image/png">
-    <title>{{ .Tr "Task" "Задача" }} - Braincode</title>
-    <!-- TODO: vadim / andrrey- put actual task title here -->
+    <title>{{ .Document.Name }} - Braincode</title>
 </head>
 <body>
     <div class="task">
@@ -20,7 +19,9 @@
 
         <div class="task-submition">
             <form action="#" method="post" class="submit_form">
-                <textarea id="task_text" class="submition-text" name="solution"></textarea>
+                <textarea id="task_text" class="submition-text" name="solution">
+                    {{- with .Solution -}}{{ . }}{{- end -}}
+                </textarea>
                 <div class="submition-btn">
                     <!-- <input id="test_btn" type="button" value="Test"> -->
 

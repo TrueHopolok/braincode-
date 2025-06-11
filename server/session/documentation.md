@@ -194,7 +194,7 @@ func New(name string) Session
 
 
 <a name="Session.CreateJWT"></a>
-### func \(Session\) [CreateJWT](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/jwt.go#L30>)
+### func \(Session\) [CreateJWT](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/jwt.go#L32>)
 
 ```go
 func (ses Session) CreateJWT() string
@@ -232,7 +232,7 @@ func (ses *Session) UpdateExpiration()
 
 
 <a name="Session.ValidateJWT"></a>
-### func \(\*Session\) [ValidateJWT](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/jwt.go#L46>)
+### func \(\*Session\) [ValidateJWT](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/jwt.go#L48>)
 
 ```go
 func (ses *Session) ValidateJWT(token string) bool

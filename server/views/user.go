@@ -3,19 +3,28 @@ package views
 import (
 	"bufio"
 	"database/sql"
-	"math"
 	"net/http"
 
 	"github.com/TrueHopolok/braincode-/server/prepared"
 )
 
 // Show user's stats via template with prepared section to handle fetch request of submitions. Expects all information to be valid.
-func UserFindInfo(w http.ResponseWriter, username string, isenglish bool, acceptance_rate, solved_rate sql.NullFloat64) error {
-	if !acceptance_rate.Valid {
-		acceptance_rate.Float64 = 0
+func UserFindInfo(w http.ResponseWriter, username string, isenglish bool, acceptanceRate, solvedRate sql.NullFloat64) error {
+	if !acceptanceRate.Valid {
+		acceptanceRate.Float64 = 0
 	}
-	if !solved_rate.Valid {
-		solved_rate.Float64 = 0
+	if !solvedRate.Valid {
+		solvedRate.Float64 = 0
+	}
+
+	ar := 0.0
+	if acceptanceRate.Valid {
+		ar = acceptanceRate.Float64 * 100
+	}
+
+	sr := 0.0
+	if solvedRate.Valid {
+		sr = solvedRate.Float64 * 100
 	}
 
 	buf := bufio.NewWriter(w)
@@ -26,8 +35,8 @@ func UserFindInfo(w http.ResponseWriter, username string, isenglish bool, accept
 		prepared.T
 	}{
 		Username:       username,
-		AcceptanceRate: math.Round(acceptance_rate.Float64*1000) / 10,
-		SolvedRate:     math.Round(solved_rate.Float64*1000) / 10,
+		AcceptanceRate: ar,
+		SolvedRate:     sr,
 		T:              prepared.TFromBools(isenglish, true),
 	})
 	if err != nil {

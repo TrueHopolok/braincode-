@@ -15,15 +15,16 @@ import (
 const SUBMISSIONS_AMOUNT_LIMIT = 20
 
 type SubmissionSet struct {
-	TotalAmount int              `json:"TotalAmount"`
-	Rows        []SubmissionInfo `json:"Rows"`
+	TotalAmount int
+	TotalPages  int
+	Rows        []SubmissionInfo
 }
 
 type SubmissionInfo struct {
-	Id        int           `json:"Id"`
-	Timestamp time.Time     `json:"Timestamp"`
-	TaskId    sql.NullInt64 `json:"TaskId"`
-	Score     float64       `json:"Score"`
+	Id        int
+	Timestamp time.Time
+	TaskId    sql.NullInt64
+	Score     float64
 }
 
 // Return a solution for selected submission
@@ -51,6 +52,26 @@ func SubmissionFindOne(username string, subid int) (string, bool, error) {
 	}
 
 	return res, true, tx.Commit()
+}
+
+func SubmissionFindLatest(username string, taskid int) (string, bool, error) {
+	query, err := db.GetQuery("find_submission_latest")
+	if err != nil {
+		return "", false, err
+	}
+
+	row := db.Conn.QueryRow(string(query), username, taskid, username, taskid)
+	var res string
+	if err := row.Scan(&res); err != nil {
+		if err == sql.ErrNoRows {
+			return "", false, nil
+		} else {
+			return "", false, err
+		}
+
+	}
+
+	return res, true, nil
 }
 
 // Get limited amount of submissions as encoded json slice

@@ -10,15 +10,17 @@ import (
 )
 
 // Show 1 task page. Expects all information to be valid.
-func TaskFindOne(w http.ResponseWriter, username string, isauth, isenglish bool, task models.Task) error {
+func TaskFindOne(w http.ResponseWriter, username string, isauth, isenglish bool, task models.Task, previousSolution string) error {
 	buf := bufio.NewWriter(w)
 	t := prepared.TFromBools(isenglish, isauth)
 	err := prepared.Templates.ExecuteTemplate(buf, "taskpage.html", struct {
 		prepared.T
 		Document ml.TemplatableDocument
+		Solution string
 	}{
 		t,
 		task.Doc.Templatable(t.Lang),
+		previousSolution,
 	})
 	if err != nil {
 		return err
@@ -33,7 +35,7 @@ func TaskFindAll(w http.ResponseWriter, username string, isauth, isenglish bool)
 		Username string
 		prepared.T
 		Auth bool
-	}{ // TODO(anpir) handle auth param in template
+	}{
 		Username: username,
 		T:        prepared.TFromBools(isenglish, isauth),
 		Auth:     isauth,

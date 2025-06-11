@@ -20,18 +20,18 @@
         <div class="user_stats">
             <div class="stats_block">
                 <div>{{ .Tr "Acceptance Rate" "Процент Принятых Решений" }}</div>
-                <div id="sub_rate">{{.AcceptanceRate}}%</div>
+                <div id="sub_rate">{{ printf "%.1f%%" .AcceptanceRate }}%</div>
             </div>
             <div class="stats_block">
                 <div>{{ .Tr "Solved Rate" "Процент Решённый Задач" }}</div>
-                <div id="sub_rate">{{.SolvedRate}}%</div>
+                <div id="sub_rate">{{ printf "%.1f%%" .SolvedRate }}%</div>
             </div>
 
             <div class="stats_block">
                 <div>{{ .Tr "Submission List" "Список Решений" }}</div>
                 <div id="sub_list">
                     <!-- FETCHED -->
-                    <!-- TODO: template this bitch -->
+                     <!-- TODO -->
                 </div>
             </div>
         </div>

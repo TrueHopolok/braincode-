@@ -6,6 +6,8 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"strings"
+
+	"github.com/TrueHopolok/braincode-/server/logger"
 )
 
 const header = "{'alg':'HS256','typ':'JWT'}" // Standard JWT header
@@ -54,14 +56,16 @@ func (ses *Session) ValidateJWT(token string) bool {
 	}
 	data, err := base64.URLEncoding.DecodeString(fields[1])
 	if err != nil {
-		// TODO(anpir): this may panic if structure of token changes;
-		// probably should return false instead.
-		panic("infallible base64 decode failed: " + err.Error())
+		// Leaking the token to the logs: don't care, it is invalid anyway.
+		logger.Log.Error("Received valid JWT token with invalid base64 (%v): %q, should not be possible.", err, token)
+		return false
 	}
-	if err := json.Unmarshal(data, ses); err != nil {
-		// TODO(anpir): this may panic if structure of token changes;
-		// probably should return false instead.
-		panic("infallible JSON unmarshal failed: " + err.Error())
+	var sesCopy Session
+	if err := json.Unmarshal(data, &sesCopy); err != nil {
+		// Leaking the token to the logs: don't care, it is invalid anyway.
+		logger.Log.Error("Received valid JWT token with invalid JSON (%v): %q, should not be possible.", err, token)
+		return false
 	}
+	*ses = sesCopy
 	return true
 }

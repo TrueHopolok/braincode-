@@ -100,7 +100,15 @@ func TaskPage(w http.ResponseWriter, r *http.Request) {
 		logger.Log.Debug("req=%p task-id=%d not found", r, taskid)
 		return
 	}
-	if err = views.TaskFindOne(w, username, isauth, isenglish, task); err != nil {
+	var lastSubmition string
+	submition, found, err := models.SubmissionFindLatest(username, taskid)
+	if err != nil {
+		errResp_Fatal(w, r, err)
+	}
+	if found {
+		lastSubmition = submition
+	}
+	if err = views.TaskFindOne(w, username, isauth, isenglish, task, lastSubmition); err != nil {
 		errResp_Fatal(w, r, err)
 		return
 	}

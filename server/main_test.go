@@ -31,10 +31,6 @@ func InitBackend(t *testing.T) {
 		panic("InitBackend called outside of a test")
 	}
 
-	// TODO(anpir): use other DB for tests (braincode-testing)
-	// which is wiped on start each tests.
-	// Would have been a lot easier, if migrations were 2-way :/
-
 	//* Config init for testing
 	config.OverrideConfig(t, config.Config{
 		Verbose:       true,

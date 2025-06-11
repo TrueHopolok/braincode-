@@ -21,28 +21,30 @@ func UserDelete(w http.ResponseWriter, r *http.Request) {
 	redirect2main(w, r, "userDelete")
 }
 
-func StatsPage(w http.ResponseWriter, r *http.Request) {
+func ProfilePage(w http.ResponseWriter, r *http.Request) {
+	username := session.Get(r.Context()).Name
+	ok, isenglish := langHandler(w, r)
+	if !ok {
+		return
+	}
+
+	acceptance_rate, solved_rate, err := models.UserFindInfo(username)
+	if err != nil {
+		errResp_Fatal(w, r, err)
+		return
+	}
+
+	if err = views.UserFindInfo(w, username, isenglish, acceptance_rate, solved_rate); err != nil {
+		errResp_Fatal(w, r, err)
+		return
+	}
+}
+
+func SubmissionsAPI(w http.ResponseWriter, r *http.Request) {
 	username := session.Get(r.Context()).Name
 
-	switch r.Header.Get("Content-Type") {
-	case "text/html", "":
-		ok, isenglish := langHandler(w, r)
-		if !ok {
-			return
-		}
-
-		acceptance_rate, solved_rate, err := models.UserFindInfo(username)
-		if err != nil {
-			errResp_Fatal(w, r, err)
-			return
-		}
-
-		if err = views.UserFindInfo(w, username, isenglish, acceptance_rate, solved_rate); err != nil {
-			errResp_Fatal(w, r, err)
-			return
-		}
-		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	case "application/json":
+	if r.URL.Query().Has("id") {
+		// get list of all submissions
 		page, err := strconv.Atoi(r.URL.Query().Get("id"))
 		if err != nil || page < 0 {
 			page = 0
@@ -57,8 +59,8 @@ func StatsPage(w http.ResponseWriter, r *http.Request) {
 		if _, err = w.Write(data); err != nil {
 			errResp_Fatal(w, r, err)
 		}
-		w.Header().Set("Content-Type", "application/json")
-	case "application/brainfunk":
+	} else {
+		// get a singular submition
 		ssubid := r.URL.Query().Get("id")
 		subid, err := strconv.Atoi(ssubid)
 		if err != nil {
@@ -76,12 +78,11 @@ func StatsPage(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		w.Header().Set("Content-Type", "application/brainfunk") // lol
+
 		if _, err = w.Write([]byte(solution)); err != nil {
 			errResp_Fatal(w, r, err)
 		}
-		w.Header().Set("Content-Type", "application/brainfunk")
-	default:
-		denyResp_ContentTypeNotAllowed(w, r, "text/html", "application/json", "application/brainfunk")
 	}
 }
 

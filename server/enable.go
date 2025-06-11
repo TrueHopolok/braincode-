@@ -33,6 +33,7 @@ func EnableFileHandlers(mux *http.ServeMux) {
 
 func EnableControllerHandlers(mux *http.ServeMux) {
 	mux.Handle("GET /api/tasks/", session.MiddlewareFunc(controllers.ProblemsAPI))
+	mux.Handle("GET /api/submissions/", session.AuthMiddlewareFunc(controllers.SubmissionsAPI))
 
 	mux.Handle("GET /", session.MiddlewareFunc(controllers.ProblemsPage))
 	mux.Handle("DELETE /", session.AuthMiddlewareFunc(controllers.TaskDelete))
@@ -47,7 +48,7 @@ func EnableControllerHandlers(mux *http.ServeMux) {
 	mux.Handle("GET /register/", session.NoAuthMiddlewareFunc(controllers.RegistrationPage))
 	mux.Handle("POST /register/", session.NoAuthMiddlewareFunc(controllers.UserRegister))
 
-	mux.Handle("GET /stats/", session.AuthMiddlewareFunc(controllers.StatsPage))
+	mux.Handle("GET /stats/", session.AuthMiddlewareFunc(controllers.ProfilePage))
 	mux.Handle("DELETE /stats/", session.AuthMiddlewareFunc(controllers.UserDelete))
 
 	mux.Handle("GET /upload/", session.AuthMiddlewareFunc(controllers.UploadPage))

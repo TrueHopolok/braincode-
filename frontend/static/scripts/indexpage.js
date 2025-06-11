@@ -1,6 +1,6 @@
 {
-    function render_task_list(elementId, data, isEnglish = true) {
-        // TODO: detect language
+    function render_task_list(elementId, data) {
+        let isEnglish = document.LANG !== 'ru'
 
         console.log("renderTaskList", elementId, data, isEnglish)
         const container = document.getElementById(elementId);
