@@ -12,10 +12,45 @@
     <div class="task">
         <div class="task-information-all">
             <a href="{{ .TrURL "/" }}" class="back">{{ .Tr "BACK" "НАЗАД" }}</a>
+            <div class="instructions instructions-instr">{{.Tr "Max allowed instructions" "Максимально допустимое количество инструкций"}}</div>
+            <div class="instructions instructions-steps">{{.Tr "Max runtime steps" "Максимальное количество шагов выполнения"}}</div>
+            <div class="instructions instructions-mem">{{.Tr "Max memory usage (bytes)" "Максимальное использование памяти (в байтах)"}}</div>
+            <div class="infoBlock"><div class="infoInstructions">100</div><div class="infoSteps">10000</div><div class="infoMemory">200</div></div>
             <div id="doc">
                 {{- template "markleftDoc" .Document -}}
             </div>
-        </div> 
+                <script>
+                    const tooltips = [
+                        {
+                        trigger: document.querySelector('.infoInstructions'),
+                        tooltip: document.querySelector('.instructions-instr'),
+                        },
+                        {
+                        trigger: document.querySelector('.infoSteps'),
+                        tooltip: document.querySelector('.instructions-steps'),
+                        },
+                        {
+                        trigger: document.querySelector('.infoMemory'),
+                        tooltip: document.querySelector('.instructions-mem'),
+                        }
+                    ];
+
+                    tooltips.forEach(({ trigger, tooltip }) => {
+                        if (!trigger || !tooltip) return;
+
+                        trigger.addEventListener('mouseenter', (e) => {
+                        const rect = trigger.getBoundingClientRect();
+                        tooltip.style.top = `${rect.bottom + window.scrollY + 5}px`;
+                        tooltip.style.left = `${rect.left + window.scrollX}px`;
+                        tooltip.style.display = 'block';
+                        });
+
+                        trigger.addEventListener('mouseleave', () => {
+                        tooltip.style.display = 'none';
+                        });
+                    });
+                </script>
+        </div>
 
         <div class="task-submition">
             <form action="#" method="post" class="submit_form">
