@@ -56,7 +56,7 @@ func TaskDelete(username string, taskid int) error {
 		return err
 	}
 	if n != 1 {
-		return errors.New("invalid amount of deleted rows")
+		return fmt.Errorf("invalid amount of deleted rows: %d want 1", n)
 	}
 
 	return tx.Commit()

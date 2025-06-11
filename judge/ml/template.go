@@ -202,6 +202,26 @@ func (d Document) Templatable(locale string) TemplatableDocument {
 		}
 	}
 
+	if loc.Name == "" {
+		// try default
+		ll := d.Localizations[""]
+		if ll != nil {
+			loc.Name = ll.Name
+		}
+	}
+
+	if loc.Name == "" {
+		// try any found
+		keys := slices.Sorted(maps.Keys(d.Localizations))
+		for _, k := range keys {
+			ll := d.Localizations[k]
+			if ll != nil && ll.Name != "" {
+				loc.Name = ll.Name
+				break
+			}
+		}
+	}
+
 	t := TemplatableDocument{
 		Name:         loc.Name,
 		Locale:       locale,

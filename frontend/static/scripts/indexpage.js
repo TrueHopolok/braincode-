@@ -75,7 +75,7 @@
     }
 
     async function delete_task(id) {
-        fetch(
+        await fetch(
             "/",
             {
                 method: "DELETE",
@@ -84,7 +84,7 @@
                 },
             },
         )
-            .then();
+        tasks_search()
     }
 
     function tasks_next() {
