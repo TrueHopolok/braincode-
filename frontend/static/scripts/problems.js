@@ -1,17 +1,34 @@
+let problems, search, filter;
+
 document.addEventListener("DOMContentLoaded", (event) => {
+	problems = document.getElementById("section-content");
+	search = document.getElementById("search-input");
+	filter = document.getElementById("filter-input");
+	getProblemSet();
+	search.addEventListener("oninput", getProblemSet()); // TODO(vadim) not updating without reload of the page
+	filter.addEventListener("onclick", getProblemSet()); // TODO(vadim) not working
+});
+
+function getProblemSet() {
 	let params = new URLSearchParams(document.location.search);
 	let lang = params.get("lang");
 	if (lang === null) {
 		lang = "EN";
 	}
+	let isUserProblems = filter.checked;
+	if (isUserProblems) {
+		isUserProblems = "user-only";
+	}
 	fetch(`/?lang=${lang}`, {
 		method: "GET",
 		headers: {
 			"Content-Type": "application/json",
+			"Search": search.value,
+			"Filter": isUserProblems,
 		},
 	})	.then(response => response.json().then(data => renderTasks(data)))
 		.catch(error => failedRequest(error));
-	});
+}
 	
 function createEmptyNode() {
 	let node = document.createElement("p");
@@ -31,19 +48,13 @@ function createTaskNode(task) {
 
 function failedRequest(error) {
 	console.error(error);
-	const problems = document.getElementById("section-content");
-	console.log(problems); 	// TODO: remove console logs probably
+	problems.innerHTML = ""
+	
 	problems.appendChild(createEmptyNode());
 }
 
 function renderTasks(data) {
-	const problems = document.getElementById("section-content");
-	const search = document.getElementById("search-input");
-	const checkbox = document.getElementById("filter-input");
-	console.log(problems); 	// TODO: remove console logs probably
-	console.log(search); 	// TODO: remove console logs probably
-	console.log(checkbox); 	// TODO: remove console logs probably
-	console.log(data.Rows); // TODO: remove console logs probably
+	problems.innerHTML = ""
 
 	if (data.TotalAmount == 0) {
 		problems.appendChild(createEmptyNode());
@@ -60,4 +71,6 @@ function renderTasks(data) {
 		problemlist.appendChild(document.createElement("br"))
 	});
 	
+	// TODO(vadim) add page selection render
+	// TODO(vadim) add search and filter connection
 }

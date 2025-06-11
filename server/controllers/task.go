@@ -55,8 +55,8 @@ func ProblemsPage(w http.ResponseWriter, r *http.Request) {
 			page = 0
 		}
 
-		search := r.Header.Get("search")
-		filter := r.Header.Get("filter") == "user-only"
+		search := r.Header.Get("Search")
+		filter := r.Header.Get("Filter") == "user-only"
 		data, err := models.TaskFindAll(username, isenglish, search, filter, isauth, page)
 		if err != nil {
 			errResp_Fatal(w, r, err)
