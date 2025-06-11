@@ -123,10 +123,8 @@
     document.getElementById("current-user-only-checkbox")?.addEventListener("click", tasks_search)
     let debounceTimer;
     document.getElementById("tasks-search").addEventListener("input", function () {
-        console.log("input")
         clearTimeout(debounceTimer);
         debounceTimer = setTimeout(() => {
-            console.log("timer")
             tasks_search()
         }, 300);
     });

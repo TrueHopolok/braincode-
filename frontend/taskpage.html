@@ -13,14 +13,14 @@
         <div class="task-information">
             <a href="{{ .TrURL "/" }}" class="back">{{ .Tr "BACK" "НАЗАД" }}</a>
             <div id="doc">
-                {{ template "markleftDoc" .Document }}
+                {{- template "markleftDoc" .Document -}}
             </div>
         </div> 
 
         <div class="task-submition">
             <form action="#" method="post" class="submit_form">
                 <textarea id="task_text" class="submition-text" name="solution">
-                    {{- with .Solution -}}{{ . }}{{- end -}}
+                    {{- with .Solution -}}{{- . -}}{{- end -}}
                 </textarea>
                 <div class="submition-btn">
                     <!-- <input id="test_btn" type="button" value="Test"> -->

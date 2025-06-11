@@ -76,7 +76,6 @@ func main() {
 		pr := ParseMarkLeft(source, locale)
 		errs := make([]any, 0, len(pr.Errors))
 		for _, err := range pr.Errors {
-			fmt.Println(err)
 			errs = append(errs, err)
 		}
 
