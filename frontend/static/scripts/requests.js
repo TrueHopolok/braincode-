@@ -101,11 +101,8 @@ function submit_req(data, id) {
 // Profile
 
 function profile_req() {
-    fetch('/stats/', {
+    fetch('/api/submissions/', {
         method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        },
     })
         .then(response => response.json())
         .then(data => {

@@ -22,7 +22,7 @@ type SubmissionSet struct {
 
 type SubmissionInfo struct {
 	Id        int
-	Timestamp time.Time
+	Timestamp string
 	TaskId    sql.NullInt64
 	Score     float64
 }
@@ -94,15 +94,18 @@ func SubmissionFindAll(username string) ([]byte, error) {
 	defer rows.Close()
 
 	var rawdata SubmissionSet
-	for i := 0; rows.Next(); i++ {
-		rawdata.Rows = append(rawdata.Rows, SubmissionInfo{})
+	for rows.Next() {
+		si := SubmissionInfo{}
+		var t time.Time
 		err = rows.Scan(
-			&rawdata.Rows[i].Id, &rawdata.Rows[i].Timestamp,
-			&rawdata.Rows[i].TaskId, &rawdata.Rows[i].Score,
+			&si.Id, &t,
+			&si.TaskId, &si.Score,
 			&rawdata.TotalAmount)
 		if err != nil {
 			return nil, err
 		}
+		si.Timestamp = t.In(time.UTC).Format("2006-01-02 15:04:05 MST")
+		rawdata.Rows = append(rawdata.Rows, si)
 	}
 	jsondata, err := json.Marshal(rawdata)
 	if err != nil {
