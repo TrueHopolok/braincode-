@@ -3,7 +3,9 @@ package prepared
 import (
 	"context"
 	"html/template"
+	"net/http"
 	"path/filepath"
+	"strconv"
 	"strings"
 
 	"github.com/TrueHopolok/braincode-/judge/ml"
@@ -25,6 +27,7 @@ type T struct {
 	Auth     bool
 	Username string
 	IsAdmin  bool
+	ErrCode  int // 0 = no error
 }
 
 func (t T) Tr(en, ru string) string {
@@ -91,6 +94,32 @@ func (t T) SetAdmin(isadmin bool) T {
 	return t
 }
 
+func (t T) Request(r *http.Request) T {
+	s := r.URL.Query().Get("error")
+	i, err := strconv.Atoi(s)
+	if err != nil {
+		return t
+	}
+	t.ErrCode = i
+	return t
+}
+
+func (t T) SetErr(errcode int) T {
+	t.ErrCode = errcode
+	return t
+}
+
 func (t T) Context(ctx context.Context) T {
 	return t.Session(session.Get(ctx))
+}
+
+func (t T) E(code int, en, ru string) string {
+	if t.ErrCode != code {
+		return ""
+	}
+	if t.IsEN() {
+		return en
+	} else {
+		return ru
+	}
 }

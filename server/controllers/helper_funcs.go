@@ -4,6 +4,7 @@ import (
 	"crypto/rand"
 	"fmt"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/TrueHopolok/braincode-/server/logger"
@@ -80,6 +81,15 @@ func redirect2main(w http.ResponseWriter, r *http.Request, action string) {
 func redirect2stats(w http.ResponseWriter, r *http.Request, action string) {
 	http.Redirect(w, r, "/stats/", 303)
 	logger.Log.Debug("req=%p user redirect after %s", r, action)
+}
+
+func redirectError(w http.ResponseWriter, r *http.Request, errcode int) {
+	url := "?error=" + strconv.Itoa(errcode)
+	if r.URL.Query().Has("lang") {
+		url += "&lang=" + r.URL.Query().Get("lang")
+	}
+	http.Redirect(w, r, url, http.StatusSeeOther)
+	logger.Log.Debug("req=%p user redirect with error code %v", r, errcode)
 }
 
 // This should be the last write into the response!

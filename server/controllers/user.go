@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"unicode"
 
 	"github.com/TrueHopolok/braincode-/server/logger"
 	"github.com/TrueHopolok/braincode-/server/models"
+	"github.com/TrueHopolok/braincode-/server/prepared"
 	"github.com/TrueHopolok/braincode-/server/session"
 	"github.com/TrueHopolok/braincode-/server/views"
 )
@@ -34,7 +36,9 @@ func ProfilePage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err = views.UserFindInfo(w, username, isenglish, acceptance_rate, solved_rate); err != nil {
+	errorcode := prepared.T{}.Request(r).ErrCode
+
+	if err = views.UserFindInfo(w, username, isenglish, acceptance_rate, solved_rate, errorcode); err != nil {
 		errResp_Fatal(w, r, err)
 		return
 	}
@@ -93,7 +97,7 @@ func RegistrationPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := views.UserCreate(w, isenglish); err != nil {
+	if err := views.UserCreate(w, isenglish, prepared.T{}.Request(r).ErrCode); err != nil {
 		errResp_Fatal(w, r, err)
 	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
@@ -101,33 +105,40 @@ func RegistrationPage(w http.ResponseWriter, r *http.Request) {
 
 func UserRegister(w http.ResponseWriter, r *http.Request) {
 	if err := r.ParseForm(); err != nil {
-		http.Error(w, "Invalid login form provided", http.StatusBadRequest)
+		redirectError(w, r, 1) // bad request
 		logger.Log.Debug("req=%p invalid registration form", r)
 		return
 	}
 	username := r.PostFormValue("username")
 	password := r.PostFormValue("password")
 	if len(username) < 3 {
-		http.Error(w, "Invalid login form provided\nUsername is too short", http.StatusBadRequest)
-		logger.Log.Debug("req=%p invalid login form", r)
+		redirectError(w, r, 2) // short username
+		logger.Log.Debug("req=%p invalid login form: username is too short", r)
 		return
 	} else if len(password) < 8 {
-		http.Error(w, "Invalid login form provided\nPassword is too short", http.StatusBadRequest)
+		redirectError(w, r, 3) // short password
 		logger.Log.Debug("req=%p invalid login form", r)
 		return
 	}
+	for _, c := range username {
+		if !unicode.IsLetter(c) && !unicode.IsDigit(c) && c != '-' && c != '_' {
+			redirectError(w, r, 6) // invalid username char
+			logger.Log.Debug("req=%p invalid login form: username is not unicode", r)
+			return
+		}
+	}
 	_, found, err := models.UserFindSalt(username)
 	if err != nil {
-		errResp_Fatal(w, r, err)
+		redirectError(w, r, 4) // internal error
 		return
 	} else if found {
-		http.Error(w, "User with such username exists", http.StatusBadRequest)
+		redirectError(w, r, 5) // already exists
 		logger.Log.Debug("req=%p trying to create same user", r)
 		return
 	}
 	salt := SaltGen()
 	if err = models.UserCreate(username, PSH(password, salt), salt); err != nil {
-		errResp_Fatal(w, r, err)
+		redirectError(w, r, 4) // internal error
 		return
 	}
 	session.Login(session.New(username), w)
@@ -137,6 +148,8 @@ func UserRegister(w http.ResponseWriter, r *http.Request) {
 func UserChangePassword(w http.ResponseWriter, r *http.Request) {
 	if err := r.ParseForm(); err != nil {
 		http.Error(w, "Invalid password change form provided", http.StatusBadRequest)
+		redirectError(w, r, 1) // bad request
+		return
 	}
 
 	username := session.Get(r.Context()).Name
@@ -146,10 +159,10 @@ func UserChangePassword(w http.ResponseWriter, r *http.Request) {
 
 	// double check user auth
 	if ok, err := authValid(username, passOld); err != nil {
-		errResp_Fatal(w, r, err)
+		redirectError(w, r, 2) // internal error
 		return
 	} else if !ok {
-		http.Error(w, "Old password does not match", http.StatusBadRequest)
+		redirectError(w, r, 3) // bad old pass
 		logger.Log.Debug("req=%p incorrect old password", r)
 		return
 	}
@@ -157,21 +170,27 @@ func UserChangePassword(w http.ResponseWriter, r *http.Request) {
 	// validate data
 
 	if passNew == passOld {
-		http.Error(w, "New password must differ from old one", http.StatusBadRequest)
+		redirectError(w, r, 4) // old pass same as new
 		logger.Log.Debug("req=%p duplicate new password", r)
 		return
 	}
 
 	if passConfirm != passNew {
-		http.Error(w, "Passwords do not match", http.StatusBadRequest)
+		redirectError(w, r, 5) // confirmation does not match
 		logger.Log.Debug("req=%p passwords do not match", r)
+		return
+	}
+
+	if len(passNew) < 8 {
+		redirectError(w, r, 6) // new password too short
+		logger.Log.Debug("req=%p password too short", r)
 		return
 	}
 
 	// ok!
 	salt := SaltGen()
 	if err := models.UserChangePassword(username, PSH(passNew, salt), salt); err != nil {
-		errResp_Fatal(w, r, err)
+		redirectError(w, r, 2) // internal error
 		return
 	}
 
@@ -190,15 +209,15 @@ func LoginPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := views.UserFindLogin(w, isenglish); err != nil {
+	errcode := prepared.T{}.Request(r).ErrCode
+	if err := views.UserFindLogin(w, isenglish, errcode); err != nil {
 		errResp_Fatal(w, r, err)
 	}
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 }
 
 func UserLogin(w http.ResponseWriter, r *http.Request) {
 	if err := r.ParseForm(); err != nil {
-		http.Error(w, "Invalid login form provided", http.StatusBadRequest)
+		redirectError(w, r, 1) // bad form
 		logger.Log.Debug("req=%p invalid login form", r)
 		return
 	}
@@ -206,20 +225,20 @@ func UserLogin(w http.ResponseWriter, r *http.Request) {
 	password := r.PostFormValue("password")
 	logger.Log.Debug("req=%p username=%s password=%s", r, username, password)
 	if len(username) < 3 {
-		http.Error(w, "Invalid login form provided\nUsername is too short", http.StatusBadRequest)
+		redirectError(w, r, 2) // short login
 		logger.Log.Debug("req=%p invalid login form", r)
 		return
 	} else if len(password) < 8 {
-		http.Error(w, "Invalid login form provided\nPassword is too short", http.StatusBadRequest)
+		redirectError(w, r, 3) // short pass
 		logger.Log.Debug("req=%p invalid login form", r)
 		return
 	}
 
 	if ok, err := authValid(username, password); err != nil {
-		errResp_Fatal(w, r, err)
+		redirectError(w, r, 4) // internal error
 		return
 	} else if !ok {
-		http.Error(w, "Incorrect username or password", http.StatusBadRequest)
+		redirectError(w, r, 5) // wrong username/password
 		logger.Log.Debug("req=%p incorrect username or password", r)
 		return
 	}

@@ -23,6 +23,35 @@
             <input type="password" placeholder="{{ .Tr "Enter Password" "Введите Пароль" }}" name="password" required>
 
             <button type="submit">{{ .Tr "Registration" "Регистрация" }}</button>
+
+            {{- if ne .ErrCode  0 -}}
+            <div class="error">
+                {{- .E 1
+                    "Corrupted data received. Try again in a few minutes."
+                    "Получены нецелостные данные. Попробуйте чуть позже."
+                -}}
+                {{- .E 2
+                    "Provided username is too short."
+                    "Логин слишком короткий."
+                -}}
+                {{- .E 3
+                    "Provided password is too short."
+                    "Пароль слишком короткий."
+                -}}
+                {{- .E 4
+                    "Internal error. Contact site administrators."
+                    "Внутренняя ошибка. Свяжитесь с администрацией сайта."
+                -}}
+                {{- .E 5
+                    "Username already taken."
+                    "Имя пользователя уже занято."
+                -}}
+                {{- .E 6
+                    "Username can only contain letters, numbers, dashes and underscores."
+                    "Имя пользвователя может содержать только буквы, цифры, дефисы и подчёркивания."
+                -}}
+            </div>
+            {{- end -}}
         </form>
     </div>
 </body>
