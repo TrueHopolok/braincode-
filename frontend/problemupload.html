@@ -11,27 +11,42 @@
 </head>
 
 <body>
+
     {{- template "headernav.html" . -}}
 
     <div class="container">
-        <form class="task_upload" id="task_upload">
-            <!-- TODO: Misha: add a guide on markleft here, ask andrey for the text -->
-            
-            <label for="des"><b>{{ .Tr "Task Statement (Markleft)" "Описание Задачи" }}</b></label>
-            <textarea id="problem_statement" type="text" 
-                placeholder="{{ .Tr "Enter Task Statement" "Введите Описание Задачи" }}" name="des" required>
-            </textarea>
+        <form class="task_upload" id="task_upload" method="post" action="/upload/">            
+            <label for="des"><b>{{ .Tr "Task Statement" "Описание Задачи" }} (MarkLeft)</b></label>
+            <textarea id="problem_statement" type="text" name="statement"
+                placeholder="{{ .Tr "Enter Task Statement" "Введите Описание Задачи" }}" name="des" required></textarea>
             <button type="submit">{{ .Tr "Submit" "Отправить" }}</button>
         </form>
 
+        <button id="format-button">Format</button>
+
+        <label>
+            EN
+            <input type="radio" name="locale" value="EN" id="radio-en" checked>
+        </label>
+        <label>
+            RU
+            <input type="radio" name="locale" value="RU" id="radio-ru">
+        </label>
+        <div class="tasksub_output">
+            <div id="task-preview"></div>
+            <div id="preview-errors"></div>
+        </div>
         <div class="markleft_guide">
             <div><b>{{ .Tr "Markleft guide" "Руководство по Markleft" }}</b></div>
-            <div>{{ template "markleftDoc" .Documentation }}</div>
+            <div>
+                {{- template "markleftDoc" .Documentation -}}
+            </div>
         </div>
     </div>
 
-    <script src="static/scripts/requests.js"></script>
-    <script src="static/scripts/problems_upload.js"></script>
+    <script src="static/wasm/wasm_exec.js"></script>
+    <script src="static/scripts/problem_upload.js"></script>
 </body>
 
 </html>
+
