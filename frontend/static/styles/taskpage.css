@@ -46,3 +46,9 @@ body {
 .task_des {
     margin: 20px 0;
 }
+
+.taskTitle {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}

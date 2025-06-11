@@ -16,12 +16,18 @@
     <div class="container">
         <form class="task_upload" id="task_upload" method="post" action="/upload/">
             <!-- TODO: Misha: add a guide on markleft here, ask andrey for the text -->
+            
             <label for="des"><b>{{ .Tr "Task Statement (Markleft)" "Описание Задачи" }}</b></label>
             <textarea id="problem_statement" type="text" name="statement"
                 placeholder="{{ .Tr "Enter Task Statement" "Введите Описание Задачи" }}" name="des" required>
             </textarea>
             <button type="submit">{{ .Tr "Submit" "Отправить" }}</button>
         </form>
+
+        <div class="markleft_guide">
+            <div><b>{{ .Tr "Markleft guide" "Руководство по Markleft" }}</b></div>
+            <div>{{ template "markleftDoc" .Documentation }}</div>
+        </div>
     </div>
 </body>
 
