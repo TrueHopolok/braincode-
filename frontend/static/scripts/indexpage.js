@@ -41,9 +41,9 @@
             `;
 
                 deleteButton = document.createElement("button");
-                deleteButton.innerHTML = "Delete task";
+                deleteButton.innerHTML = isEnglish ? "Delete task" : "Удалить задачу";
                 deleteButton.classList.add("task-delete");
-                deleteButton.addEventListener("click", e => delete_task(task.Id));
+                deleteButton.addEventListener("click", () => delete_task(task.Id));
 
                 listItem.appendChild(taskLink);
                 listItem.appendChild(deleteButton);
@@ -80,7 +80,7 @@
                 },
             },
         )
-        .then();
+            .then();
     }
 
     function tasks_next() {
