@@ -88,9 +88,3 @@ of a localization block belong to a -I[default locale~]. Only ~I[Document blocks
 blocks may appear inside localization blocks. Each localization block may be specified multiple 
 times and will be equivalent to concatenation of all localization blocks of the same locale.
 ..
-.paragraph 
-How about some math?? ~M[\int \frac{1}{x} dx = \ln \left| x \right| + C]
-..
-.math
-\int \frac{1}{x} dx = \ln \left| x \right| + C
-..
