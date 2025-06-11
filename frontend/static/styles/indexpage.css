@@ -91,7 +91,6 @@ ul {
 
 .section-search {
     width: 1200px;
-    max-width: 75%;
 }
 
 .section-upper {
@@ -105,3 +104,22 @@ ul {
     margin-left: auto;
     margin-right: 0;
 }
+
+/*Problems*/
+
+.task-list {
+    padding: 0;
+}
+
+.task-item {
+    border: 1px solid #000;
+    display: inline-block;
+    height: 100px;
+    width: 100%;
+    color: #000;
+    text-decoration: none;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    padding: 10px;
+}
+
