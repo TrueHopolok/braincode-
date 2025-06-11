@@ -26,7 +26,7 @@ body {
     border-left: 3px solid #000;
 }
 
-.task-information, .task-submition{
+.task-information-all, .task-submition{
     width: 50%;
     height: 100vh;
 }
@@ -48,7 +48,44 @@ body {
 }
 
 .taskTitle {
-    font-size: 36px;
-    font-weight: 700;
-    margin-bottom: 10px;
+    font-size:1.5rem;
+    font-weight:bold; 
+    color:#343a40; 
+    margin-bottom:8px
+}
+
+#doc {
+    margin-left: 1px;
+}
+
+.paragraph {
+  font-size: 1rem;
+  color: #495057;
+  background-color: #ffffff;
+  border-left: 4px solid #0d6efd;
+  padding: 10px 14px;
+  border-radius: 6px;
+}
+
+.spanCode {
+  background-color: #e9ecef;
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: #d63384;
+}
+
+.infoBlock {
+  display: flex;
+  gap: 16px;
+  justify-content: flex-start;
+  margin-top: 10px;
+}
+
+.infoBlock > div {
+  background-color: #ffffff;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  color: #212529;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
