@@ -45,6 +45,11 @@ func ProblemsPage(w http.ResponseWriter, r *http.Request) {
 		}
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	case "application/json":
+		ok, isenglish := langHandler(w, r)
+		if !ok {
+			return
+		}
+
 		page, err := strconv.Atoi(r.Header.Get("id"))
 		if err != nil || page < 0 {
 			page = 0
@@ -52,7 +57,7 @@ func ProblemsPage(w http.ResponseWriter, r *http.Request) {
 
 		search := r.Header.Get("search")
 		filter := r.Header.Get("filter") == "user-only"
-		data, err := models.TaskFindAll(username, search, filter, isauth, page)
+		data, err := models.TaskFindAll(username, isenglish, search, filter, isauth, page)
 		if err != nil {
 			errResp_Fatal(w, r, err)
 			return

@@ -19,6 +19,7 @@ type Task struct {
 
 type TaskInfo struct {
 	Id        int             `json:"Id"`
+	Title     string          `json:"Title"`
 	TitleEn   string          `json:"TitleEn"`
 	TitleRu   string          `json:"TitleRu"`
 	OwnerName string          `json:"OwnerName"`
@@ -94,7 +95,7 @@ func TaskFindOne(username string, taskid int) (Task, bool, error) {
 }
 
 // Get all task names, id and owner_id as well as amount of tasks in json
-func TaskFindAll(username, search string, filter, isauth bool, page int) ([]byte, error) {
+func TaskFindAll(username string, isenglish bool, search string, filter, isauth bool, page int) ([]byte, error) {
 	query, err := db.GetQuery("find_task_all")
 	if err != nil {
 		return nil, err
@@ -129,6 +130,14 @@ func TaskFindAll(username, search string, filter, isauth bool, page int) ([]byte
 			return nil, err
 		}
 	}
+
+	for i := range rawdata.Rows {
+		rawdata.Rows[i].Title = rawdata.Rows[i].TitleEn
+		if !isenglish && rawdata.Rows[i].TitleRu != "" {
+			rawdata.Rows[i].Title = rawdata.Rows[i].TitleRu
+		}
+	}
+
 	jsondata, err := json.Marshal(rawdata)
 	if err != nil {
 		return nil, err

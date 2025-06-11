@@ -13,14 +13,6 @@
 <body>
     {{- template "headernav.html" . -}}
 
-    <nav class="navigation">
-        <div class="container">
-            <ul class="nav-ul">
-                <li class="nav-ul-element"><a href="/">{{ .Tr "BACK" "НАЗАД" }}</a></li>
-            </ul>
-        </div>
-    </nav>
-
     <div class="auth_form">
         <div class="form_text">{{ .Tr "Login" "Авторизация" }}</div>
         <form id="login_form" method="POST">
