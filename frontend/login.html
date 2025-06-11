@@ -23,6 +23,7 @@
 
     <div class="auth_form">
         <div class="form_text">{{ .Tr "Login" "Авторизация" }}</div>
+
         <form id="login_form" method="POST">
             <label for="username"><b>{{ .Tr "Username" "Имя Пользователя" }}</b></label>
             <input type="text" placeholder="{{ .Tr " Enter Username" "Введите Имя Пользователя" }}" name="username"
@@ -33,6 +34,31 @@
 
             <button type="submit">{{ .Tr "Login" "Авторизация" }}</button>
         </form>
+
+        {{- if ne .ErrCode  0 -}}
+        <div class="error">
+            {{- .E 1
+                "Corrupted data received. Try again in a few minutes."
+                "Получены нецелостные данные. Попробуйте чуть позже."
+            -}}
+            {{- .E 2
+                "Provided username is too short."
+                "Логин слишком короткий."
+            -}}
+            {{- .E 3
+                "Provided password is too short."
+                "Пароль слишком короткий."
+            -}}
+            {{- .E 4
+                "Internal error. Contact site administrators."
+                "Внутренняя ошибка. Свяжитесь с администрацией сайта."
+            -}}
+            {{- .E 5
+                "Wrong username or password."
+                "Неверное имя пользователя или пароль."
+            -}}
+        </div>
+        {{- end -}}
     </div>
 </body>
 

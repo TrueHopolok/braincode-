@@ -18,11 +18,11 @@
             <div class="name">{{ .Tr "Username" "Имя Пользователя" }}: {{.Username}}</div>
             <div class="stats_block">
                 <div>{{ .Tr "Acceptance Rate" "Процент Принятых Решений" }}</div>
-                <div id="sub_rate">{{ printf "%.1f%%" .AcceptanceRate }}%</div>
+                <div id="sub_rate">{{ printf "%.1f" .AcceptanceRate }}%</div>
             </div>
             <div class="stats_block">
                 <div>{{ .Tr "Solved Rate" "Процент Решённых Задач" }}</div>
-                <div id="sub_rate">{{ printf "%.1f%%" .SolvedRate }}%</div>
+                <div id="sub_rate">{{ printf "%.1f" .SolvedRate }}%</div>
             </div>
 
         </div>
@@ -76,6 +76,35 @@
                           return true;
                         }
                       </script>
+
+                      {{- if ne .ErrCode  0 -}}
+                      <div class="error">
+                          {{- .E 1
+                              "Corrupted data received. Try again in a few minutes."
+                              "Получены нецелостные данные. Попробуйте чуть позже."
+                          -}}
+                          {{- .E 2
+                              "Internal error. Contact site administrators."
+                              "Внутренняя ошибка. Свяжитесь с администрацией сайта."
+                          -}}
+                          {{- .E 3
+                              "Old password is incorrect."
+                              "Неправильный старый пароль."
+                          -}}
+                          {{- .E 4
+                              "New password must not match old password."
+                              "Новый пароль не должен совпадать со старым паролем."
+                          -}}
+                          {{- .E 5
+                              "Confirmation password does not match."
+                              "Подтверждение пароля не совпадает."
+                          -}}
+                          {{- .E 6
+                              "New password is too short."
+                              "Новый пароль слишком короткий."
+                          -}}
+                      </div>
+                      {{- end -}}
                   </form>
                   
                   <form class="btn_form" method="POST" action="{{ .TrURL "/stats/delete-user/" }}"
