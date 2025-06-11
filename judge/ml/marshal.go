@@ -34,5 +34,15 @@ func (d *Document) AppendBinary(dst []byte) ([]byte, error) {
 }
 
 func (d *Document) UnmarshalBinary(src []byte) error {
+	if len(src) == 0 {
+		*d = Document{
+			Localizations: map[string]*Localizable{
+				"": {
+					Name: "Null document",
+				},
+			},
+		}
+		return nil
+	}
 	return gob.NewDecoder(bytes.NewReader(src)).Decode((*serializableDocument)(d))
 }

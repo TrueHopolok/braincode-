@@ -84,7 +84,6 @@ func TaskPage(w http.ResponseWriter, r *http.Request) {
 	ses := session.Get(r.Context())
 	username := ses.Name
 	isauth := !ses.IsZero()
-
 	staskid := r.URL.Query().Get("id")
 	taskid, err := strconv.Atoi(staskid)
 	if err != nil {
@@ -94,7 +93,8 @@ func TaskPage(w http.ResponseWriter, r *http.Request) {
 	}
 	task, found, err := models.TaskFindOne(username, taskid)
 	if err != nil {
-		errResp_Fatal(w, r, err)
+		errResp_Fatal(w, r, fmt.Errorf("corrupted task: %w", err))
+		fmt.Println("AND HERE AS WEL *******************************")
 		return
 	} else if !found {
 		http.Error(w, fmt.Sprintf("Invalid provided task-id=%d\nSuch task does not exists", taskid), http.StatusNotAcceptable)
@@ -104,7 +104,8 @@ func TaskPage(w http.ResponseWriter, r *http.Request) {
 	var lastSubmition string
 	submition, found, err := models.SubmissionFindLatest(username, taskid)
 	if err != nil {
-		errResp_Fatal(w, r, err)
+		errResp_Fatal(w, r, fmt.Errorf("corrupted latest submission: %w", err))
+		return
 	}
 	if found {
 		lastSubmition = submition
