@@ -9,6 +9,7 @@ function render_profile(data) {
         return;
     }
     sub_list.innerHTML = '';
+    let isEnglish = document.LANG !== 'ru'
     data.Rows.forEach(sub => {
         let node = document.createElement("div");
         node.classList.add("submission");
@@ -16,9 +17,10 @@ function render_profile(data) {
         if (!sub.TaskId.Valid) {
             id = "deleted";
         }
+        const title = isEnglish ? sub.TitleEn.String : (sub.TitleRu.String || sub.TitleEn.String);
         node.innerHTML = `
         <div class="timestamp">${sub.Timestamp}</div>
-        <div class="task-id">Task id: ${id}</div>
+        <div class="task-id">${id}. ${title}</div>
         <div class="score">Score: ${sub.Score}</div>
         `;
         sub_list.appendChild(node);

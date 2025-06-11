@@ -24,6 +24,8 @@ type SubmissionInfo struct {
 	Id        int
 	Timestamp string
 	TaskId    sql.NullInt64
+	TitleEn   sql.NullString
+	TitleRu   sql.NullString
 	Score     float64
 }
 
@@ -99,7 +101,10 @@ func SubmissionFindAll(username string) ([]byte, error) {
 		var t time.Time
 		err = rows.Scan(
 			&si.Id, &t,
-			&si.TaskId, &si.Score,
+			&si.TaskId,
+			&si.TitleEn,
+			&si.TitleRu,
+			&si.Score,
 			&rawdata.TotalAmount)
 		if err != nil {
 			return nil, err
