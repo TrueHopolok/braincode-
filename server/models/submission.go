@@ -75,7 +75,7 @@ func SubmissionFindLatest(username string, taskid int) (string, bool, error) {
 }
 
 // Get limited amount of submissions as encoded json slice
-func SubmissionFindAll(username string, page int) ([]byte, error) {
+func SubmissionFindAll(username string) ([]byte, error) {
 	query, err := db.GetQuery("find_submission_all")
 	if err != nil {
 		return nil, err
@@ -87,7 +87,7 @@ func SubmissionFindAll(username string, page int) ([]byte, error) {
 	}
 	defer tx.Rollback()
 
-	rows, err := tx.Query(string(query), username, SUBMISSIONS_AMOUNT_LIMIT, SUBMISSIONS_AMOUNT_LIMIT*page)
+	rows, err := tx.Query(string(query), username, SUBMISSIONS_AMOUNT_LIMIT)
 	if err != nil {
 		return nil, err
 	}

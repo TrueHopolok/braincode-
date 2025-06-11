@@ -35,8 +35,8 @@
                 taskLink.innerHTML = `
                 <div class="task-info">${task.Id}. <b>${title}</b></div>
                 <div class="task-secondaries">
-                    <div class="task-author">${isEnglish ? 'By' : 'От'} ${task.OwnerName || "[DELETED]"}</div>
-                    <div class="task-score"><i>${scoreDisplay}</i></div>
+                <div class="task-author">${isEnglish ? 'By' : 'От'} ${task.OwnerName || (isEnglish ? "[DELETED]" : "[УДАЛЁН]")}</div>
+                <div class="task-score">${isEnglish ? "Score" : "Результат"}: <i>${scoreDisplay}</i></div>
                 </div>
             `;
 

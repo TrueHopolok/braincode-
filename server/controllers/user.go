@@ -44,6 +44,22 @@ func SubmissionsAPI(w http.ResponseWriter, r *http.Request) {
 	username := session.Get(r.Context()).Name
 
 	if r.URL.Query().Has("id") {
+		// get list of all submissions
+		page, err := strconv.Atoi(r.URL.Query().Get("id"))
+		if err != nil || page < 0 {
+			page = 0
+		}
+
+		data, err := models.SubmissionFindAll(username)
+		if err != nil {
+			errResp_Fatal(w, r, err)
+			return
+		}
+
+		if _, err = w.Write(data); err != nil {
+			errResp_Fatal(w, r, err)
+		}
+	} else {
 		// get a singular submition
 		ssubid := r.URL.Query().Get("id")
 		subid, err := strconv.Atoi(ssubid)
@@ -65,22 +81,6 @@ func SubmissionsAPI(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/brainfunk") // lol
 
 		if _, err = w.Write([]byte(solution)); err != nil {
-			errResp_Fatal(w, r, err)
-		}
-	} else {
-		// get list of all submissions
-		page, err := strconv.Atoi(r.URL.Query().Get("page"))
-		if err != nil || page < 0 {
-			page = 0
-		}
-
-		data, err := models.SubmissionFindAll(username, page)
-		if err != nil {
-			errResp_Fatal(w, r, err)
-			return
-		}
-
-		if _, err = w.Write(data); err != nil {
 			errResp_Fatal(w, r, err)
 		}
 	}

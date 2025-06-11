@@ -13,11 +13,9 @@
 <body>
     {{- template "headernav.html" . -}}
 
-    <div class="container">
+    <div class="stats_container">
         <div class="user_info">
             <div class="name">{{ .Tr "Username" "Имя Пользователя" }}: {{.Username}}</div>
-        </div>
-        <div class="user_stats">
             <div class="stats_block">
                 <div>{{ .Tr "Acceptance Rate" "Процент Принятых Решений" }}</div>
                 <div id="sub_rate">{{ printf "%.1f%%" .AcceptanceRate }}%</div>
@@ -27,11 +25,14 @@
                 <div id="sub_rate">{{ printf "%.1f%%" .SolvedRate }}%</div>
             </div>
 
-            <div class="stats_block">
-                <div>{{ .Tr "Submission List" "Список Решений" }}</div>
-                <div id="sub_list">
-                    <!-- FETCHED -->
-                     <!-- TODO -->
+        </div>
+        <div class="submission_list">
+            <div>{{ .Tr "Submission List" "Список Решений" }}</div>
+            <div id="sub_list">
+                <div class="submission_container">
+                    <div class="timestamp">${timestamp}</div>
+                    <div class="task-id">Task id: ${id}</div>
+                    <div class="score">Score: ${score}</div>
                 </div>
             </div>
 
@@ -83,6 +84,8 @@
             </div>
         </div>
     </div>
+    <script src="static/scripts/requests.js"></script>
+    <script src="static/scripts/profile.js"></script>
 </body>
 
 </html>
