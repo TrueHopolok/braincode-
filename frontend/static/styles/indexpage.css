@@ -91,6 +91,7 @@ ul {
 
 .section-search {
     width: 1200px;
+    max-width: 75%;
 }
 
 .section-upper {

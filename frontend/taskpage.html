@@ -6,38 +6,36 @@
     <link rel="stylesheet" href="static/styles/indexpage.css">
     <link rel="stylesheet" href="static/styles/taskpage.css">
     <link rel="icon" href="static/favicon.png" type="image/png">
-    <title>{{ .Tr "Task" "Задача" }} - Braincode</title>
-    <!-- TODO: vadim / andrrey- put actual task title here -->
+    <title>{{ .Document.Name }} - Braincode</title>
 </head>
 <body>
     <div class="task">
         <div class="task-information">
             <a href="{{ .TrURL "/" }}" class="back">{{ .Tr "BACK" "НАЗАД" }}</a>
             <div id="doc">
-                <div class="task_name">Example name (no tr for now)</div>
-                <div class="task_des">Example task</div>
-                <div>Example input</div>
-                <div>Example output</div>
+                {{ template "markleftDoc" .Document }}
             </div>
         </div> 
 
         <div class="task-submition">
-            <form action="" class="submit_form">
-                <textarea id="task_text" class="submition-text"></textarea>
+            <form action="#" method="post" class="submit_form">
+                <textarea id="task_text" class="submition-text" name="solution">
+                    {{- with .Solution -}}{{ . }}{{- end -}}
+                </textarea>
                 <div class="submition-btn">
-                    <input id="test_btn" type="button" value="Test">
-                    <input id="sub_btn" type="button" value="Submit">
+                    <!-- <input id="test_btn" type="button" value="Test"> -->
+
+                    {{-  if .Auth  -}}
+                    <input id="sub_btn" type="submit" value="Submit">
+                    {{- else -}}
+                    <p><a href="{{.TrURL "/login/" }}">Login</a> to submit</p>
+                    {{- end -}}
                 </div>
             </form>
-            <div id="task_answer"></div>
+            <!-- TODO: decide what to do here -->
+            <!-- <div id="task_answer"></div> -->
         </div>
 
     </div>
-
-    <!-- TODO: wrong scripts here -->
-    <script src="static/scripts/wasm_exec.js"></script>
-    <script src="static/scripts/wasm.js"></script>
-    <script src="static/scripts/requests.js"></script>
-    <script src="static/scripts/task_render.js"></script>
 </body>
 </html>

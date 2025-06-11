@@ -34,3 +34,5 @@ test_btn.addEventListener('click' , e => {
         console.log(text_value); //TODO: test task
     }
 })
+
+const infoInstuction = document.getElementsByClassName("infoInstruction");
