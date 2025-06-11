@@ -1,14 +1,85 @@
-.container {
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
+.user_info {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 24px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  font-family: Arial, sans-serif;
+  color: #333;
 }
 
-.solutions_date {
-    display: flex;
-    justify-content: space-between;
+.user_info .name {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
 }
 
 .stats_block {
-    margin: 20px 0 ;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 20px;
+  margin-top: 10px;
+  background-color: #f9f9f9;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+#sub_rate {
+  font-weight: 600;
+  color: #007bff;
+}
+
+.submission_list {
+  margin-top: 30px;
+}
+
+.submission_list > div:first-child {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+#sub_list {
+  padding: 12px;
+  background-color: #f8f8f8;
+  border: 1px solid #e1e1e1;
+  border-radius: 8px;
+  min-height: 100px;
+}
+
+.submission {
+  border: 1px solid #ddd;
+  background-color: #fff;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  border-radius: 10px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.04);
+  font-family: Arial, sans-serif;
+  transition: background-color 0.3s ease;
+}
+
+.submission:hover {
+  background-color: #f9f9f9;
+}
+
+.submission .timestamp {
+  font-size: 14px;
+  color: #888;
+  margin-bottom: 8px;
+}
+
+.submission .task-id {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 6px;
+}
+
+.submission .score {
+  font-size: 15px;
+  color: #007bff;
+  font-weight: 500;
 }

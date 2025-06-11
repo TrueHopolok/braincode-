@@ -1,9 +1,7 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
-	"strconv"
 
 	"github.com/TrueHopolok/braincode-/server/logger"
 	"github.com/TrueHopolok/braincode-/server/models"
@@ -43,12 +41,7 @@ func StatsPage(w http.ResponseWriter, r *http.Request) {
 		}
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	case "application/json":
-		page, err := strconv.Atoi(r.URL.Query().Get("id"))
-		if err != nil || page < 0 {
-			page = 0
-		}
-
-		data, err := models.SubmissionFindAll(username, page)
+		data, err := models.SubmissionFindAll(username)
 		if err != nil {
 			errResp_Fatal(w, r, err)
 			return
@@ -58,30 +51,8 @@ func StatsPage(w http.ResponseWriter, r *http.Request) {
 			errResp_Fatal(w, r, err)
 		}
 		w.Header().Set("Content-Type", "application/json")
-	case "application/brainfunk":
-		ssubid := r.URL.Query().Get("id")
-		subid, err := strconv.Atoi(ssubid)
-		if err != nil {
-			http.Error(w, fmt.Sprintf("Invalid provided submission-id=%s\nWant an integer", ssubid), http.StatusNotAcceptable)
-			logger.Log.Debug("req=%p submission-id=%s is not a valid integer", r, ssubid)
-			return
-		}
-		solution, found, err := models.SubmissionFindOne(username, subid)
-		if err != nil {
-			errResp_Fatal(w, r, err)
-			return
-		} else if !found {
-			http.Error(w, fmt.Sprintf("Invalid provided task-id=%d\nSuch task does not exists", subid), http.StatusNotAcceptable)
-			logger.Log.Debug("req=%p task-id=%d not found", r, subid)
-			return
-		}
-
-		if _, err = w.Write([]byte(solution)); err != nil {
-			errResp_Fatal(w, r, err)
-		}
-		w.Header().Set("Content-Type", "application/brainfunk")
 	default:
-		denyResp_ContentTypeNotAllowed(w, r, "text/html", "application/json", "application/brainfunk")
+		denyResp_ContentTypeNotAllowed(w, r, "text/html", "application/json")
 	}
 }
 

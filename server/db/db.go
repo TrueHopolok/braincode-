@@ -25,7 +25,7 @@ var Conn DB
 func Init() error {
 	var err error
 	sqldb, err := sql.Open("mysql",
-		fmt.Sprintf("%s:%s@/%s",
+		fmt.Sprintf("%s:%s@/%s?parseTime=true",
 			config.Get().DBuser,
 			config.Get().DBpass,
 			config.Get().DBname))

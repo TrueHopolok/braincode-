@@ -1,16 +1,26 @@
 profile_req();
 
-const sub_year = document.getElementById("sub_year");
-const sub_month = document.getElementById("sub_month");
-const sub_all = document.getElementById("sub_all");
 const sub_list = document.getElementById("sub_list");
-const sub_rate = document.getElementById("sub_rate");
 
 function render_profile(data) {
-    sub_month.innerHTML = `${data.month} problems`;
-    sub_all.innerHTML = `${data.all} problems`;
-    sub_year.innerHTML = `${data.year} problems`;
-
-    sub_list.innerHTML = `${data.list} problems`;
-    sub_rate.innerHTML = `${data.rate} problems`;
+    console.log(data);
+    if (data === null || data.TotalAmount === 0 || data.Rows === null) {
+        sub_list.innerHTML = 'No submissions found...';
+        return;
+    }
+    sub_list.innerHTML = '';
+    data.Rows.forEach(sub => {
+        let node = document.createElement("div");
+        node.classList.add("submission");
+        let id = sub.TaskId.Int64;
+        if (!sub.TaskId.Valid) {
+            id = "deleted";
+        }
+        node.innerHTML = `
+        <div class="timestamp">${sub.Timestamp}</div>
+        <div class="task-id">Task id: ${id}</div>
+        <div class="score">Score: ${sub.Score}</div>
+        `;
+        sub_list.appendChild(node);
+    });
 }

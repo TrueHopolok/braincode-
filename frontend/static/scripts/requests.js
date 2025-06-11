@@ -103,7 +103,7 @@ function submit_req(data, id) {
 
 function profile_req() {
     fetch('/stats/', {
-        method: 'POST',
+        method: 'GET',
         headers: {
             'Content-Type': 'application/json'
         },
