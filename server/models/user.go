@@ -163,3 +163,23 @@ func UserChangePassword(username string, psh, salt []byte) error {
 
 	return tx.Commit()
 }
+
+func UserIsAdmin(username string) (bool, error) {
+	query, err := db.GetQuery("is_admin")
+	if err != nil {
+		return false, err
+	}
+
+	tx, err := db.Conn.Begin()
+	if err != nil {
+		return false, err
+	}
+	defer tx.Rollback()
+
+	var res bool
+	if err := tx.QueryRow(string(query), username).Scan(&res); err != nil {
+		return false, err
+	}
+
+	return res, nil
+}

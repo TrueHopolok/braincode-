@@ -37,7 +37,7 @@ func UserFindInfo(w http.ResponseWriter, username string, isenglish bool, accept
 		Username:       username,
 		AcceptanceRate: ar,
 		SolvedRate:     sr,
-		T:              prepared.TFromBools(isenglish, true),
+		T:              prepared.T{}.AuthBool(true, username).LangBool(isenglish),
 	})
 	if err != nil {
 		return err
@@ -51,7 +51,7 @@ func UserFindLogin(w http.ResponseWriter, isenglish bool) error {
 	err := prepared.Templates.ExecuteTemplate(buf, "login.html", struct {
 		prepared.T
 	}{
-		T: prepared.TFromBools(isenglish, false),
+		T: prepared.T{}.LangBool(isenglish),
 	})
 	if err != nil {
 		return err
@@ -65,7 +65,7 @@ func UserCreate(w http.ResponseWriter, isenglish bool) error {
 	err := prepared.Templates.ExecuteTemplate(buf, "registration.html", struct {
 		prepared.T
 	}{
-		prepared.TFromBools(isenglish, false),
+		prepared.T{}.LangBool(isenglish),
 	})
 	if err != nil {
 		return err

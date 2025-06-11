@@ -40,13 +40,17 @@
                 </div>
             `;
 
-                deleteButton = document.createElement("button");
-                deleteButton.innerHTML = isEnglish ? "Delete task" : "Удалить задачу";
-                deleteButton.classList.add("task-delete");
-                deleteButton.addEventListener("click", () => delete_task(task.Id));
 
                 listItem.appendChild(taskLink);
-                listItem.appendChild(deleteButton);
+                const canDelete = (document.ISADMIN || task.OwnerName === document.USERNAME) && document.AUTH
+                if (canDelete) {
+                    deleteButton = document.createElement("button");
+                    const text = isEnglish ? "Delete task" : "Удалить задачу";
+                    deleteButton.innerHTML = task.OwnerName === document.USERNAME ? text : "[A] " + text;
+                    deleteButton.classList.add("task-delete");
+                    deleteButton.addEventListener("click", () => delete_task(task.Id));
+                    listItem.appendChild(deleteButton);
+                }
                 list.appendChild(listItem);
             });
         }

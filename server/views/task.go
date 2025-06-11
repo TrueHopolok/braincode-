@@ -12,7 +12,7 @@ import (
 // Show 1 task page. Expects all information to be valid.
 func TaskFindOne(w http.ResponseWriter, username string, isauth, isenglish bool, task models.Task, previousSolution string) error {
 	buf := bufio.NewWriter(w)
-	t := prepared.TFromBools(isenglish, isauth)
+	t := prepared.T{}.AuthBool(isauth, username).LangBool(isenglish)
 	err := prepared.Templates.ExecuteTemplate(buf, "taskpage.html", struct {
 		prepared.T
 		Document ml.TemplatableDocument
@@ -29,7 +29,7 @@ func TaskFindOne(w http.ResponseWriter, username string, isauth, isenglish bool,
 }
 
 // Show problemset page. Expects all information to be valid.
-func TaskFindAll(w http.ResponseWriter, username string, isauth, isenglish bool) error {
+func TaskFindAll(w http.ResponseWriter, username string, isadmin, isauth, isenglish bool) error {
 	buf := bufio.NewWriter(w)
 	err := prepared.Templates.ExecuteTemplate(buf, "index.html", struct {
 		Username string
@@ -37,7 +37,7 @@ func TaskFindAll(w http.ResponseWriter, username string, isauth, isenglish bool)
 		Auth bool
 	}{
 		Username: username,
-		T:        prepared.TFromBools(isenglish, isauth),
+		T:        prepared.T{}.AuthBool(isauth, username).LangBool(isenglish).SetAdmin(isadmin),
 		Auth:     isauth,
 	})
 	if err != nil {
@@ -48,7 +48,7 @@ func TaskFindAll(w http.ResponseWriter, username string, isauth, isenglish bool)
 
 // Show the upload task page. Expects all information to be valid.
 func TaskCreate(w http.ResponseWriter, username string, isenglish bool) error {
-	t := prepared.TFromBools(isenglish, true)
+	t := prepared.T{}.AuthBool(true, username).LangBool(isenglish)
 	buf := bufio.NewWriter(w)
 	err := prepared.Templates.ExecuteTemplate(buf, "problemupload.html", struct {
 		Documentation ml.TemplatableDocument

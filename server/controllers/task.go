@@ -38,7 +38,16 @@ func ProblemsPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := views.TaskFindAll(w, username, isauth, isenglish); err != nil {
+	var isadmin bool
+	if isauth {
+		ok, err := models.UserIsAdmin(username)
+		if err != nil {
+			logger.Log.Debug("Cannot check if user is admin (%v), assuming he is not.", err)
+		}
+		isadmin = ok
+	}
+
+	if err := views.TaskFindAll(w, username, isadmin, isauth, isenglish); err != nil {
 		errResp_Fatal(w, r, err)
 		return
 	}
@@ -94,7 +103,6 @@ func TaskPage(w http.ResponseWriter, r *http.Request) {
 	task, found, err := models.TaskFindOne(username, taskid)
 	if err != nil {
 		errResp_Fatal(w, r, fmt.Errorf("corrupted task: %w", err))
-		fmt.Println("AND HERE AS WEL *******************************")
 		return
 	} else if !found {
 		http.Error(w, fmt.Sprintf("Invalid provided task-id=%d\nSuch task does not exists", taskid), http.StatusNotAcceptable)
