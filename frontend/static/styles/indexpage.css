@@ -176,7 +176,6 @@ ul {
 .center-container {
   display: flex;
   flex-direction: row;
-  margin: 5%;
   width: 100%;
   align-items: center;
 }
