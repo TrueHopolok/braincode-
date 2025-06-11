@@ -15,20 +15,26 @@
     <section class="section">
         <div class="container">
             <div id="section-upper" class="section-upper">
-                <input class="section-search" type="text">
+                <input class="section-search" type="text" id="tasks-search">
+                {{- if .Auth -}}
                 <div class="section-user">
-                    <input type="checkbox">
+                    <input type="checkbox" id="current-user-only-checkbox">
                     <div>{{ .Tr "USER'S PROBLEMS" "ЗАДАЧИ ПОЛЬЗОВАТЕЛЯ" }}</div>
                 </div>
+                {{- end -}}
             </div>
 
             <div id="section-content">
-                <!-- FETCHED -->
+                <div>{{ .Tr "Loading..." "Ждём-с..." }}</div>
             </div>
+
+            <button id="tasks_next">Next</button>
+            <button id="tasks_prev">Prev</button>
         </div>
     </section>
 
-    <script src="static/scripts/logout.js"></script>
+    
+    <script src="static/scripts/indexpage.js"></script>
 </body>
 
 </html>

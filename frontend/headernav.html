@@ -28,6 +28,10 @@
 </header>
 
 <nav class="navigation">
+    {{- if .Auth -}}
+    <script src="static/scripts/logout.js"></script>
+    {{- end -}}
+
     <div class="container">
         <ul class="nav-ul">
             <li id="problem-set" class="nav-ul-element"><a href="{{ .TrURL "/" }}">{{ .Tr "PROBLEMSET" "ЗАДАЧИ" }}</a></li>

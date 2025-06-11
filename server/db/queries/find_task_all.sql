@@ -1,3 +1,4 @@
+-- this query is cursed
 SELECT t.id, t.title_en, t.title_ru, t.owner_name, (
 	SELECT s.score
 	FROM Status AS s
@@ -6,13 +7,7 @@ SELECT t.id, t.title_en, t.title_ru, t.owner_name, (
 ) AS score, COUNT(*) OVER() AS totalAmount
 FROM Task AS t
 WHERE (
-	t.title_en LIKE CONCAT(?, '%')
-	OR
-	t.title_ru LIKE CONCAT(?, '%')
-)
-AND (
-	t.owner_name = ?
-	OR
-	true = ?
+	CONCAT(t.title_en, t.title_en) LIKE CONCAT('%', ?, '%')
+	AND (? OR t.owner_name = ?)
 )
 LIMIT ? OFFSET ?;

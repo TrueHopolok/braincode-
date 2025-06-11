@@ -1,6 +1,7 @@
 package main
 
 import (
+	"cmp"
 	"net/http"
 
 	"github.com/TrueHopolok/braincode-/server/config"
@@ -31,6 +32,8 @@ func EnableFileHandlers(mux *http.ServeMux) {
 }
 
 func EnableControllerHandlers(mux *http.ServeMux) {
+	mux.Handle("GET /api/tasks/", session.MiddlewareFunc(controllers.ProblemsAPI))
+
 	mux.Handle("GET /", session.MiddlewareFunc(controllers.ProblemsPage))
 	mux.Handle("DELETE /", session.AuthMiddlewareFunc(controllers.TaskDelete))
 
@@ -61,8 +64,9 @@ func LoggerMiddleware(mux *http.ServeMux) http.Handler {
 			}
 		}()
 
-		logger.Log.Debug("req=%p met=%s url=%s | arrived", r, r.Method, r.URL.Path)
-		defer logger.Log.Debug("req=%p met=%s url=%s | served", r, r.Method, r.URL.Path)
+		remote := cmp.Or(r.Header.Get("X-Forwarded-For"), "("+r.RemoteAddr+")")
+		logger.Log.Debug("addr=%s met=%s url=%s | arrived", remote, r.Method, r.URL.Path)
+		defer logger.Log.Debug("addr=%s met=%s url=%s | served", remote, r.Method, r.URL.Path)
 
 		mux.ServeHTTP(w, r)
 	})

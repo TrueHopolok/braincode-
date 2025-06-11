@@ -32,39 +32,41 @@ func ProblemsPage(w http.ResponseWriter, r *http.Request) {
 	username := ses.Name
 	isauth := !ses.IsZero()
 
-	switch r.Header.Get("Content-Type") {
-	case "text/html", "":
-		ok, isenglish := langHandler(w, r)
-		if !ok {
-			return
-		}
-
-		if err := views.TaskFindAll(w, username, isauth, isenglish); err != nil {
-			errResp_Fatal(w, r, err)
-			return
-		}
-		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	case "application/json":
-		page, err := strconv.Atoi(r.URL.Query().Get("id"))
-		if err != nil || page < 0 {
-			page = 0
-		}
-
-		search := r.URL.Query().Get("id")
-		filter := r.URL.Query().Get("id") == "user-only"
-		data, err := models.TaskFindAll(username, search, filter, isauth, page)
-		if err != nil {
-			errResp_Fatal(w, r, err)
-			return
-		}
-
-		if _, err = w.Write(data); err != nil {
-			errResp_Fatal(w, r, err)
-		}
-		w.Header().Set("Content-Type", "application/json")
-	default:
-		denyResp_ContentTypeNotAllowed(w, r, "text/html", "application/json")
+	ok, isenglish := langHandler(w, r)
+	if !ok {
+		return
 	}
+
+	if err := views.TaskFindAll(w, username, isauth, isenglish); err != nil {
+		errResp_Fatal(w, r, err)
+		return
+	}
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+}
+
+func ProblemsAPI(w http.ResponseWriter, r *http.Request) {
+	ses := session.Get(r.Context())
+	username := ses.Name
+	isauth := !ses.IsZero()
+
+	pageS := r.URL.Query().Get("page")
+	query := r.URL.Query().Get("query")
+	currentOnly := r.URL.Query().Has("current-only")
+	page, err := strconv.Atoi(pageS)
+	if err != nil || page < 0 {
+		page = 0
+	}
+
+	data, err := models.TaskFindAll(username, query, currentOnly, isauth, page)
+	if err != nil {
+		errResp_Fatal(w, r, err)
+		return
+	}
+
+	if _, err = w.Write(data); err != nil {
+		errResp_Fatal(w, r, err)
+	}
+	w.Header().Set("Content-Type", "application/json")
 }
 
 func TaskPage(w http.ResponseWriter, r *http.Request) {

@@ -18,19 +18,20 @@ type Task struct {
 }
 
 type TaskInfo struct {
-	Id        int             `json:"Id"`
-	TitleEn   string          `json:"TitleEn"`
-	TitleRu   string          `json:"TitleRu"`
-	OwnerName string          `json:"OwnerName"`
-	Score     sql.NullFloat64 `json:"Score"`
+	Id        int
+	TitleEn   string
+	TitleRu   string
+	OwnerName string
+	Score     sql.NullFloat64
 }
 
 type Problemset struct {
-	TotalAmount int        `json:"TotalAmount"`
-	Rows        []TaskInfo `json:"Rows"`
+	TotalAmount int
+	TotalPages  int
+	Rows        []TaskInfo
 }
 
-const TASKS_AMOUNT_LIMIT = 20
+const taskAmountLimit = 20
 
 // Deletes task from the database
 func TaskDelete(username string, taskid int) error {
@@ -94,7 +95,7 @@ func TaskFindOne(username string, taskid int) (Task, bool, error) {
 }
 
 // Get all task names, id and owner_id as well as amount of tasks in json
-func TaskFindAll(username, search string, filter, isauth bool, page int) ([]byte, error) {
+func TaskFindAll(username, search string, currentUserOnly, isauth bool, page int) ([]byte, error) {
 	query, err := db.GetQuery("find_task_all")
 	if err != nil {
 		return nil, err
@@ -109,26 +110,31 @@ func TaskFindAll(username, search string, filter, isauth bool, page int) ([]byte
 	rows, err := tx.Query(string(query),
 		username,
 		search,
-		search,
+		!(currentUserOnly && isauth),
 		username,
-		!(filter && isauth),
-		TASKS_AMOUNT_LIMIT, TASKS_AMOUNT_LIMIT*page)
+		taskAmountLimit, taskAmountLimit*page)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 
 	var rawdata Problemset
-	for i := 0; rows.Next(); i++ {
-		rawdata.Rows = append(rawdata.Rows, TaskInfo{})
+	rawdata.Rows = make([]TaskInfo, 0, 20) // prealocate + avoid null
+	for rows.Next() {
+		var ti TaskInfo
 		err = rows.Scan(
-			&rawdata.Rows[i].Id, &rawdata.Rows[i].TitleEn, &rawdata.Rows[i].TitleRu,
-			&rawdata.Rows[i].OwnerName, &rawdata.Rows[i].Score,
-			&rawdata.TotalAmount)
+			&ti.Id, &ti.TitleEn, &ti.TitleRu,
+			&ti.OwnerName, &ti.Score,
+			&rawdata.TotalAmount) // WTF
 		if err != nil {
 			return nil, err
 		}
+		rawdata.Rows = append(rawdata.Rows, ti)
 	}
+
+	rawdata.TotalPages = (rawdata.TotalAmount + taskAmountLimit - 1) / taskAmountLimit
+
+	// FIXME(anpir): this should be a view
 	jsondata, err := json.Marshal(rawdata)
 	if err != nil {
 		return nil, err
