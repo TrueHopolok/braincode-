@@ -58,6 +58,10 @@ body {
     margin: 15px;
 }
 
+.submition-btn {
+    margin: 10px;
+}
+
 .paragraph {
   font-size: 1rem;
   color: #495057;
