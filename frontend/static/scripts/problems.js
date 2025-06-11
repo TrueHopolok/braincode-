@@ -1,8 +1,7 @@
-const problems = document.getElementById("section-content");
-const search = document.getElementById("section-search");
-const checkbox = document.getElementById("user_problem");
-
 document.addEventListener("DOMContentLoaded", (event) => {
+	const problems = document.getElementById("section-content");
+	const search = document.getElementById("section-search");
+	const checkbox = document.getElementById("user_problem");
 	let data = fetch("/", {
 		method: "GET",
 		headers: {
