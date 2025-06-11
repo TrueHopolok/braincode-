@@ -862,7 +862,7 @@ type TemplatableDocument struct {
 ```
 
 <a name="TemplateContext"></a>
-## type [TemplateContext](<https://github.com/TrueHopolok/braincode-/blob/main/judge/ml/template.go#L248-L254>)
+## type [TemplateContext](<https://github.com/TrueHopolok/braincode-/blob/main/judge/ml/template.go#L243-L249>)
 
 TemplateContext is a context with helper methods that wraps some other value.
 
@@ -877,7 +877,7 @@ type TemplateContext struct {
 ```
 
 <a name="TemplateContext.CodeBlock"></a>
-### func \(TemplateContext\) [CodeBlock](<https://github.com/TrueHopolok/braincode-/blob/main/judge/ml/template.go#L314>)
+### func \(TemplateContext\) [CodeBlock](<https://github.com/TrueHopolok/braincode-/blob/main/judge/ml/template.go#L309>)
 
 ```go
 func (c TemplateContext) CodeBlock() *CodeBlock
@@ -886,7 +886,7 @@ func (c TemplateContext) CodeBlock() *CodeBlock
 
 
 <a name="TemplateContext.Example"></a>
-### func \(TemplateContext\) [Example](<https://github.com/TrueHopolok/braincode-/blob/main/judge/ml/template.go#L328>)
+### func \(TemplateContext\) [Example](<https://github.com/TrueHopolok/braincode-/blob/main/judge/ml/template.go#L323>)
 
 ```go
 func (c TemplateContext) Example() *Example
@@ -895,7 +895,7 @@ func (c TemplateContext) Example() *Example
 
 
 <a name="TemplateContext.Image"></a>
-### func \(TemplateContext\) [Image](<https://github.com/TrueHopolok/braincode-/blob/main/judge/ml/template.go#L321>)
+### func \(TemplateContext\) [Image](<https://github.com/TrueHopolok/braincode-/blob/main/judge/ml/template.go#L316>)
 
 ```go
 func (c TemplateContext) Image() *Image
@@ -904,7 +904,7 @@ func (c TemplateContext) Image() *Image
 
 
 <a name="TemplateContext.List"></a>
-### func \(TemplateContext\) [List](<https://github.com/TrueHopolok/braincode-/blob/main/judge/ml/template.go#L335>)
+### func \(TemplateContext\) [List](<https://github.com/TrueHopolok/braincode-/blob/main/judge/ml/template.go#L330>)
 
 ```go
 func (c TemplateContext) List() *List
@@ -913,7 +913,7 @@ func (c TemplateContext) List() *List
 
 
 <a name="TemplateContext.Math"></a>
-### func \(TemplateContext\) [Math](<https://github.com/TrueHopolok/braincode-/blob/main/judge/ml/template.go#L349>)
+### func \(TemplateContext\) [Math](<https://github.com/TrueHopolok/braincode-/blob/main/judge/ml/template.go#L344>)
 
 ```go
 func (c TemplateContext) Math() *Math
@@ -922,7 +922,7 @@ func (c TemplateContext) Math() *Math
 
 
 <a name="TemplateContext.Paragraph"></a>
-### func \(TemplateContext\) [Paragraph](<https://github.com/TrueHopolok/braincode-/blob/main/judge/ml/template.go#L306>)
+### func \(TemplateContext\) [Paragraph](<https://github.com/TrueHopolok/braincode-/blob/main/judge/ml/template.go#L301>)
 
 ```go
 func (c TemplateContext) Paragraph() *NestedRichText
@@ -931,7 +931,7 @@ func (c TemplateContext) Paragraph() *NestedRichText
 
 
 <a name="TemplateContext.Quote"></a>
-### func \(TemplateContext\) [Quote](<https://github.com/TrueHopolok/braincode-/blob/main/judge/ml/template.go#L342>)
+### func \(TemplateContext\) [Quote](<https://github.com/TrueHopolok/braincode-/blob/main/judge/ml/template.go#L337>)
 
 ```go
 func (c TemplateContext) Quote() *Quote
@@ -940,7 +940,7 @@ func (c TemplateContext) Quote() *Quote
 
 
 <a name="TemplateContext.RenderMathBlock"></a>
-### func \(TemplateContext\) [RenderMathBlock](<https://github.com/TrueHopolok/braincode-/blob/main/judge/ml/template.go#L360>)
+### func \(TemplateContext\) [RenderMathBlock](<https://github.com/TrueHopolok/braincode-/blob/main/judge/ml/template.go#L355>)
 
 ```go
 func (c TemplateContext) RenderMathBlock(value Math) template.HTML
@@ -949,7 +949,7 @@ func (c TemplateContext) RenderMathBlock(value Math) template.HTML
 
 
 <a name="TemplateContext.RenderMathInline"></a>
-### func \(TemplateContext\) [RenderMathInline](<https://github.com/TrueHopolok/braincode-/blob/main/judge/ml/template.go#L356>)
+### func \(TemplateContext\) [RenderMathInline](<https://github.com/TrueHopolok/braincode-/blob/main/judge/ml/template.go#L351>)
 
 ```go
 func (c TemplateContext) RenderMathInline(value string) template.HTML
@@ -958,7 +958,7 @@ func (c TemplateContext) RenderMathInline(value string) template.HTML
 
 
 <a name="TemplateContext.RichTextToNested"></a>
-### func \(TemplateContext\) [RichTextToNested](<https://github.com/TrueHopolok/braincode-/blob/main/judge/ml/template.go#L263>)
+### func \(TemplateContext\) [RichTextToNested](<https://github.com/TrueHopolok/braincode-/blob/main/judge/ml/template.go#L258>)
 
 ```go
 func (c TemplateContext) RichTextToNested(t RichText) NestedRichText
@@ -967,7 +967,7 @@ func (c TemplateContext) RichTextToNested(t RichText) NestedRichText
 RichTextToNested converts usual, span\-based [RichText](<#RichText>) into a [NestedRichText](<#NestedRichText>).
 
 <a name="TemplateContext.Title"></a>
-### func \(TemplateContext\) [Title](<https://github.com/TrueHopolok/braincode-/blob/main/judge/ml/template.go#L298>)
+### func \(TemplateContext\) [Title](<https://github.com/TrueHopolok/braincode-/blob/main/judge/ml/template.go#L293>)
 
 ```go
 func (c TemplateContext) Title() *NestedRichText
@@ -976,7 +976,7 @@ func (c TemplateContext) Title() *NestedRichText
 
 
 <a name="TemplateContext.W"></a>
-### func \(TemplateContext\) [W](<https://github.com/TrueHopolok/braincode-/blob/main/judge/ml/template.go#L257>)
+### func \(TemplateContext\) [W](<https://github.com/TrueHopolok/braincode-/blob/main/judge/ml/template.go#L252>)
 
 ```go
 func (c TemplateContext) W(i any) TemplateContext
