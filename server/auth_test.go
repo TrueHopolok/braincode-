@@ -125,7 +125,7 @@ func TestAuth(t *testing.T) {
 	//* Delete user (ok)
 	subTestName = "Delete user (ok)"
 	expectedStatusCode = http.StatusSeeOther
-	req = MustRequest(t, "DELETE", ts.URL+"/stats/", nil)
+	req = MustRequest(t, "POST", ts.URL+"/stats/delete-user/", nil)
 	resp, err = tc.Do(req)
 	ResponseCheck(t, ts, tc, subTestName, expectedStatusCode, resp, err)
 
