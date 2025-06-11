@@ -159,34 +159,30 @@ func TaskSolve(w http.ResponseWriter, r *http.Request) {
 }
 
 func UploadPage(w http.ResponseWriter, r *http.Request) {
-	if contenttype := r.Header.Get("Content-Type"); contenttype != "" && contenttype != "text/html" {
-		denyResp_ContentTypeNotAllowed(w, r, "text/html")
-		return
-	}
-
 	ok, isenglish := langHandler(w, r)
 	if !ok {
 		return
 	}
 
-	if err := views.TaskCreate(w, session.Get(r.Context()).Name, isenglish); err != nil {
-		errResp_Fatal(w, r, err)
+	if err := views.TaskCreate(w, session.Get(r.Context()).Name, isenglish, r.URL.Query().Get("error")); err != nil {
+		redirectErrorString(w, r, err.Error())
+		return
 	}
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 }
 
 func TaskCreate(w http.ResponseWriter, r *http.Request) {
 	username := session.Get(r.Context()).Name
 
 	if err := r.ParseForm(); err != nil {
-		http.Error(w, fmt.Sprintf("Something went wrong while parsing request:\n%s", err), http.StatusBadRequest)
+		redirectErrorString(w, r, "invalid forma data: "+err.Error())
 		logger.Log.Debug("req=%p upload-err=%s ", r, err)
+		return
 	}
 
 	v := r.FormValue("statement")
 	id, err := models.TaskCreate(strings.NewReader(v), username)
 	if err != nil {
-		http.Error(w, fmt.Sprintf("Something went wrong while uploading the task:\n%s", err), http.StatusBadRequest)
+		redirectErrorString(w, r, "judge said no: "+err.Error())
 		logger.Log.Debug("req=%p upload-err=%s ", r, err)
 		return
 	}
