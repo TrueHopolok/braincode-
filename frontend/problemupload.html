@@ -17,8 +17,8 @@
     <div class="container">
         <form class="task_upload" id="task_upload" method="post" action="/upload/">            
             <label for="des"><b>{{ .Tr "Task Statement" "Описание Задачи" }} (MarkLeft)</b></label>
-            <textarea id="problem_statement" type="text" name="statement"
-                placeholder="{{ .Tr "Enter Task Statement" "Введите Описание Задачи" }}" name="des" required></textarea>
+            <textarea id="problem_statement" name="statement"
+                placeholder="{{ .Tr "Enter Task Statement" "Введите Описание Задачи" }}" required></textarea>
             <button type="submit" class="submit_button">{{ .Tr "Submit" "Отправить" }}</button>
         </form>
 
