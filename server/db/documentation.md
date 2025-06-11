@@ -10,14 +10,24 @@ Implements basic realization of database connection and queries. As well as prep
 
 ## Index
 
+- [func GetQuery\(name string\) \(\[\]byte, error\)](<#GetQuery>)
 - [func Init\(\) error](<#Init>)
 - [func InitTesting\(t \*testing.T\)](<#InitTesting>)
 - [func Migrate\(\) error](<#Migrate>)
 - [type DB](<#DB>)
 
 
+<a name="GetQuery"></a>
+## func [GetQuery](<https://github.com/TrueHopolok/braincode-/blob/main/server/db/db.go#L44>)
+
+```go
+func GetQuery(name string) ([]byte, error)
+```
+
+GetQuery retrieves named query from an embedded filesystem. It is safe to use concurrently.
+
 <a name="Init"></a>
-## func [Init](<https://github.com/TrueHopolok/braincode-/blob/main/server/db/db.go#L24>)
+## func [Init](<https://github.com/TrueHopolok/braincode-/blob/main/server/db/db.go#L25>)
 
 ```go
 func Init() error
@@ -44,7 +54,7 @@ func Migrate() error
 Migrate executes all embedded migrations.
 
 <a name="DB"></a>
-## type [DB](<https://github.com/TrueHopolok/braincode-/blob/main/server/db/db.go#L16-L18>)
+## type [DB](<https://github.com/TrueHopolok/braincode-/blob/main/server/db/db.go#L17-L19>)
 
 Contains pointer to sql.DB but gurantees safety of usage outside the package
 

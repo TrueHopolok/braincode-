@@ -52,7 +52,7 @@ const EXPIRATION_TIME = 1.0
 ```
 
 <a name="AuthMiddleware"></a>
-## func [AuthMiddleware](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/middleware.go#L87>)
+## func [AuthMiddleware](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/middleware.go#L68>)
 
 ```go
 func AuthMiddleware(h http.Handler) http.Handler
@@ -63,7 +63,7 @@ AuthMiddleware wraps h making it reject all requests which are not authorized.
 AuthMiddleware modifies the context of request, [Session](<#Session>) can be retrieved with [Get](<#Get>).
 
 <a name="AuthMiddlewareFunc"></a>
-## func [AuthMiddlewareFunc](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/middleware.go#L142>)
+## func [AuthMiddlewareFunc](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/middleware.go#L103>)
 
 ```go
 func AuthMiddlewareFunc(f http.HandlerFunc) http.Handler
@@ -90,7 +90,7 @@ func Logout(w http.ResponseWriter)
 Logout deletes the auth cookie. Caller is responsible for not using any remaining session values.
 
 <a name="Middleware"></a>
-## func [Middleware](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/middleware.go#L33>)
+## func [Middleware](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/middleware.go#L32>)
 
 ```go
 func Middleware(h http.Handler) http.Handler
@@ -103,7 +103,7 @@ If request is properly authenticated, [Get](<#Get>)\(r.Context\(\)\) will return
 Prefer [AuthMiddleware](<#AuthMiddleware>) or [NoAuthMiddleware](<#NoAuthMiddleware>) if a resource is only available to authorized or unauthorized users. [Middleware](<#Middleware>) should only be used when handler has different behavior depending on authentication status.
 
 <a name="MiddlewareFunc"></a>
-## func [MiddlewareFunc](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/middleware.go#L80>)
+## func [MiddlewareFunc](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/middleware.go#L61>)
 
 ```go
 func MiddlewareFunc(f http.HandlerFunc) http.Handler
@@ -112,7 +112,7 @@ func MiddlewareFunc(f http.HandlerFunc) http.Handler
 See [Middleware](<#Middleware>)
 
 <a name="NoAuthMiddleware"></a>
-## func [NoAuthMiddleware](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/middleware.go#L151>)
+## func [NoAuthMiddleware](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/middleware.go#L112>)
 
 ```go
 func NoAuthMiddleware(h http.Handler) http.Handler
@@ -125,7 +125,7 @@ NoAuthMiddleware deletes session from the context.
 Note that requests with invalid Cookie headers will still be rejected.
 
 <a name="NoAuthMiddlewareFunc"></a>
-## func [NoAuthMiddlewareFunc](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/middleware.go#L181>)
+## func [NoAuthMiddlewareFunc](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/middleware.go#L143>)
 
 ```go
 func NoAuthMiddlewareFunc(f http.HandlerFunc) http.Handler
@@ -174,7 +174,7 @@ type Session struct {
 ```
 
 <a name="Get"></a>
-### func [Get](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/middleware.go#L18>)
+### func [Get](<https://github.com/TrueHopolok/braincode-/blob/main/server/session/middleware.go#L17>)
 
 ```go
 func Get(ctx context.Context) Session

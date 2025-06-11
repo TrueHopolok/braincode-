@@ -126,6 +126,7 @@ func (m *HTMLClassMap) MathBlock() string        { return m[HTMLClassMathBlock] 
 
 //go:embed html.template
 var htmlTemplateData string
+
 var htmlParseOnce = sync.OnceValue(func() *template.Template {
 	tpl, err := template.New("markleftDoc").Parse(htmlTemplateData)
 	if err != nil {
@@ -141,6 +142,10 @@ func HTMLTemplate() *template.Template {
 		panic(err)
 	}
 	return tpl
+}
+
+func AddHTMLTemplate(t *template.Template, name string) {
+	t.New(name).Parse(htmlTemplateData)
 }
 
 // DefaultClassMap is a the default class map used by parsers if not overridden.

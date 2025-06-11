@@ -63,7 +63,7 @@ func TaskDelete(username string, taskid int) error {
 
 // Get info about single task by given id and returns it as a struct
 func TaskFindOne(username string, taskid int) (Task, bool, error) {
-	query, err := db.GetQuery("find_task_one.sql")
+	query, err := db.GetQuery("find_task_one")
 	if err != nil {
 		return Task{}, false, err
 	}

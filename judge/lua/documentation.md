@@ -62,7 +62,7 @@ Only strings and nils are allowed. Nils are silently dropped.
 A function called test\_data may be provided. It will be called with zero arguments and must return a string | \(nil | string | \(nil | string\)\[\]\)\[\]
 
 <a name="Checker"></a>
-## type [Checker](<https://github.com/TrueHopolok/braincode-/blob/main/judge/lua/check.go#L42-L46>)
+## type [Checker](<https://github.com/TrueHopolok/braincode-/blob/main/judge/lua/check.go#L42-L47>)
 
 Checker contains a parsed lua script to be used for checking solutions to a problem.
 
@@ -93,7 +93,7 @@ type Checker struct {
 ```
 
 <a name="NewChecker"></a>
-### func [NewChecker](<https://github.com/TrueHopolok/braincode-/blob/main/judge/lua/check.go#L51>)
+### func [NewChecker](<https://github.com/TrueHopolok/braincode-/blob/main/judge/lua/check.go#L52>)
 
 ```go
 func NewChecker(source string) (Checker, error)
@@ -102,7 +102,7 @@ func NewChecker(source string) (Checker, error)
 NewChecker parses source and creates a new Checker.
 
 <a name="Checker.AppendBinary"></a>
-### func \(Checker\) [AppendBinary](<https://github.com/TrueHopolok/braincode-/blob/main/judge/lua/check.go#L158>)
+### func \(Checker\) [AppendBinary](<https://github.com/TrueHopolok/braincode-/blob/main/judge/lua/check.go#L162>)
 
 ```go
 func (c Checker) AppendBinary(b []byte) ([]byte, error)
@@ -111,7 +111,7 @@ func (c Checker) AppendBinary(b []byte) ([]byte, error)
 
 
 <a name="Checker.CheckOutput"></a>
-### func \(Checker\) [CheckOutput](<https://github.com/TrueHopolok/braincode-/blob/main/judge/lua/check.go#L97>)
+### func \(Checker\) [CheckOutput](<https://github.com/TrueHopolok/braincode-/blob/main/judge/lua/check.go#L99>)
 
 ```go
 func (c Checker) CheckOutput(input, output string) (string, error)
@@ -120,7 +120,7 @@ func (c Checker) CheckOutput(input, output string) (string, error)
 CheckOutput runs the checker. Non nil error means that checker has failed. If error is nil, string can be examined for test result. If string is empty, test passes. Otherwise, string will contain a possibly multiline checker comment.
 
 <a name="Checker.MarshalBinary"></a>
-### func \(\*Checker\) [MarshalBinary](<https://github.com/TrueHopolok/braincode-/blob/main/judge/lua/check.go#L165>)
+### func \(\*Checker\) [MarshalBinary](<https://github.com/TrueHopolok/braincode-/blob/main/judge/lua/check.go#L169>)
 
 ```go
 func (c *Checker) MarshalBinary() (data []byte, err error)
@@ -129,7 +129,7 @@ func (c *Checker) MarshalBinary() (data []byte, err error)
 
 
 <a name="Checker.UnmarshalBinary"></a>
-### func \(\*Checker\) [UnmarshalBinary](<https://github.com/TrueHopolok/braincode-/blob/main/judge/lua/check.go#L169>)
+### func \(\*Checker\) [UnmarshalBinary](<https://github.com/TrueHopolok/braincode-/blob/main/judge/lua/check.go#L173>)
 
 ```go
 func (c *Checker) UnmarshalBinary(data []byte) error

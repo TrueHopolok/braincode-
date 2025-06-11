@@ -15,9 +15,9 @@ Brainfunk needs to be compiled into byte code using [Compile](<#Compile>) and th
 - [type ByteCode](<#ByteCode>)
   - [func Compile\(source string, instructionLimit int\) \(ByteCode, error\)](<#Compile>)
   - [func \(bc ByteCode\) AppendBinary\(b \[\]byte\) \(\[\]byte, error\)](<#ByteCode.AppendBinary>)
-  - [func \(bc \*ByteCode\) AppendText\(b \[\]byte\) \(\[\]byte, error\)](<#ByteCode.AppendText>)
+  - [func \(bc ByteCode\) AppendText\(b \[\]byte\) \(\[\]byte, error\)](<#ByteCode.AppendText>)
   - [func \(bc ByteCode\) MarshalBinary\(\) \(\[\]byte, error\)](<#ByteCode.MarshalBinary>)
-  - [func \(bc \*ByteCode\) MarshalText\(\) \(text \[\]byte, err error\)](<#ByteCode.MarshalText>)
+  - [func \(bc ByteCode\) MarshalText\(\) \(text \[\]byte, err error\)](<#ByteCode.MarshalText>)
   - [func \(b ByteCode\) String\(\) string](<#ByteCode.String>)
   - [func \(bc \*ByteCode\) UnmarshalBinary\(data \[\]byte\) error](<#ByteCode.UnmarshalBinary>)
   - [func \(bc \*ByteCode\) UnmarshalText\(text \[\]byte\) error](<#ByteCode.UnmarshalText>)
@@ -77,10 +77,10 @@ MarshalBinary packs byte code into the provided byte slice. This is around 2.5 t
 Implements [encoding.BinaryAppender](<https://pkg.go.dev/encoding/#BinaryAppender>).
 
 <a name="ByteCode.AppendText"></a>
-### func \(\*ByteCode\) [AppendText](<https://github.com/TrueHopolok/braincode-/blob/main/judge/bf/serialize.go#L103>)
+### func \(ByteCode\) [AppendText](<https://github.com/TrueHopolok/braincode-/blob/main/judge/bf/serialize.go#L103>)
 
 ```go
-func (bc *ByteCode) AppendText(b []byte) ([]byte, error)
+func (bc ByteCode) AppendText(b []byte) ([]byte, error)
 ```
 
 AppendText appends valid brainfunk source to b. It will never error.
@@ -99,10 +99,10 @@ MarshalBinary packs byte code into a byte slice. This is around 2.5 time more sp
 Implements [encoding.BinaryMarshaler](<https://pkg.go.dev/encoding/#BinaryMarshaler>).
 
 <a name="ByteCode.MarshalText"></a>
-### func \(\*ByteCode\) [MarshalText](<https://github.com/TrueHopolok/braincode-/blob/main/judge/bf/serialize.go#L96>)
+### func \(ByteCode\) [MarshalText](<https://github.com/TrueHopolok/braincode-/blob/main/judge/bf/serialize.go#L96>)
 
 ```go
-func (bc *ByteCode) MarshalText() (text []byte, err error)
+func (bc ByteCode) MarshalText() (text []byte, err error)
 ```
 
 MarshalText emits a valid brainfunk source. It will never error.

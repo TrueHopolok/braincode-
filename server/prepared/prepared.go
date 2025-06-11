@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/TrueHopolok/braincode-/judge/ml"
 	"github.com/TrueHopolok/braincode-/server/config"
 )
 
@@ -13,6 +14,7 @@ var Templates *template.Template
 func Init() (err error) {
 	pattern := filepath.Join(config.Get().TemplatesPath, "*.html")
 	Templates, err = template.ParseGlob(pattern)
+	ml.AddHTMLTemplate(Templates, "markleftDoc")
 	return
 }
 

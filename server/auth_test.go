@@ -77,6 +77,7 @@ func TestAuth(t *testing.T) {
 	expectedStatusCode = http.StatusSeeOther
 	req = MustRequest(t, "DELETE", ts.URL+"/login/", nil)
 	resp, err = tc.Do(req)
+	// This test keeps failing, i dont know why, auth works fine in prod
 	ResponseCheck(t, ts, tc, subTestName, expectedStatusCode, resp, err)
 
 	// //* Logout (fail=notauth)

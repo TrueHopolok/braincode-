@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"net/http"
 
+	"github.com/TrueHopolok/braincode-/judge/ml"
 	"github.com/TrueHopolok/braincode-/server/models"
 	"github.com/TrueHopolok/braincode-/server/prepared"
 )
@@ -11,14 +12,14 @@ import (
 // Show 1 task page. Expects all information to be valid.
 func TaskFindOne(w http.ResponseWriter, username string, isauth, isenglish bool, task models.Task) error {
 	buf := bufio.NewWriter(w)
+	t := prepared.TFromBools(isenglish, isauth)
 	err := prepared.Templates.ExecuteTemplate(buf, "taskpage.html", struct {
 		prepared.T
+		Document ml.TemplatableDocument
 	}{
-		prepared.TFromBools(isenglish, isauth),
+		t,
+		task.Doc.Templatable(t.Lang),
 	})
-
-	// TODO(vadim): add struct info into the page
-	// anpir: left this here because still need info probably
 	if err != nil {
 		return err
 	}

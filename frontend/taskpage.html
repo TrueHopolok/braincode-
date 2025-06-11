@@ -14,10 +14,7 @@
         <div class="task-information">
             <a href="{{ .TrURL "/" }}" class="back">{{ .Tr "BACK" "НАЗАД" }}</a>
             <div id="doc">
-                <div class="task_name">Example name (no tr for now)</div>
-                <div class="task_des">Example task</div>
-                <div>Example input</div>
-                <div>Example output</div>
+                {{ template "markleftDoc" .Document }}
             </div>
         </div> 
 

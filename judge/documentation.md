@@ -215,7 +215,7 @@ type OutputChecker interface {
 ```
 
 <a name="NewBFChecker"></a>
-### func [NewBFChecker](<https://github.com/TrueHopolok/braincode-/blob/main/judge/bfcheck.go#L19>)
+### func [NewBFChecker](<https://github.com/TrueHopolok/braincode-/blob/main/judge/bfcheck.go#L21>)
 
 ```go
 func NewBFChecker(source string) (OutputChecker, error)
@@ -228,7 +228,7 @@ NewBFChecker creates a new brainfunk output checker.
 Not all programs can be tested with this api, for this use [NewLuaChecker](<#NewLuaChecker>), you freak.
 
 <a name="NewBFSolution"></a>
-### func [NewBFSolution](<https://github.com/TrueHopolok/braincode-/blob/main/judge/bfcheck.go#L57>)
+### func [NewBFSolution](<https://github.com/TrueHopolok/braincode-/blob/main/judge/bfcheck.go#L106>)
 
 ```go
 func NewBFSolution(source string, instructions, steps, memory int) (OutputChecker, error)
