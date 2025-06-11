@@ -33,14 +33,19 @@
                 taskLink.classList.add('task-link');
 
                 taskLink.innerHTML = `
-                <div class="task-info">
-                    <div class="task-title">${title}</div>
+                <div class="task-info">${task.Id}. <b>${title}</b></div>
+                <div class="task-secondaries">
                     <div class="task-author">${isEnglish ? 'By' : 'От'} ${task.OwnerName || "[DELETED]"}</div>
-                    <div class="task-score">${scoreDisplay}</div>
+                    <div class="task-score"><i>${scoreDisplay}</i></div>
                 </div>
             `;
 
+                deleteButton = document.createElement("button");
+                deleteButton.innerHTML = "Delete task";
+                deleteButton.classList.add("task-delete");
+
                 listItem.appendChild(taskLink);
+                listItem.appendChild(deleteButton);
                 list.appendChild(listItem);
             });
         }

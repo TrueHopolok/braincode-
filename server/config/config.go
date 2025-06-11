@@ -20,6 +20,7 @@ type Config struct {
 	DBname        string `default:"braincode"`
 	DBqueriesPath string `default:"server/db/queries/"`
 	Secure        bool   `default:"true"`
+	AdminsFile    string
 }
 
 var CfgPath = flag.String("config", "", "path to the config file")
