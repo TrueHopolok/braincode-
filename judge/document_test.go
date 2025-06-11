@@ -121,3 +121,76 @@ test_data = {
 	}
 
 }
+
+func TestParseError(t *testing.T) {
+	const data = "" +
+		`.task = A + B
+.en
+.task = A + B
+..
+.ru
+.task = A + B
+..
+
+.instructions = 100
+.steps = 10000
+.mefmory = 200
+
+.paragraph = Input: 2 unsigned bytes: ~C[a] and ~C[b]. Output: ~C[(a + b) mod 256].
+.ru
+.paragraph = Ввод: 2 безнаковых байта: ~C[a] и ~C[b]. Вывод: ~C[(a + b) mod 256].
+..
+.en
+.paragraph = Input: 2 unsigned bytes: ~C[a] and ~C[b]. Output: ~C[(a + b) mod 256].
+..
+
+.example
+.paragraph = 123
+..
+
+.luha
+function solution(input)
+	local a = string.byte(input, 1)
+	local b = string.byte(input, 2)
+	return string.char((a + b) % 256)
+end
+test_data = {
+	{
+		string.char(0) .. string.char(0),
+		string.char(0) .. string.char(1),
+		string.char(0) .. string.char(2),
+		string.char(0) .. string.char(3),
+		string.char(1) .. string.char(0),
+		string.char(1) .. string.char(1),
+		string.char(1) .. string.char(2),
+		string.char(1) .. string.char(3),
+		string.char(2) .. string.char(0),
+		string.char(2) .. string.char(1),
+		string.char(2) .. string.char(2),
+		string.char(2) .. string.char(3),
+	},
+	{
+		string.char(5) .. string.char(6),
+		string.char(123) .. string.char(22),
+		string.char(55) .. string.char(11),
+		string.char(1) .. string.char(3),
+		string.char(2) .. string.char(0),
+		string.char(2) .. string.char(1),
+		string.char(2) .. string.char(2),
+	},
+	{
+		string.char(0) .. string.char(1),
+		string.char(255) .. string.char(255),
+		string.char(1) .. string.char(3),
+		string.char(2) .. string.char(0),
+		string.char(2) .. string.char(1),
+		string.char(2) .. string.char(2),
+	}
+}
+`
+	_, err := ml.Parse(strings.NewReader(data))
+	if err == nil {
+		t.Error("expected err, got nil")
+	}
+	t.Log(err)
+}

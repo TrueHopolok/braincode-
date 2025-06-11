@@ -123,12 +123,7 @@ func (pctx *parserContext) PushPath(b *rawBlock) (pop func()) {
 
 	pctx.path = fmt.Appendf(pctx.path, "in block %q (line %d): ", cmp.Or(blockToString[b.kind], b.rawName), b.line)
 
-	isOk := false
-
 	return func() {
-		if !isOk {
-			return
-		}
 		pctx.path = pctx.path[:n]
 	}
 }
