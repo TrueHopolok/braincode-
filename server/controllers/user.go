@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"unicode"
 
 	"github.com/TrueHopolok/braincode-/server/logger"
 	"github.com/TrueHopolok/braincode-/server/models"
@@ -112,12 +113,19 @@ func UserRegister(w http.ResponseWriter, r *http.Request) {
 	password := r.PostFormValue("password")
 	if len(username) < 3 {
 		redirectError(w, r, 2) // short username
-		logger.Log.Debug("req=%p invalid login form", r)
+		logger.Log.Debug("req=%p invalid login form: username is too short", r)
 		return
 	} else if len(password) < 8 {
 		redirectError(w, r, 3) // short password
 		logger.Log.Debug("req=%p invalid login form", r)
 		return
+	}
+	for _, c := range username {
+		if !unicode.IsLetter(c) && !unicode.IsDigit(c) && c != '-' && c != '_' {
+			redirectError(w, r, 6) // invalid username char
+			logger.Log.Debug("req=%p invalid login form: username is not unicode", r)
+			return
+		}
 	}
 	_, found, err := models.UserFindSalt(username)
 	if err != nil {
