@@ -115,3 +115,59 @@
     font-size: 0.95rem;
     line-height: 1.4;
 }
+
+.submit_button {
+    background-color: #5ec061;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.submit_button:hover {
+    background-color: #367539;
+}
+
+.format_button {
+    background-color: #5e60c0;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.format_button:hover {
+    background-color: #44458d;
+}
+
+label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 2px solid #ccc;
+  border-radius: 6px;
+  margin: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  font-weight: 500;
+}
+
+input[type="radio"] {
+  display: none;
+}
+
+/* Selected radio style */
+input[type="radio"]:checked + label,
+label:has(input[type="radio"]:checked) {
+  border-color: #4CAF50;
+  background-color: #e6f7ec;
+  color: #2b7a3d;
+}
