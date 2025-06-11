@@ -4,6 +4,7 @@ import (
 	"crypto/rand"
 	"fmt"
 	"net/http"
+	"net/url"
 	"strconv"
 	"strings"
 
@@ -84,12 +85,16 @@ func redirect2stats(w http.ResponseWriter, r *http.Request, action string) {
 }
 
 func redirectError(w http.ResponseWriter, r *http.Request, errcode int) {
-	url := "?error=" + strconv.Itoa(errcode)
+	redirectErrorString(w, r, strconv.Itoa(errcode))
+}
+
+func redirectErrorString(w http.ResponseWriter, r *http.Request, errorS string) {
+	url := "?error=" + url.QueryEscape(errorS)
 	if r.URL.Query().Has("lang") {
 		url += "&lang=" + r.URL.Query().Get("lang")
 	}
 	http.Redirect(w, r, url, http.StatusSeeOther)
-	logger.Log.Debug("req=%p user redirect with error code %v", r, errcode)
+	logger.Log.Debug("req=%p user redirect with error %v", r, errorS)
 }
 
 // This should be the last write into the response!

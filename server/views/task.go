@@ -47,17 +47,18 @@ func TaskFindAll(w http.ResponseWriter, username string, isadmin, isauth, isengl
 }
 
 // Show the upload task page. Expects all information to be valid.
-func TaskCreate(w http.ResponseWriter, username string, isenglish bool) error {
+func TaskCreate(w http.ResponseWriter, username string, isenglish bool, errorS string) error {
 	t := prepared.T{}.AuthBool(true, username).LangBool(isenglish)
+	t.Username = username
 	buf := bufio.NewWriter(w)
 	err := prepared.Templates.ExecuteTemplate(buf, "problemupload.html", struct {
 		Documentation ml.TemplatableDocument
-		Username      string
+		Error         string
 		prepared.T
 	}{
-		Username:      username,
 		T:             t,
 		Documentation: ml.Documentation().Templatable(t.Lang),
+		Error:         errorS,
 	})
 	if err != nil {
 		return err

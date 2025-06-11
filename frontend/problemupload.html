@@ -34,7 +34,11 @@
         </label>
         <div class="tasksub_output">
             <div id="task-preview"></div>
-            <div id="preview-errors"></div>
+            <div id="preview-errors">
+                {{- with .Error -}}
+                Response from server: {{ . -}}
+                {{- end -}}
+            </div>
         </div>
         <div class="markleft_guide">
             <div>
