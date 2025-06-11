@@ -41,6 +41,7 @@
                 deleteButton = document.createElement("button");
                 deleteButton.innerHTML = "Delete task";
                 deleteButton.classList.add("task-delete");
+                deleteButton.addEventListener("click", e => delete_task(task.Id));
 
                 listItem.appendChild(taskLink);
                 listItem.appendChild(deleteButton);
@@ -67,7 +68,18 @@
         return (await fetch(url)).json()
     }
 
-
+    async function delete_task(id) {
+        fetch(
+            "/",
+            {
+                method: "DELETE",
+                headers: {
+                    "Id": id,
+                },
+            },
+        )
+        .then();
+    }
 
     function tasks_next() {
         if (currentPage < data.TotalPages - 1) {

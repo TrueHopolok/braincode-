@@ -46,7 +46,7 @@ func TaskDelete(username string, taskid int) error {
 	}
 	defer tx.Rollback()
 
-	res, err := tx.Exec(string(query), username, taskid)
+	res, err := tx.Exec(string(query), username, username, taskid)
 	if err != nil {
 		return err
 	}

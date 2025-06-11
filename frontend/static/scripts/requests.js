@@ -26,9 +26,7 @@ function task_req() {
     fetch("https://jsonplaceholder.typicode.com/todos/1", {
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json',
-            'Session': session,
-            //        'lang': lang 
+            'Content-Type': 'application/json'
         }
     })
         .then(response => response.json())
@@ -45,10 +43,7 @@ function task_information(id) {
     fetch('/task/', {
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json',
-            'Session': session,
-            'lang': lang,
-            'id': id
+            'Content-Type': 'application/json'
         }
     })
         .then(response => response.json())
@@ -63,10 +58,7 @@ function task_upload(des) {
     fetch('/upload/', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'Session': session,
-            'lang': lang,
-            'id': id
+            'Content-Type': 'application/markleft'
         },
         body: des,
     })
@@ -84,7 +76,6 @@ function submit_req(data, id) {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Session': session,
             'id': id
         },
         body: JSON.stringify(data)

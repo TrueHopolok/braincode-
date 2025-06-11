@@ -12,7 +12,7 @@ import (
 )
 
 func TaskDelete(w http.ResponseWriter, r *http.Request) {
-	staskid := r.URL.Query().Get("id")
+	staskid := r.Header.Get("Id")
 	taskid, err := strconv.Atoi(staskid)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Invalid provided task-id=%s\nWant an integer", staskid), http.StatusInternalServerError)
