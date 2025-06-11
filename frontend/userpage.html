@@ -26,63 +26,65 @@
             </div>
 
         </div>
-        <div class="submission_list">
-            <div>{{ .Tr "Submission List" "Список Решений" }}</div>
-            <div id="sub_list">
-                <div class="submission_container">
-                    <div class="timestamp">${timestamp}</div>
-                    <div class="task-id">Task id: ${id}</div>
-                    <div class="score">Score: ${score}</div>
-                </div>
-            </div>
+        <div class="container">
+          <div class="submission_list">
+              <div>{{ .Tr "Submission List" "Список Решений" }}</div>
+              <div id="sub_list">
+                  <div class="submission_container">
+                      <div class="timestamp">${timestamp}</div>
+                      <div class="task-id">Task id: ${id}</div>
+                      <div class="score">Score: ${score}</div>
+                  </div>
+              </div>
 
-            <div class="danger_block">
-                {{- $prompt := .Tr
-                    "Are you sure you want to delete your account? This action cannot be undone."
-                    "Вы уверены что хотите удалить свой аккоунт? Это действие невозможно отвенить."
-                -}}
-                <form method="POST" action="{{ .TrURL "/stats/delete-user/" }}"
-                    onsubmit="return confirm('{{ $prompt }}');">
-                    <button type="submit">{{ .Tr "Delete Account" "Удалить Аккаунт"}}</button>
-                </form>
+              <div class="danger_block">
+                  {{- $prompt := .Tr
+                      "Are you sure you want to delete your account? This action cannot be undone."
+                      "Вы уверены что хотите удалить свой аккоунт? Это действие невозможно отвенить."
+                  -}}
+                  <form class ="password-form" method="POST" action="/stats/change-password/" onsubmit="return validatePasswordChange()">
+                      <div>
+                        <label for="current_password">{{ .Tr "Current Password:" "Текущий Пароль:"}}</label>
+                        <input type="password" id="current_password" name="current_password" required>
+                      </div>
 
-                <form method="POST" action="/stats/change-password/" onsubmit="return validatePasswordChange()">
-                    <div>
-                      <label for="current_password">{{ .Tr "Current Password:" "Текущий Пароль:"}}</label>
-                      <input type="password" id="current_password" name="current_password" required>
-                    </div>
+                      <div>
+                        <label for="new_password">{{ .Tr "New Password:" "Новый Парль"}}</label>
+                        <input type="password" id="new_password" name="new_password" required minlength="8">
+                      </div>
 
-                    <div>
-                      <label for="new_password">{{ .Tr "New Password:" "Новый Парль"}}</label>
-                      <input type="password" id="new_password" name="new_password" required minlength="8">
-                    </div>
+                      <div>
+                        <label for="confirm_password">{{ .Tr "Confirm Password:" "Подвтерждение Пароля" }}</label>
+                        <input type="password" id="confirm_password" name="confirm_password" required>
+                      </div>
 
-                    <div>
-                      <label for="confirm_password">{{ .Tr "Confirm Password:" "Подвтерждение Пароля" }}</label>
-                      <input type="password" id="confirm_password" name="confirm_password" required>
-                    </div>
+                      <button type="submit">{{ .Tr "Change Password" "Сменить Пароль" }}</button>
 
-                    <button type="submit">{{ .Tr "Change Password" "Сменить Пароль" }}</button>
+                      {{- $prompt := .Tr 
+                          "New password does not match confirmation!"
+                          "Новый пароль не совпадает с подтверждением!"
+                      -}}
+                      <script>
+                        function validatePasswordChange() {
+                          const newPassword = document.getElementById('new_password').value;
+                          const confirmPassword = document.getElementById('confirm_password').value;
 
-                    {{- $prompt := .Tr 
-                        "New password does not match confirmation!"
-                        "Новый пароль не совпадает с подтверждением!"
-                    -}}
-                    <script>
-                      function validatePasswordChange() {
-                        const newPassword = document.getElementById('new_password').value;
-                        const confirmPassword = document.getElementById('confirm_password').value;
-
-                        if (newPassword !== confirmPassword) {
-                          alert("{{ $prompt }}");
-                          return false;
+                          if (newPassword !== confirmPassword) {
+                            alert("{{ $prompt }}");
+                            return false;
+                          }
+                          return true;
                         }
-                        return true;
-                      }
-                    </script>
-                </form>
-            </div>
-        </div>
+                      </script>
+                  </form>
+                  
+                  <form class="btn_form" method="POST" action="{{ .TrURL "/stats/delete-user/" }}"
+                      onsubmit="return confirm('{{ $prompt }}');">
+                      <button type="submit" class="danger">{{ .Tr "Delete Account" "Удалить Аккаунт"}}</button>
+                  </form>
+              </div>
+          </div>
+      </div>
     </div>
     <script src="static/scripts/requests.js"></script>
     <script src="static/scripts/profile.js"></script>

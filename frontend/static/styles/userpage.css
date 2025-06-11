@@ -1,85 +1,163 @@
 .user_info {
-  max-width: 800px;
-  margin: 40px auto;
-  padding: 24px;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  font-family: Arial, sans-serif;
-  color: #333;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 24px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    color: #333;
 }
 
 .user_info .name {
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
 }
 
 .stats_block {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px 20px;
-  margin-top: 10px;
-  background-color: #f9f9f9;
-  padding: 12px;
-  border-radius: 8px;
-  font-size: 15px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 20px;
+    margin-top: 10px;
+    background-color: #f9f9f9;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 15px;
 }
 
 #sub_rate {
-  font-weight: 600;
-  color: #007bff;
+    font-weight: 600;
+    color: #007bff;
 }
 
 .submission_list {
-  margin-top: 30px;
+    margin-top: 30px;
 }
 
-.submission_list > div:first-child {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 12px;
+.submission_list>div:first-child {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 12px;
 }
 
 #sub_list {
-  padding: 12px;
-  background-color: #f8f8f8;
-  border: 1px solid #e1e1e1;
-  border-radius: 8px;
-  min-height: 100px;
+    padding: 12px;
+    background-color: #f8f8f8;
+    border: 1px solid #e1e1e1;
+    border-radius: 8px;
+    min-height: 100px;
 }
 
 .submission {
-  border: 1px solid #ddd;
-  background-color: #fff;
-  padding: 16px 20px;
-  margin-bottom: 16px;
-  border-radius: 10px;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.04);
-  font-family: Arial, sans-serif;
-  transition: background-color 0.3s ease;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    border-radius: 10px;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.04);
+    font-family: Arial, sans-serif;
+    transition: background-color 0.3s ease;
 }
 
 .submission:hover {
-  background-color: #f9f9f9;
+    background-color: #f9f9f9;
 }
 
 .submission .timestamp {
-  font-size: 14px;
-  color: #888;
-  margin-bottom: 8px;
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 8px;
 }
 
 .submission .task-id {
-  font-size: 16px;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 6px;
 }
 
 .submission .score {
-  font-size: 15px;
-  color: #007bff;
-  font-weight: 500;
+    font-size: 15px;
+    color: #007bff;
+    font-weight: 500;
+}
+
+.password-form {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 2rem;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.password-form div {
+    margin-bottom: 1.2rem;
+}
+
+.password-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.password-form input {
+    width: 100%;
+    padding: 0.6rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.password-form input:focus {
+    border-color: #3f51b5;
+    box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.1);
+    outline: none;
+}
+
+.password-form button {
+    width: 100%;
+    padding: 0.8rem;
+    font-size: 1rem;
+    background-color: #3f51b5;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.password-form button:hover {
+    background-color: #303f9f;
+}
+
+.btn_form {
+    display: flex;
+    justify-content: center;
+}
+
+button[type="submit"].danger {
+    display: flex;
+    justify-content: center;
+    padding: 0.8rem;
+    font-size: 1rem;
+    background-color: #dc2626;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    margin-top: 1rem;
+}
+
+button[type="submit"].danger:hover {
+    background-color: #b91c1c;
+}
+
+button[type="submit"].danger:active {
+    transform: scale(0.98);
 }
