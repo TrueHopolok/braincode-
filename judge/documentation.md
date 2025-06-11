@@ -61,7 +61,7 @@ func AppendGenerator(g InputGenerator, b []byte) ([]byte, error)
 
 
 <a name="CalculateScore"></a>
-## func [CalculateScore](<https://github.com/TrueHopolok/braincode-/blob/main/judge/judge.go#L69>)
+## func [CalculateScore](<https://github.com/TrueHopolok/braincode-/blob/main/judge/judge.go#L71>)
 
 ```go
 func CalculateScore(v [][]Verdict) float64
@@ -169,7 +169,7 @@ type Judge struct {
 ```
 
 <a name="NewJudge"></a>
-### func [NewJudge](<https://github.com/TrueHopolok/braincode-/blob/main/judge/judge.go#L27>)
+### func [NewJudge](<https://github.com/TrueHopolok/braincode-/blob/main/judge/judge.go#L29>)
 
 ```go
 func NewJudge(workers int) Judge
@@ -179,8 +179,10 @@ NewJudge creates a new judge and allocates workers. At least one worker will be 
 
 Judge must be closed to free up resources.
 
+Judge should usually be created globally. It is safe to use for concurrent use.
+
 <a name="Judge.Close"></a>
-### func \(Judge\) [Close](<https://github.com/TrueHopolok/braincode-/blob/main/judge/judge.go#L39>)
+### func \(Judge\) [Close](<https://github.com/TrueHopolok/braincode-/blob/main/judge/judge.go#L41>)
 
 ```go
 func (j Judge) Close() error
@@ -189,7 +191,7 @@ func (j Judge) Close() error
 Frees worker pool of the judge. Never returns an error. Signature matches [io.Closer](<https://pkg.go.dev/io/#Closer>).
 
 <a name="Judge.Judge"></a>
-### func \(Judge\) [Judge](<https://github.com/TrueHopolok/braincode-/blob/main/judge/judge.go#L94>)
+### func \(Judge\) [Judge](<https://github.com/TrueHopolok/braincode-/blob/main/judge/judge.go#L96>)
 
 ```go
 func (j Judge) Judge(p Problem, submition string) [][]Verdict
@@ -285,7 +287,7 @@ type Pair struct {
 ```
 
 <a name="Problem"></a>
-## type [Problem](<https://github.com/TrueHopolok/braincode-/blob/main/judge/judge.go#L56-L63>)
+## type [Problem](<https://github.com/TrueHopolok/braincode-/blob/main/judge/judge.go#L58-L65>)
 
 Problem is a collection of metadata about a problem. It should be constructed directly.
 

@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/TrueHopolok/braincode-/judge"
@@ -90,31 +91,27 @@ func SubmissionFindAll(username string, page int) ([]byte, error) {
 	return jsondata, tx.Commit()
 }
 
+var globalJudge = judge.NewJudge(4)
+
 // Test and get a score for a given solution and given code, then saves it into database
 // Return false if solution is invalid and cannot be tested
 func SubmissionCreate(username string, taskid int, solution string) (found, isvalid bool, err error) {
-	query1, err := db.GetQuery("find_task_judge")
+	findTask, err := db.GetQuery("find_task_judge")
 	if err != nil {
 		return false, false, err
 	}
 
-	query2, err := db.GetQuery("create_submission")
+	createSubmission, err := db.GetQuery("create_submission")
 	if err != nil {
 		return false, false, err
 	}
 
-	query3, err := db.GetQuery("update_status")
+	updateStatus, err := db.GetQuery("update_status")
 	if err != nil {
 		return false, false, err
 	}
 
-	tx, err := db.Conn.Begin()
-	if err != nil {
-		return false, false, err
-	}
-	defer tx.Rollback()
-
-	row := tx.QueryRow(string(query1), taskid)
+	row := db.Conn.QueryRow(string(findTask), taskid)
 	var rawprb []byte
 	if err = row.Scan(&rawprb); err != nil {
 		if err == sql.ErrNoRows {
@@ -123,20 +120,13 @@ func SubmissionCreate(username string, taskid int, solution string) (found, isva
 			return false, false, err
 		}
 	}
-	if err = tx.Commit(); err != nil {
-		return true, false, err
-	}
 
 	var prb judge.Problem
 	if err = prb.UnmarshalBinary(rawprb); err != nil {
 		logger.Log.Warn("task-id=%d corrupt entry", taskid)
 		return true, false, err
 	}
-	jdg := judge.NewJudge(4)
-	rawverdict := jdg.Judge(prb, solution)
-	if err = jdg.Close(); err != nil {
-		logger.Log.Fatal("judge error=%s", err)
-	}
+	rawverdict := globalJudge.Judge(prb, solution)
 	var (
 		verdict judge.Status = 0
 		comment string       = ""
@@ -158,7 +148,13 @@ func SubmissionCreate(username string, taskid int, solution string) (found, isva
 		score = judge.CalculateScore(rawverdict)
 	}
 
-	res, err := tx.Exec(string(query2),
+	tx, err := db.Conn.Begin()
+	if err != nil {
+		return false, false, err
+	}
+	defer tx.Rollback()
+
+	res, err := tx.Exec(string(createSubmission),
 		username, taskid,
 		verdict, comment,
 		solution, score,
@@ -174,7 +170,7 @@ func SubmissionCreate(username string, taskid int, solution string) (found, isva
 		return true, true, errors.New("invalid amount of inserted rows")
 	}
 
-	res, err = tx.Exec(string(query3), username, taskid, score, username, taskid)
+	res, err = tx.Exec(string(updateStatus), username, taskid, score, username, taskid)
 	if err != nil {
 		return true, true, err
 	}
@@ -182,8 +178,8 @@ func SubmissionCreate(username string, taskid int, solution string) (found, isva
 	if err != nil {
 		return true, true, err
 	}
-	if n != 1 {
-		return true, true, errors.New("invalid amount of updated rows")
+	if n < 0 || n > 1 {
+		return true, true, fmt.Errorf("updated %d rows, want 0 or 1", n)
 	}
 
 	return true, true, tx.Commit()

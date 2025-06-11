@@ -24,6 +24,8 @@ type Judge struct {
 // At least one worker will be allocated to prevent a deadlock.
 //
 // Judge must be closed to free up resources.
+//
+// Judge should usually be created globally. It is safe to use for concurrent use.
 func NewJudge(workers int) Judge {
 	ch := make(chan job)
 	for range max(workers, 1) {
