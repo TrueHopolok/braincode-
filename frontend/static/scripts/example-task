@@ -1,0 +1,37 @@
+.instructions = 2
+.steps = 2
+.memory = 1
+
+.lua
+function solution(input)
+    local a = string.byte(input, 1)
+    return a
+end
+
+test_data = {
+    {string.char(0)},
+    {string.char(5)},
+    {string.char(10)},
+    {string.char(92)},
+    {string.char(88)},
+    {string.char(123)},
+    {string.char(1)},
+    {string.char(2)},
+    {string.char(3)},
+    {string.char(255)}
+}
+..
+
+.en
+.task = BasicIO-4
+.paragraph
+Copy the input into the output.
+..
+..
+
+.ru
+.task = БазовыйIO-4
+.paragraph
+Скопировать и вывести введённый символ.
+..
+..

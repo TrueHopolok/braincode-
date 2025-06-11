@@ -59,23 +59,6 @@ function task_information(id) {
 
 // Upload Task
 
-function task_upload(des) {
-    fetch('/upload/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Session': session,
-            'lang': lang,
-            'id': id
-        },
-        body: des,
-    })
-        .then(response => response.json())
-        .then(data => {
-            render_task(data);
-        });
-}
-
 
 
 // Submit and test

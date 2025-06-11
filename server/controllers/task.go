@@ -167,5 +167,4 @@ func TaskCreate(w http.ResponseWriter, r *http.Request) {
 		logger.Log.Debug("req=%p upload-err=%s ", r, err)
 		return
 	}
-	redirect2main(w, r, "uploadTask")
 }

@@ -18,14 +18,15 @@
             <!-- TODO: Misha: add a guide on markleft here, ask andrey for the text -->
             <label for="des"><b>{{ .Tr "Task Statement (Markleft)" "Описание Задачи" }}</b></label>
             <textarea id="problem_statement" type="text" 
-                placeholder="{{ .Tr "Enter Task Statement" "Введите Описание Задачи" }}" name="des" required>
-            </textarea>
+                placeholder="{{ .Tr "Enter Task Statement" "Введите Описание Задачи" }}" name="des" required></textarea>
             <button type="submit">{{ .Tr "Submit" "Отправить" }}</button>
         </form>
+        <div id="status_text">
+            <p>Task haven't been uploaded yet.</p>
+        </div>
     </div>
 
-    <script src="static/scripts/requests.js"></script>
-    <script src="static/scripts/problems_upload.js"></script>
+    <script src="static/scripts/upload.js"></script>
     <script src="static/scripts/logout.js"></script>
 </body>
 
