@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,64 +9,34 @@
     <link rel="icon" href="static/favicon.png" type="image/png">
     <title>Stats - Braincode</title>
 </head>
-<body>
-    
-    <header>
-        <div class="container">
-            
-            <div class="header">
-                
-                <div class="header-logo">
-                    <img src="static/headericon.png" alt="!"> 
-                    <div class="logo-text">Braincode</div>
-                </div>
-                
-                <div class="header-user">
-                    <div class="language">
-                        <a href="/stats/?lang=EN">EN</a>
-                        <a href="/stats/?lang=RU">RU</a>
-                    </div>
-                    <div class="login">
-                        <a href="/stats/">{{.Username}}</a>
-                    </div>
-                </div>
-            </div>
-    
-        </div>
-    </header>
 
-    <nav class="navigation">
-        <div class="container">
-            <ul class="nav-ul">
-                <li id="problem-set" class="nav-ul-element"><a href="/">PROBLEMSET</a></li>
-                <li id="problem-upload" class="nav-ul-element"><a href="/upload/">PROBLEMUPLOAD</a></li>
-                <li class="nav-ul-element">
-                    <a onclick="logout()" href="/">LOG OUT</a>
-                </li>
-              </ul>
-        </div>
-    </nav>
-    
+<body>
+    {{- template "headernav.html" . -}}
+
     <div class="container">
         <div class="user_info">
-            <div class="name">Username: {{.Username}}</div>
+            <div class="name">{{ .Tr "Username" "Имя Пользователя" }}: {{.Username}}</div>
         </div>
         <div class="user_stats">
             <div class="stats_block">
-                <div>Acceptance Rate</div>
+                <div>{{ .Tr "Acceptance Rate" "Процент Принятых Решений" }}</div>
                 <div id="sub_rate">{{.AcceptanceRate}}%</div>
             </div>
             <div class="stats_block">
-                <div>Solved Rate</div>
+                <div>{{ .Tr "Solved Rate" "Процент Решённый Задач" }}</div>
                 <div id="sub_rate">{{.SolvedRate}}%</div>
             </div>
 
             <div class="stats_block">
-                <div>Submission list</div>
-                <div id="sub_list"><!-- FETCHED --></div>
+                <div>{{ .Tr "Submission List" "Список Решений" }}</div>
+                <div id="sub_list">
+                    <!-- FETCHED -->
+                    <!-- TODO: template this bitch -->
+                </div>
             </div>
         </div>
-     </div>
-     <script src="static/scripts/logout.js"></script>
+    </div>
+    <script src="static/scripts/logout.js"></script>
 </body>
+
 </html>

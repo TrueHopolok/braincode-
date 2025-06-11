@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ .LangNormalized }}">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,40 +9,9 @@
     <script src="static/scripts/problems.js"></script>
     <title>Braincode</title>
 </head>
+
 <body>
-
-    <header>
-        <div class="container">
-            
-            <div class="header">
-                
-                <div class="header-logo">
-                    <img src="static/headericon.png" alt="!"> 
-                    <div class="logo-text">Braincode</div>
-                </div>
-                
-                <div class="header-user">
-                    <div class="language">
-                        <a href="/?lang=EN">EN</a>
-                        <a href="/?lang=RU">RU</a>
-                    </div>
-                    <div class="login">
-                        <a href="/login/">Login</a>
-                        <a href="/register/">Registration</a>
-                    </div>
-                </div>
-            </div>
-    
-        </div>
-    </header>
-
-    <nav class="navigation">
-        <div class="container">
-            <ul class="nav-ul">
-                <li id="problem-set" class="nav-ul-element"><a href="/">PROBLEMSET</a></li>
-              </ul>
-        </div>
-    </nav>
+    {{- template "headernav.html" . -}}
 
     <section class="section">
         <div class="container">
@@ -49,7 +19,7 @@
                 <input class="section-search" type="text">\
                 <div class="section-user">
                     <input type="checkbox">
-                    <div>USER PROBLEMS</div>
+                    <div>{{ .Tr "USER'S PROBLEMS" "ЗАДАЧИ ПОЛЬЗОВАТЕЛЯ" }}</div>
                 </div>
             </div>
 
@@ -58,5 +28,8 @@
             </div>
         </div>
     </section>
+
+    <script src="static/scripts/logout.js"></script>
 </body>
+
 </html>

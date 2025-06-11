@@ -6,11 +6,9 @@ import (
 	"encoding/json"
 	"errors"
 	"io"
-	"os"
 
 	"github.com/TrueHopolok/braincode-/judge"
 	"github.com/TrueHopolok/braincode-/judge/ml"
-	"github.com/TrueHopolok/braincode-/server/config"
 	"github.com/TrueHopolok/braincode-/server/db"
 )
 
@@ -36,8 +34,7 @@ const TASKS_AMOUNT_LIMIT = 20
 
 // Deletes task from the database
 func TaskDelete(username string, taskid int) error {
-	queryfile := "delete_task.sql"
-	query, err := os.ReadFile(config.Get().DBqueriesPath + queryfile)
+	query, err := db.GetQuery("delete_task")
 	if err != nil {
 		return err
 	}
@@ -65,8 +62,7 @@ func TaskDelete(username string, taskid int) error {
 
 // Get info about single task by given id and returns it as a struct
 func TaskFindOne(username string, taskid int) (Task, bool, error) {
-	queryfile := "find_task_one.sql"
-	query, err := os.ReadFile(config.Get().DBqueriesPath + queryfile)
+	query, err := db.GetQuery("find_task_one.sql")
 	if err != nil {
 		return Task{}, false, err
 	}
@@ -99,8 +95,7 @@ func TaskFindOne(username string, taskid int) (Task, bool, error) {
 
 // Get all task names, id and owner_id as well as amount of tasks in json
 func TaskFindAll(username, search string, filter, isauth bool, page int) ([]byte, error) {
-	queryfile := "find_task_all.sql"
-	query, err := os.ReadFile(config.Get().DBqueriesPath + queryfile)
+	query, err := db.GetQuery("find_task_all")
 	if err != nil {
 		return nil, err
 	}
@@ -159,6 +154,14 @@ func TaskCreate(ioDoc io.ReadCloser, username string) error {
 		return errors.New("No valid task titles were provided - Nil entries")
 	}
 
+	// FIXME(anpir)
+	// Previous logic is broken and this fails if no locale is provided.
+	// (nil pointer dereference)
+	// This is a crotch
+	localeDEFAULT = cmp.Or(localeDEFAULT, new(ml.Localizable))
+	localeEN = cmp.Or(localeEN, new(ml.Localizable))
+	localeRU = cmp.Or(localeRU, new(ml.Localizable))
+
 	titleDEFAULT := cmp.Or(localeDEFAULT.Name, localeEN.Name, localeRU.Name)
 	if titleDEFAULT == "" {
 		return errors.New("No valid task titles were provided - Zero entries")
@@ -183,8 +186,7 @@ func TaskCreate(ioDoc io.ReadCloser, username string) error {
 		return err
 	}
 
-	queryfile := "create_task.sql"
-	query, err := os.ReadFile(config.Get().DBqueriesPath + queryfile)
+	query, err := db.GetQuery("create_task")
 	if err != nil {
 		return err
 	}

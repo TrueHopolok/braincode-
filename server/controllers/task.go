@@ -156,8 +156,9 @@ func UploadPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func TaskCreate(w http.ResponseWriter, r *http.Request) {
-	if err := models.TaskCreate(r.Body, session.Get(r.Context()).Name); err != nil {
-		http.Error(w, fmt.Sprintf("Something went wrong while uploading the task:\n%s", err), http.StatusNotAcceptable)
+	username := session.Get(r.Context()).Name
+	if err := models.TaskCreate(r.Body, username); err != nil {
+		http.Error(w, fmt.Sprintf("Something went wrong while uploading the task:\n%s", err), http.StatusBadRequest)
 		logger.Log.Debug("req=%p upload-err=%s ", r, err)
 		return
 	}

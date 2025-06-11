@@ -10,15 +10,15 @@ import (
 
 // Show 1 task page. Expects all information to be valid.
 func TaskFindOne(w http.ResponseWriter, username string, isauth, isenglish bool, task models.Task) error {
-	var templ string
-	if isenglish {
-		templ = "taskpage.html"
-	} else {
-		templ = "taskpage_ru.html"
-	}
-
 	buf := bufio.NewWriter(w)
-	err := prepared.Templates.ExecuteTemplate(buf, templ, nil) // TODO(vadim): add struct info into the page
+	err := prepared.Templates.ExecuteTemplate(buf, "taskpage.html", struct {
+		prepared.T
+	}{
+		prepared.TFromBools(isenglish, isauth),
+	})
+
+	// TODO(vadim): add struct info into the page
+	// anpir: left this here because still need info probably
 	if err != nil {
 		return err
 	}
@@ -27,25 +27,15 @@ func TaskFindOne(w http.ResponseWriter, username string, isauth, isenglish bool,
 
 // Show problemset page. Expects all information to be valid.
 func TaskFindAll(w http.ResponseWriter, username string, isauth, isenglish bool) error {
-	var templ string
-	if isauth {
-		if isenglish {
-			templ = "index_auth.html"
-		} else {
-			templ = "index_auth_ru.html"
-		}
-	} else {
-		if isenglish {
-			templ = "index.html"
-		} else {
-			templ = "index_ru.html"
-		}
-	}
 	buf := bufio.NewWriter(w)
-	err := prepared.Templates.ExecuteTemplate(buf, templ, struct {
+	err := prepared.Templates.ExecuteTemplate(buf, "index.html", struct {
 		Username string
-	}{
+		prepared.T
+		Auth bool
+	}{ // TODO(anpir) handle auth param in template
 		Username: username,
+		T:        prepared.TFromBools(isenglish, isauth),
+		Auth:     isauth,
 	})
 	if err != nil {
 		return err
@@ -55,18 +45,13 @@ func TaskFindAll(w http.ResponseWriter, username string, isauth, isenglish bool)
 
 // Show the upload task page. Expects all information to be valid.
 func TaskCreate(w http.ResponseWriter, username string, isenglish bool) error {
-	var templ string
-	if isenglish {
-		templ = "problemupload.html"
-	} else {
-		templ = "problemupload_ru.html"
-	}
-
 	buf := bufio.NewWriter(w)
-	err := prepared.Templates.ExecuteTemplate(buf, templ, struct {
+	err := prepared.Templates.ExecuteTemplate(buf, "problemupload.html", struct {
 		Username string
+		prepared.T
 	}{
 		Username: username,
+		T:        prepared.TFromBools(isenglish, true),
 	})
 	if err != nil {
 		return err

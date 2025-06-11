@@ -16,10 +16,10 @@ The responses gurantee:
 */
 
 const tasks = [
-  { id: 1, title: "Hello", author: "1" },
-  { id: 2, title: "Test", author: "2" },
-  { id: 3, title: "1234", author: "3" },
-  { id: 4, title: "iiii", author: "4" }
+    { id: 1, title: "Hello", author: "1" },
+    { id: 2, title: "Test", author: "2" },
+    { id: 3, title: "1234", author: "3" },
+    { id: 4, title: "iiii", author: "4" }
 ];
 
 function task_req() {
@@ -28,13 +28,13 @@ function task_req() {
         headers: {
             'Content-Type': 'application/json',
             'Session': session,
-        //        'lang': lang 
-    }
+            //        'lang': lang 
+        }
     })
-    .then(response => response.json())
-    .then(data => {
-        // tasks = data;
-    });
+        .then(response => response.json())
+        .then(data => {
+            // tasks = data;
+        });
 }
 //.then(data => tasks.push(data));
 
@@ -51,16 +51,16 @@ function task_information(id) {
             'id': id
         }
     })
-    .then(response => response.json())
-    .then(data => {
-        render_task(data);
-    });
+        .then(response => response.json())
+        .then(data => {
+            render_task(data);
+        });
 }
 
 // Upload Task
 
-function task_upload(name, des) {
-        fetch('/upload/', {
+function task_upload(des) {
+    fetch('/upload/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -68,15 +68,12 @@ function task_upload(name, des) {
             'lang': lang,
             'id': id
         },
-        body: JSON.stringify({
-            tname: name,
-            tdes: des,
-        })
+        body: des,
     })
-    .then(response => response.json())
-    .then(data => {
-        render_task(data);
-    });
+        .then(response => response.json())
+        .then(data => {
+            render_task(data);
+        });
 }
 
 
@@ -92,10 +89,10 @@ function submit_req(data, id) {
         },
         body: JSON.stringify(data)
     }).then(response => response.json())
-    .then(data => {
-        const answer = document.getElementById("task_answer");
-        answer.innerHTML = data;
-    })
+        .then(data => {
+            const answer = document.getElementById("task_answer");
+            answer.innerHTML = data;
+        })
 }
 
 /*function test_req(data) {
@@ -120,8 +117,8 @@ function profile_req() {
             'Content-Type': 'application/json'
         },
     })
-    .then(response => response.json())
-    .then(data => {
-        render_profile(data);
-    });
+        .then(response => response.json())
+        .then(data => {
+            render_profile(data);
+        });
 }

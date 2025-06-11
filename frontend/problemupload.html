@@ -1,57 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="static/styles/indexpage.css">
     <link rel="stylesheet" href="static/styles/problemupload.css">
     <link rel="icon" href="static/favicon.png" type="image/png">
-    <title>Upload - Braincode</title>
+    <title>{{ .Tr "Task Upload" "Создание Задачи" }} - Braincode</title>
 </head>
-<body>
-    <header>
-        <div class="container">
-            
-            <div class="header">
-                
-                <div class="header-logo">
-                    <img src="static/headericon.png" alt="!"> 
-                    <div class="logo-text">Braincode</div>
-                </div>
-                
-                <div class="header-user">
-                    <div class="language">
-                        <a href="/upload/?lang=EN">EN</a>
-                        <a href="/upload/?lang=RU">RU</a>
-                    </div>
-                    <div class="login">
-                        <a href="/stats/">{{.Username}}</a>
-                    </div>
-                </div>
-            </div>
-    
-        </div>
-    </header>
 
-    <nav class="navigation">
-        <div class="container">
-            <ul class="nav-ul">
-                <li id="problem-upload" class="nav-ul-element"><a href="/">PROBLEMSET</a></li>
-                <li id="problem-upload" class="nav-ul-element"><a href="/upload/">PROBLEMUPLOAD</a></li>
-                <li id="log_out" class="nav-ul-element"><a onclick="logout()" href="/">LOG OUT</a></li>
-            </ul>
-        </div>
-    </nav>
+<body>
+    {{- template "headernav.html" . -}}
 
     <div class="container">
         <form class="task_upload" id="task_upload">
-            <label for="tname"><b>Task Name</b></label>
-            <input type="text" placeholder="Enter Name" name="tname" required>
-            <label for="des"><b>Description</b></label>
-            <textarea type="text" placeholder="Enter Task" name="des" required></textarea>
-            <button type="submit">Submit</button>
+            <!-- TODO: Misha: add a guide on markleft here, ask andrey for the text -->
+            <label for="des"><b>{{ .Tr "Task Statement (Markleft)" "Описание Задачи" }}</b></label>
+            <textarea id="problem_statement" type="text" 
+                placeholder="{{ .Tr "Enter Task Statement" "Введите Описание Задачи" }}" name="des" required>
+            </textarea>
+            <button type="submit">{{ .Tr "Submit" "Отправить" }}</button>
         </form>
     </div>
+
+    <script src="static/scripts/requests.js"></script>
+    <script src="static/scripts/problems_upload.js"></script>
     <script src="static/scripts/logout.js"></script>
 </body>
+
 </html>

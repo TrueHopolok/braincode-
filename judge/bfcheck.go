@@ -2,6 +2,8 @@ package judge
 
 import (
 	"bytes"
+	"encoding/gob"
+	"errors"
 	"strings"
 
 	"github.com/TrueHopolok/braincode-/judge/bf"
@@ -48,10 +50,57 @@ func (b bfChecker) CheckOutput(input string, output string) Verdict {
 	return Verdict{}
 }
 
+func (b bfChecker) MarshalBinary() ([]byte, error) { return bf.ByteCode(b).MarshalBinary() }
+func (b bfChecker) AppendBinary(buf []byte) ([]byte, error) {
+	return bf.ByteCode(b).AppendBinary(buf)
+}
+func (b *bfChecker) UnmarshalBinary(buf []byte) error {
+	return (*bf.ByteCode)(b).UnmarshalBinary(buf)
+}
+func (b bfChecker) MarshalText() ([]byte, error) { return bf.ByteCode(b).MarshalText() }
+func (b bfChecker) AppendText(buf []byte) ([]byte, error) {
+	return bf.ByteCode(b).AppendText(buf)
+}
+func (b *bfChecker) UnmarshalText(buf []byte) error {
+	return (*bf.ByteCode)(b).UnmarshalText(buf)
+}
+
 type bfSolution struct {
 	bc     bf.ByteCode
 	steps  int
 	memory int
+}
+
+// Used for gob marshalling.
+type serializedBFSolution struct {
+	B bf.ByteCode // Field names are also encoded in GOB, so they are one byte long.
+	S int
+	M int
+}
+
+func (b bfSolution) MarshalBinary() ([]byte, error) { return b.AppendBinary(nil) }
+func (b bfSolution) AppendBinary(buf []byte) ([]byte, error) {
+	buffer := bytes.NewBuffer(buf)
+	err := gob.NewEncoder(buffer).Encode(&serializedBFSolution{
+		B: b.bc,
+		S: b.steps,
+		M: b.memory,
+	})
+	return buffer.Bytes(), err
+}
+
+func (b *bfSolution) UnmarshalBinary(buf []byte) error {
+	if b == nil {
+		return errors.New("nil receiver")
+	}
+	var data serializedBFSolution
+	if err := gob.NewDecoder(bytes.NewReader(buf)).Decode(&data); err != nil {
+		return err
+	}
+	b.bc = data.B
+	b.memory = data.M
+	b.steps = data.S
+	return nil
 }
 
 func NewBFSolution(source string, instructions, steps, memory int) (OutputChecker, error) {

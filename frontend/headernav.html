@@ -1,0 +1,43 @@
+<header>
+    <div class="container">
+
+        <div class="header">
+
+            <div class="header-logo">
+                <img src="static/headericon.png" alt="!">
+                <div class="logo-text">Braincode</div>
+            </div>
+
+            <div class="header-user">
+                <div class="language">
+                    <a href="?lang=EN">EN</a>
+                    <a href="?lang=RU">RU</a>
+                </div>
+                <div class="login">
+                    {{- if .Auth -}}
+                    <a href="{{ .TrURL "/stats/" }}">{{ .Username }}</a>
+                    {{- else -}}
+                    <a href="{{ .TrURL "/login/" }}">{{ .Tr "Login" "Авторизация" }}</a>
+                    <a href="{{ .TrURL "/register/" }}">{{ .Tr "Registration" "Регистрация" }}</a>
+                    {{- end -}}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</header>
+
+<nav class="navigation">
+    <div class="container">
+        <ul class="nav-ul">
+            <li id="problem-set" class="nav-ul-element"><a href="{{ .TrURL "/" }}">{{ .Tr "PROBLEMSET" "ЗАДАЧИ" }}</a></li>
+
+            {{- if .Auth -}}
+            <li id="problem-upload" class="nav-ul-element"><a href="{{ .TrURL "/upload/" }}">
+                    {{- .Tr "CREATE PROBLEM" "СОЗДАТЬ ЗАДАЧУ" -}}</a></li>
+            <li id="log_out" class="nav-ul-element"><a onclick="logout(event)">
+                    {{ .Tr "LOG OUT" "ВЫЙТИ"}}</a></li>
+            {{- end -}}
+        </ul>
+    </div>
+</nav>
