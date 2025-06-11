@@ -1,0 +1,2 @@
+ALTER TABLE User
+ADD is_admin BOOL NOT NULL;
