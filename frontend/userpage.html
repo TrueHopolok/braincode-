@@ -23,7 +23,7 @@
                 <div id="sub_rate">{{ printf "%.1f%%" .AcceptanceRate }}%</div>
             </div>
             <div class="stats_block">
-                <div>{{ .Tr "Solved Rate" "Процент Решённый Задач" }}</div>
+                <div>{{ .Tr "Solved Rate" "Процент Решённых Задач" }}</div>
                 <div id="sub_rate">{{ printf "%.1f%%" .SolvedRate }}%</div>
             </div>
 
@@ -33,6 +33,53 @@
                     <!-- FETCHED -->
                      <!-- TODO -->
                 </div>
+            </div>
+
+            <div class="danger_block">
+                {{- $prompt := .Tr
+                    "Are you sure you want to delete your account? This action cannot be undone."
+                    "Вы уверены что хотите удалить свой аккоунт? Это действие невозможно отвенить."
+                -}}
+                <form method="POST" action="{{ .TrURL "/stats/delete-user/" }}"
+                    onsubmit="return confirm('{{ $prompt }}');">
+                    <button type="submit">{{ .Tr "Delete Account" "Удалить Аккаунт"}}</button>
+                </form>
+
+                <form method="POST" action="/stats/change-password/" onsubmit="return validatePasswordChange()">
+                    <div>
+                      <label for="current_password">{{ .Tr "Current Password:" "Текущий Пароль:"}}</label>
+                      <input type="password" id="current_password" name="current_password" required>
+                    </div>
+
+                    <div>
+                      <label for="new_password">{{ .Tr "New Password:" "Новый Парль"}}</label>
+                      <input type="password" id="new_password" name="new_password" required minlength="8">
+                    </div>
+
+                    <div>
+                      <label for="confirm_password">{{ .Tr "Confirm Password:" "Подвтерждение Пароля" }}</label>
+                      <input type="password" id="confirm_password" name="confirm_password" required>
+                    </div>
+
+                    <button type="submit">{{ .Tr "Change Password" "Сменить Пароль" }}</button>
+
+                    {{- $prompt := .Tr 
+                        "New password does not match confirmation!"
+                        "Новый пароль не совпадает с подтверждением!"
+                    -}}
+                    <script>
+                      function validatePasswordChange() {
+                        const newPassword = document.getElementById('new_password').value;
+                        const confirmPassword = document.getElementById('confirm_password').value;
+
+                        if (newPassword !== confirmPassword) {
+                          alert("{{ $prompt }}");
+                          return false;
+                        }
+                        return true;
+                      }
+                    </script>
+                </form>
             </div>
         </div>
     </div>

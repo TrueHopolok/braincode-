@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 
 	"github.com/TrueHopolok/braincode-/judge"
@@ -122,12 +123,16 @@ func TaskFindAll(username, search string, currentUserOnly, isauth bool, page int
 	rawdata.Rows = make([]TaskInfo, 0, 20) // prealocate + avoid null
 	for rows.Next() {
 		var ti TaskInfo
+		var owner sql.NullString
 		err = rows.Scan(
 			&ti.Id, &ti.TitleEn, &ti.TitleRu,
-			&ti.OwnerName, &ti.Score,
+			&owner, &ti.Score,
 			&rawdata.TotalAmount) // WTF
 		if err != nil {
 			return nil, err
+		}
+		if owner.Valid {
+			ti.OwnerName = owner.String
 		}
 		rawdata.Rows = append(rawdata.Rows, ti)
 	}
@@ -143,21 +148,21 @@ func TaskFindAll(username, search string, currentUserOnly, isauth bool, page int
 	return jsondata, tx.Commit()
 }
 
-func TaskCreate(ioDoc io.ReadCloser, username string) error {
+func TaskCreate(ioDoc io.Reader, username string) (int, error) {
 	doc, err := ml.Parse(ioDoc)
 	if err != nil {
-		return err
+		return 0, err
 	}
 	if doc.Localizations == nil {
-		return errors.New("No valid task titles were provided - Empty map")
+		return 0, errors.New("no valid task titles were provided - Empty map")
 	}
 	localeEN, existsEN := doc.Localizations["en"]
 	localeRU, existsRU := doc.Localizations["ru"]
 	localeDEFAULT, existsDEFAULT := doc.Localizations[""]
 	if !existsEN && !existsRU && !existsDEFAULT {
-		return errors.New("No valid task titles were provided - No entries")
+		return 0, errors.New("no valid task titles were provided - No entries")
 	} else if localeEN == nil && localeRU == nil && localeDEFAULT == nil {
-		return errors.New("No valid task titles were provided - Nil entries")
+		return 0, errors.New("no valid task titles were provided - Nil entries")
 	}
 
 	// FIXME(anpir)
@@ -170,7 +175,7 @@ func TaskCreate(ioDoc io.ReadCloser, username string) error {
 
 	titleDEFAULT := cmp.Or(localeDEFAULT.Name, localeEN.Name, localeRU.Name)
 	if titleDEFAULT == "" {
-		return errors.New("No valid task titles were provided - Zero entries")
+		return 0, errors.New("no valid task titles were provided - Zero entries")
 	}
 
 	var titleEN, titleRU string
@@ -179,41 +184,46 @@ func TaskCreate(ioDoc io.ReadCloser, username string) error {
 
 	prb, err := judge.NewProblem(doc)
 	if err != nil {
-		return err
+		return 0, err
 	}
 
 	rawDoc, err := doc.MarshalBinary()
 	if err != nil {
-		return err
+		return 0, err
 	}
 
 	rawPrb, err := prb.MarshalBinary()
 	if err != nil {
-		return err
+		return 0, err
 	}
 
 	query, err := db.GetQuery("create_task")
 	if err != nil {
-		return err
+		return 0, err
 	}
 
 	tx, err := db.Conn.Begin()
 	if err != nil {
-		return err
+		return 0, err
 	}
 	defer tx.Rollback()
 
 	res, err := tx.Exec(string(query), username, titleEN, titleRU, rawDoc, rawPrb)
 	if err != nil {
-		return err
+		return 0, err
 	}
 	n, err := res.RowsAffected()
 	if err != nil {
-		return err
+		return 0, err
 	}
 	if n != 1 {
-		return errors.New("invalid amount of inserted rows")
+		return 0, errors.New("invalid amount of inserted rows")
 	}
 
-	return tx.Commit()
+	rowid, err := res.LastInsertId()
+	if err != nil {
+		return 0, fmt.Errorf("cannot get last inserted row id: %v", err)
+	}
+
+	return int(rowid), tx.Commit()
 }

@@ -84,7 +84,7 @@ func UserFindSalt(username string) ([]byte, bool, error) {
 }
 
 // Return if user exists given username and password
-func UserFindLogin(username string, password []byte) (bool, error) {
+func UserFindLogin(username string, psh []byte) (bool, error) {
 	query, err := db.GetQuery("find_user_login")
 	if err != nil {
 		return false, err
@@ -96,7 +96,7 @@ func UserFindLogin(username string, password []byte) (bool, error) {
 	}
 	defer tx.Rollback()
 
-	row := tx.QueryRow(string(query), username, password)
+	row := tx.QueryRow(string(query), username, psh)
 	var ignoredUsername string
 	if err := row.Scan(&ignoredUsername); err != nil {
 		if err == sql.ErrNoRows {
@@ -110,7 +110,7 @@ func UserFindLogin(username string, password []byte) (bool, error) {
 }
 
 // Create a user with given username, PSH and salt
-func UserCreate(username string, password, salt []byte) error {
+func UserCreate(username string, psh, salt []byte) error {
 	query, err := db.GetQuery("create_user")
 	if err != nil {
 		return err
@@ -122,7 +122,34 @@ func UserCreate(username string, password, salt []byte) error {
 	}
 	defer tx.Rollback()
 
-	res, err := tx.Exec(string(query), username, password, salt)
+	res, err := tx.Exec(string(query), username, psh, salt)
+	if err != nil {
+		return err
+	}
+	n, err := res.RowsAffected()
+	if err != nil {
+		return err
+	}
+	if n != 1 {
+		return errors.New("invalid amount of inserted rows")
+	}
+
+	return tx.Commit()
+}
+
+func UserChangePassword(username string, psh, salt []byte) error {
+	query, err := db.GetQuery("change_password")
+	if err != nil {
+		return err
+	}
+
+	tx, err := db.Conn.Begin()
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+
+	res, err := tx.Exec(string(query), psh, salt, username)
 	if err != nil {
 		return err
 	}

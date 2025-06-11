@@ -49,7 +49,8 @@ func EnableControllerHandlers(mux *http.ServeMux) {
 	mux.Handle("POST /register/", session.NoAuthMiddlewareFunc(controllers.UserRegister))
 
 	mux.Handle("GET /stats/", session.AuthMiddlewareFunc(controllers.ProfilePage))
-	mux.Handle("DELETE /stats/", session.AuthMiddlewareFunc(controllers.UserDelete))
+	mux.Handle("POST /stats/delete-user/", session.AuthMiddlewareFunc(controllers.UserDelete))
+	mux.Handle("POST /stats/change-password/", session.AuthMiddlewareFunc(controllers.UserChangePassword))
 
 	mux.Handle("GET /upload/", session.AuthMiddlewareFunc(controllers.UploadPage))
 	mux.Handle("POST /upload/", session.AuthMiddlewareFunc(controllers.TaskCreate))

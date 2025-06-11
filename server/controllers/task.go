@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/TrueHopolok/braincode-/server/logger"
 	"github.com/TrueHopolok/braincode-/server/models"
@@ -167,10 +168,18 @@ func UploadPage(w http.ResponseWriter, r *http.Request) {
 
 func TaskCreate(w http.ResponseWriter, r *http.Request) {
 	username := session.Get(r.Context()).Name
-	if err := models.TaskCreate(r.Body, username); err != nil {
+
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, fmt.Sprintf("Something went wrong while parsing request:\n%s", err), http.StatusBadRequest)
+		logger.Log.Debug("req=%p upload-err=%s ", r, err)
+	}
+
+	v := r.FormValue("statement")
+	id, err := models.TaskCreate(strings.NewReader(v), username)
+	if err != nil {
 		http.Error(w, fmt.Sprintf("Something went wrong while uploading the task:\n%s", err), http.StatusBadRequest)
 		logger.Log.Debug("req=%p upload-err=%s ", r, err)
 		return
 	}
-	redirect2main(w, r, "uploadTask")
+	http.Redirect(w, r, "/task/?id="+strconv.Itoa(id), http.StatusSeeOther)
 }

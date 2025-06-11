@@ -16,14 +16,14 @@ import (
 type Instruction struct {
 	command  string
 	helptext string
-  function func(chan bool)
+	function func(chan bool)
 }
 
-// Contain all instructions that can be accessed via console
+// Contains (almost) all instructions that can be accessed via console
 var Instructions = []Instruction{
 	{
 		"stop",
-    "alert quitChannel, thus stopping the process (should not, fix main function if that happens)",
+		"alert quitChannel, thus stopping the process (should not, fix main function if that happens)",
 		func(quitChan chan bool) {
 			quitChan <- true
 		},
@@ -47,7 +47,7 @@ func init() {
 // If it is, the function of that instruction is executed.
 func ConsoleHandler(quitChan chan bool) error {
 	if !config.Get().EnableConsole {
-		return fmt.Errorf("Console is blocked by config parameters")
+		return fmt.Errorf("console is blocked by config parameters")
 	}
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Split(bufio.ScanLines)
